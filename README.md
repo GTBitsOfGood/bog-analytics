@@ -29,7 +29,8 @@ We define a couple of different event types that are unified across Bits of Good
     "Subcategory": "Visit",
     "Event Properties": {
         "PageUrl": "URL of the page that was visited in the app",
-        "UserId": "user who visited that page"
+        "UserId": "user who visited that page",
+        "Date": "date when they visited a page"
      }
 }
 ```
