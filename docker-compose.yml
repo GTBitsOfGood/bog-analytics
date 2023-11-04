@@ -1,0 +1,29 @@
+version: '3'
+services:
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile.dev
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./api:/app
+      - /app/node_modules
+  dashboard:
+    build:
+      context: .
+      dockerfile: dashboard/Dockerfile.dev
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./dashboard:/app
+  example-app:
+    build:
+      context: .
+      dockerfile: example-app/Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./example-app:/app
+      - /app/node_modules
+      - /app/.next
