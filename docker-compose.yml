@@ -17,6 +17,7 @@ services:
       - "8501:8501"
     volumes:
       - ./dashboard:/app
+      - /app/venv
   example-app:
     build:
       context: .
