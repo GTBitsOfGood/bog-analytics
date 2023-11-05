@@ -59,7 +59,7 @@ Because this repository acts as a monorepository for all things analytics, we pr
    3. Next.js App: `http://localhost:3000/`
 
 
-If you make any changes to the packages, you may need to rebuild the images. To do this, append `--build` to the above docker compose up command. The first build and subsequent rebuilds will take longer rerunning the container.
+If you make any changes to the packages, you may need to rebuild the images. To do this, append `--build` to the above docker compose up command. The first build and subsequent rebuilds will take longer than rerunning the container.
 
 The Dockerized application will have live-reloading of changes made on the host machine.
 
