@@ -6,11 +6,11 @@ const ClickEventSchema = new Schema<BaseEvent & {
     eventProperties: ClickEventProperties;
 }>({
     eventProperties: {
-        ObjectId: {
+        objectId: {
             type: String,
             required: true,
         },
-        UserId: {
+        userId: {
             type: String,
             required: true,
         },
