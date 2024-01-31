@@ -7,7 +7,7 @@
     "test": "jest",
     "build": "tsc",
     "dev": "nodemon --exec npx tsx src/server.ts",
-    "start": "node dist/src/server.js"
+    "start": "node dist/src/api.js"
   },
   "author": "",
   "license": "ISC",
