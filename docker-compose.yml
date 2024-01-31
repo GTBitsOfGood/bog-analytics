@@ -3,12 +3,13 @@ services:
   api:
     build:
       context: .
-      dockerfile: api/Dockerfile.dev
+      dockerfile: ./api/Dockerfile.dev
     ports:
       - "3001:3001"
     volumes:
       - ./api:/app
-      - /app/node_modules
+      - ./api/node_modules:/app/node_modules
+
   dashboard:
     build:
       context: .
@@ -18,6 +19,7 @@ services:
     volumes:
       - ./dashboard:/app
       - /app/venv
+      
   example-app:
     build:
       context: .
@@ -28,3 +30,19 @@ services:
       - ./example-app:/app
       - /app/node_modules
       - /app/.next
+
+    mongo:
+      image: mongo
+      ports:
+        - "27017:27017"
+      networks:
+        - bog-analytics-net
+      volumes:
+        - mongodb-data:/data/db
+
+networks:
+  bog-analytics-net:
+    driver: bridge
+
+volumes:
+  mongodb-data:

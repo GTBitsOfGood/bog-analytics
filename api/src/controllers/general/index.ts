@@ -1,0 +1,1 @@
+export { health } from '@/controllers/general/health';
