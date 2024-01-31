@@ -6,14 +6,12 @@ import { router } from '@/src/routes';
 import { ApplicationError } from '@/src/errors/application-error';
 import serverless from "serverless-http";
 export let api = express();
-const __dirname = new URL('.', import.meta.url).pathname;
 
 api.use(compression());
 api.use(bodyParser.json());
 api.use(bodyParser.urlencoded({ extended: true }));
 
 api.set('port', process.env.PORT || 3001);
-api.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
 api.use('/api', router);
 
 api.use((err: ApplicationError, req: Request, res: Response, next: NextFunction) => {
@@ -27,4 +25,4 @@ api.use((err: ApplicationError, req: Request, res: Response, next: NextFunction)
     });
 });
 
-export const hander = serverless(api);
+export const handler = serverless(api);
