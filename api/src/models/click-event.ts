@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
-import { BaseEvent, ClickEventProperties } from "@/utils/types";
-import BaseEventModel from "./base-event";
+import { BaseEvent, ClickEventProperties } from "@/src/utils/types";
+import BaseEventModel from "@/src/models/base-event";
 
 const ClickEventSchema = new Schema<BaseEvent & {
     eventProperties: ClickEventProperties;

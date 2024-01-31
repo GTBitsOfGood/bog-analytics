@@ -1,7 +1,7 @@
 import {
     RequestHandler, Request, Response, NextFunction
 } from 'express';
-import { logger } from '@/logger';
+import { logger } from '@/src/logger';
 
 
 interface HandlerOptions { };

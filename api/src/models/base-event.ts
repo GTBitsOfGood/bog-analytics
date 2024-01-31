@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { BaseEvent } from "@/utils/types";
+import { BaseEvent } from "@/src/utils/types";
 
 export const BaseEventSchema = new mongoose.Schema<BaseEvent>({
     category: {

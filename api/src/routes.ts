@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import * as GeneralController from "@/controllers/general";
+import * as GeneralController from "@/src/controllers/general";
 
 export const router = Router();
 

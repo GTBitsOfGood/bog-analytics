@@ -1,1 +1,1 @@
-export { health } from '@/controllers/general/health';
+export { health } from '@/src/controllers/general/health';

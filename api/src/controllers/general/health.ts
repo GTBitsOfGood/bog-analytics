@@ -1,4 +1,4 @@
-import { relogRequestHandler } from "@/middleware/request-middleware";
+import { relogRequestHandler } from "@/src/middleware/request-middleware";
 import { RequestHandler } from "express"
 
 export const healthWrapper: RequestHandler = async (req, res) => {
