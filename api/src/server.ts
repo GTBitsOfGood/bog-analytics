@@ -1,4 +1,4 @@
-import { api } from "./api";
+import { api } from "@/netlify/functions/api";
 import { logger } from "@/logger";
 
 api.listen(api.get('port'), (): void => {

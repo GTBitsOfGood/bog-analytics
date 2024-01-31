@@ -1,6 +1,8 @@
 {
     "compilerOptions": {
         "target": "es6",
+        "outDir": "./dist",
+        "rootDir": "./src",
         "lib": [
             "dom",
             "dom.iterable",
@@ -9,7 +11,6 @@
         "allowJs": true,
         "skipLibCheck": true,
         "strict": true,
-        "noEmit": true,
         "esModuleInterop": true,
         "module": "esnext",
         "moduleResolution": "bundler",

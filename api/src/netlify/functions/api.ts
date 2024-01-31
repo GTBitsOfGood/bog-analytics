@@ -16,9 +16,6 @@ api.set('port', process.env.PORT || 3001);
 api.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
 api.use('/api', router);
 
-api.use('/.netlify/functions/server', router);  // path must route to lambda
-api.use('/', (req, res) => res.sendFile(path.join(__dirname, '../index.html')));
-
 api.use((err: ApplicationError, req: Request, res: Response, next: NextFunction) => {
     if (res.headersSent) {
         return next(err);
@@ -30,6 +27,4 @@ api.use((err: ApplicationError, req: Request, res: Response, next: NextFunction)
     });
 });
 
-export async function handler(event: Object, context: Object) {
-    return serverless(api)(event, context);
-}
+export const hander = serverless(api);
