@@ -1,0 +1,23 @@
+{
+    "name": "bog-analytics",
+    "version": "0.0.1",
+    "scripts": {
+        "build": "tsup",
+        "test": ""
+    },
+    "main": "./dist/index.js",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
+    "files": [
+        "dist"
+     ],    
+     "devDependencies": {
+        "concurrently": "^8.2.2",
+        "tsup": "^8.0.1",
+        "typescript": "^5.3.3"
+    },
+    "description": "An npm package to interface with the Bits of Good Analytics API",
+    "license": "MIT",
+    "type": "module",
+    "private": false
+}
