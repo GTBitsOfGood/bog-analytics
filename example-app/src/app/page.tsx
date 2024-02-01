@@ -1,7 +1,16 @@
+"use client"
+
 import Image from 'next/image'
 import styles from './page.module.css'
+import { AnalyticsLogger } from "bog-analytics";
+import { useEffect } from 'react';
 
 export default function Home() {
+
+  useEffect(() => {
+    const logger = new AnalyticsLogger();
+    console.log(logger)
+  }, [])
   return (
     <main className={styles.main}>
       <div className={styles.description}>

@@ -1,0 +1,1 @@
+export const API_KEY_JWT_TIMEOUT = 59;
