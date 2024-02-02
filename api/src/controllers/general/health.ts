@@ -1,11 +1,18 @@
 import { relogRequestHandler } from "@/src/middleware/request-middleware";
-import { RequestHandler } from "express"
+import APIWrapper from "@/src/utils/api-wrapper";
 
-export const healthWrapper: RequestHandler = async (req, res) => {
-    return res.status(200).json({
-        success: true,
-        payload: {}
-    })
-}
+const healthRoute = APIWrapper({
+    GET: {
+        config: {
+            requireToken: false,
+        },
+        handler: async () => {
+            return {
+                Hello: "World",
+                Version: 1.0,
+            };
+        },
+    },
+});
 
-export const health = relogRequestHandler(healthWrapper);
+export const health = relogRequestHandler(healthRoute);

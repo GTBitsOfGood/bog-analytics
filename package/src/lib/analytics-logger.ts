@@ -1,18 +1,18 @@
 import { authenticateProject } from "@/actions/auth";
 import { API_KEY_JWT_TIMEOUT } from "@/utils/types";
 
+// Class to be used client side
 export default class AnalyticsLogger {
     private apiKey?: string;
     private webToken?: string;
 
-    public async authenticate(apiKey: string): Promise<void> {
-        this.apiKey = apiKey;
-        this.webToken = await authenticateProject(apiKey);
+    public async authenticate(webToken: string): Promise<void> {
+        this.webToken = await authenticateProject(webToken);
 
         console.log(this.webToken)
         // reauthenticate every 59 minutes (JWT lasts 60 minutes)
         setTimeout(() => {
-            this.authenticate(apiKey);
+            this.authenticate(webToken);
         }, API_KEY_JWT_TIMEOUT * 60 * 1000)
     }
 

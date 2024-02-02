@@ -14,6 +14,6 @@ export const BaseEventSchema = new mongoose.Schema<BaseEvent>({
 
 const BaseEventModel =
     (mongoose.models.Animal as mongoose.Model<BaseEvent>) ||
-    mongoose.model<BaseEvent>("Animal", BaseEventSchema);
+    mongoose.model<BaseEvent>("BaseEvent", BaseEventSchema);
 
 export default BaseEventModel;

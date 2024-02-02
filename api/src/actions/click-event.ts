@@ -6,4 +6,4 @@ export const createClickEvent = async (event: ClickEvent) => {
     await dbConnect();
     const createdEvent = ClickEventModel.create(event);
     return createdEvent;
-}
+}   
