@@ -9,4 +9,12 @@ EVENT_TYPES = [
 ]
 selected_event_type = st.sidebar.selectbox("Select Event Type", EVENT_TYPES)
 
+# days-toggle slider
+days_aggregation = st.slider(
+    label='Select the number of days in the past to show data',
+    min_value=1, 
+    max_value=30, 
+    value=15  # Default value of the slider
+)
+
 print(selected_event_type)
