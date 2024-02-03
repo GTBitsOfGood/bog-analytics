@@ -7,6 +7,7 @@ import { Request, RequestHandler, Response } from "express"; import { getProject
 interface RouteConfig {
     requireToken?: boolean;
     handleResponse?: boolean; // handleResponse if the route handles setting status code and body
+    developmentRoute?: boolean // for routes we want for development purposes only 
 }
 
 interface Route<T> {
@@ -21,7 +22,6 @@ function APIWrapper(
     routeHandlers: Partial<Record<HttpMethod, Route<unknown>>>
 ): RequestHandler {
     return async (req: Request, res: Response) => {
-
         const method = req.method;
         const route = routeHandlers[method as HttpMethod];
 
@@ -38,6 +38,12 @@ function APIWrapper(
 
         const { config, handler } = route;
 
+        if (config?.developmentRoute && process.env.NODE_ENV === "production") {
+            return res.status(403).json({
+                success: false,
+                message: "You do not have permissions to access this API route",
+            });
+        }
         try {
             // Handle user access token + roles restrictions
             if (config?.requireToken) {

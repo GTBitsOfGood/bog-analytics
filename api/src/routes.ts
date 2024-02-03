@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import * as GeneralController from "@/src/controllers/general";
-
+import * as EventController from "@/src/controllers/events"
 export const router = Router();
 
-router.get('/health', GeneralController.health)
+router.all('/health', GeneralController.health);
+router.all('/events/click-event', EventController.clickEvent);

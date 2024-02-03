@@ -4,10 +4,11 @@ This is the unified Bits of Good analytics dashboard. It is designed with intero
 
 - **Dashboard Application:** This is the core of the analytics dashboard and is where all of the data visualizations are located. This is written and built complately using Streamlit and Python - it is deployed using Streamlit's cloud service.
 
-- **Analytics Processing API:** This is an intermediary API that acts as middleware between the streamlit application and Amplitude Analytics. It ingests information from Amplitude and reprocesses it into a unified interface (defined by the events in the event interfaces section) which enables this dashboard to be interoperable throughout Bits of Good projects.
+- **Analytics Processing API:** This is the data API that ingests data from our websites and reprocesses it into a unified interface (defined by the events in the event interfaces section) which enables this dashboard to be interoperable throughout Bits of Good projects.
 
 - **Project Application:** This is the Bits of Good application that we want to interface with. For testing purposes, we have created a Next.js application in `example-app` which has Amplitude Analytics integrated for us to test on real data.
 
+- **Package:** A publically accessible NPM package to interface with the Analytics Processing API.
 ## Event Interfaces
 
 We define a couple of different event types that are unified across Bits of Good projects - this list is non-exhaustive and can definitely be extended in the future:

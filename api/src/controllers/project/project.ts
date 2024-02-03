@@ -10,8 +10,9 @@ const projectRoute = APIWrapper({
     POST: {
         config: {
             requireToken: false,
+            developmentRoute: true
         },
-        handler: async (req: Request, res: Response) => {
+        handler: async (req: Request) => {
             const projectName: string = req.body.projectName;
 
             if (!projectName) {
@@ -23,7 +24,8 @@ const projectRoute = APIWrapper({
                 projectName, apiKey
             }
 
-            await createProject(project);
+            const createdProject = await createProject(project);
+            return createdProject
         },
     },
 });

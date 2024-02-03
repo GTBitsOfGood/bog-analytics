@@ -1,11 +1,11 @@
 import {
-    Document
+    Document, Types
 } from 'mongoose';
-import { Request } from 'express';
 
 export interface BaseEvent extends Document {
     category: string;
     subcategory: string;
+    projectId: string | Types.ObjectId;
 }
 
 export interface ClickEvent extends BaseEvent {
@@ -47,3 +47,10 @@ export interface InternalResponseData<T> {
     payload?: T;
 }
 
+export enum EventCategories {
+    INTERACTION = "Interaction",
+}
+
+export enum EventSubcategories {
+    CLICK = "Click",
+}

@@ -5,6 +5,7 @@ const healthRoute = APIWrapper({
     GET: {
         config: {
             requireToken: false,
+            developmentRoute: true
         },
         handler: async () => {
             return {
