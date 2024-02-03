@@ -31,14 +31,14 @@ services:
       - /app/node_modules
       - /app/.next
 
-    mongo:
-      image: mongo
-      ports:
-        - "27017:27017"
-      networks:
-        - bog-analytics-net
-      volumes:
-        - mongodb-data:/data/db
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    networks:
+      - bog-analytics-net
+    volumes:
+      - mongodb-data:/data/db
 
 networks:
   bog-analytics-net:
