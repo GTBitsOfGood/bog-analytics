@@ -1,0 +1,1 @@
+export { clickEvent } from '@/src/controllers/events/click-event';

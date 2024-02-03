@@ -1,0 +1,1 @@
+export { project } from '@/src/controllers/project/project';

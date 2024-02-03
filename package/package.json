@@ -3,21 +3,25 @@
     "version": "0.0.1",
     "scripts": {
         "build": "tsup",
-        "test": ""
+        "test": "jest"
     },
     "main": "./dist/index.js",
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
     "files": [
         "dist"
-     ],    
-     "devDependencies": {
+    ],
+    "devDependencies": {
+        "@jest/globals": "^29.7.0",
         "concurrently": "^8.2.2",
+        "jest": "^29.7.0",
+        "ts-jest": "^29.1.2",
         "tsup": "^8.0.1",
         "typescript": "^5.3.3"
     },
     "description": "An npm package to interface with the Bits of Good Analytics API",
     "license": "MIT",
     "type": "module",
-    "private": false
+    "private": false,
+    "dependencies": {}
 }

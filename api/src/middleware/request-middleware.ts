@@ -18,7 +18,7 @@ export const relogRequestHandler = (
 ): RequestHandler => async (req: Request, res: Response, next: NextFunction) => {
     logger.log({
         level: 'info',
-        message: req.url
+        message: `/api${req.url}`
     });
 
     try {
