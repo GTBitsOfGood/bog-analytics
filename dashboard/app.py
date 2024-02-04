@@ -38,3 +38,27 @@ with st.sidebar:
     )
 
 print(selected_event_type)
+
+#1. Add a boilerplate if statement so that if selected_event_type is equal to visit events, then you display bar graph
+if selected_event_type == EVENT_TYPES[0]:
+    recent_click_events = [
+        click_event for click_event in click_events
+        if datetime.datetime.strptime(click_event.event_properties.date, "%Y-%m-%dT%H:%M:%S.%fZ") >= (datetime.datetime.now() - datetime.timedelta(days=30))
+    ]
+
+    object_clicks = {}
+    for click_event in recent_click_events:
+        object_id = click_event.event_properties.object_id
+        if object_id not in object_clicks:
+            object_clicks[object_id] = []
+        object_clicks[object_id].append(click_event)
+
+    data = [{"Object ID": key, "Click Count": len(value)} for key, value in object_clicks.items()]
+    df = pd.DataFrame(data)
+
+    # Display the bar graph
+    st.bar_chart(df)
+
+
+
+

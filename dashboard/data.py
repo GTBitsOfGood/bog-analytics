@@ -24,9 +24,10 @@ class VisitEvent(BaseEvent):
 
 
 class ClickEventProperties:
-    def __init__(self, object_id, user_id) -> None:
+    def __init__(self, object_id, user_id, date) -> None:
         self.object_id = object_id
         self.user_id = user_id
+        self.date = date
 
 
 class ClickEvent(BaseEvent):
