@@ -5,20 +5,17 @@ FROM node:18.17.0
 WORKDIR /app
 
 # Copy package.json and yarn.lock to the working directory
-COPY api/package.json api/yarn.lock ./
+# COPY api/package.json api/yarn.lock ./
 
 # Install dependencies
 RUN yarn install
 
 # Copy the rest of the application code to the container
-COPY api ./
+# COPY api ./
 
 # Expose the port on which your Express.js API will run
 EXPOSE 3001
 
-# Install nodemon globally to enable hot reloading
-RUN yarn global add nodemon
-RUN yarn global add ts-node
+RUN chmod -R 777 node_modules/
 
-# Start the API with nodemon and ts-node for hot reloading
-CMD ["nodemon", "--exec", "ts-node", "api.ts"]
+ENTRYPOINT ["yarn", "dev"] 

@@ -26,3 +26,15 @@ if selected_event_type == EVENT_TYPES[0]:
     df = df.sort_values(by="Date", ascending=False)
     df = df.head(5)
     st.table(df)
+
+
+with st.sidebar:
+    # days-toggle slider
+    days_aggregation = st.slider(
+        label="Select Data Timeframe",
+        min_value=1,
+        max_value=30,
+        value=15,  # Default value of the slider
+    )
+
+print(selected_event_type)

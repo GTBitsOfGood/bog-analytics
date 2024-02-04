@@ -16,5 +16,7 @@ COPY example-app ./
 # Expose the port on which your Next.js app will run
 EXPOSE 3000
 
+RUN chmod -R 777 node_modules/
+
 # Start the web app using yarn dev with hot reloading
-CMD ["yarn", "dev"]
+ENTRYPOINT ["yarn", "dev"]
