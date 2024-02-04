@@ -400,10 +400,10 @@ balanced-match@^1.0.0:
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.2.tgz#e83e3a7e3f300b34cb9d87f615fa0cbf357690ee"
   integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
 
-bog-analytics@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/bog-analytics/-/bog-analytics-0.0.1.tgz#bf77259bb7e580d3ea6d462556470762ffb54507"
-  integrity sha512-NSkvqS1l7jX+7a8DgixfFca2UXdhYp2m2Lx7+PZgeFbhFqX8lhwS1qTqVPJrgvoo/6CE0zWDrAm8nWcQUMnu8A==
+bog-analytics@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/bog-analytics/-/bog-analytics-0.0.2.tgz#02c14d5508fbb7bffd282bf5bff50f71dc488d02"
+  integrity sha512-5rU+XcklmycZoEo+aL/A4CLA37bx9O/bTQYnvLlkl+ibWu3uw8HcXPUUPOwXVIPRdMqMIdK2Rvc5Sq71Cziu7Q==
 
 brace-expansion@^1.1.7:
   version "1.1.11"

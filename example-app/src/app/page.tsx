@@ -9,7 +9,12 @@ export default function Home() {
 
   useEffect(() => {
     const logger = new AnalyticsLogger();
-    console.log(logger)
+    const loadLogger = async () => {
+      logger.authenticate("57a0a660-a4c3-43fe-9178-a7d7ca69b0fe")
+      logger.logClickEvent("object1", "user1")
+    }
+
+    loadLogger().then().catch()
   }, [])
   return (
     <main className={styles.main}>

@@ -3,7 +3,7 @@ import { relogRequestHandler } from "@/src/middleware/request-middleware";
 import APIWrapper from "@/src/utils/api-wrapper";
 import { Project } from "@/src/utils/types";
 import { randomUUID } from "crypto";
-import { Request, Response } from "express";
+import { Request } from "express";
 
 
 const projectRoute = APIWrapper({
@@ -14,7 +14,7 @@ const projectRoute = APIWrapper({
         },
         handler: async (req: Request) => {
             const projectName: string = req.body.projectName;
-
+            console.log("HERE")
             if (!projectName) {
                 throw new Error("You must specify a project name to create a project!")
             }
@@ -23,6 +23,7 @@ const projectRoute = APIWrapper({
             const project: Project = {
                 projectName, apiKey
             }
+            console.log(project)
 
             const createdProject = await createProject(project);
             return createdProject

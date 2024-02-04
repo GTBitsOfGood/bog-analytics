@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document, CallbackError } from "mongoose";
-import { BaseEvent, ClickEventProperties, EventCategories, EventSubcategories } from "@/src/utils/types";
+import { BaseEvent, ClickEvent, ClickEventProperties, EventCategories, EventSubcategories } from "@/src/utils/types";
 import BaseEventModel from "@/src/models/base-event";
 
 const ClickEventSchema = new Schema<BaseEvent & {
@@ -37,7 +37,7 @@ ClickEventSchema.pre("save", async function (this: Document & BaseEvent, next: (
 });
 
 
-export const ClickEventModel = mongoose.model("ClickEvent", ClickEventSchema);
+export const ClickEventModel = (mongoose.models.ClickEvent as mongoose.Model<ClickEvent>) || mongoose.model("ClickEvent", ClickEventSchema);
 
 export default EventDiscriminator as mongoose.Model<Document & BaseEvent & {
     eventProperties: ClickEventProperties
