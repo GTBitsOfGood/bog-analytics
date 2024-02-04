@@ -2,6 +2,17 @@ import pandas as pd
 
 
 def init_recent_events_table(st, visit_events):
+    # CSS to inject contained in a string
+    hide_table_row_index = """
+        <style>
+            thead tr th:first-child {display:none}
+            tbody th {display:none}
+        </style>
+    """
+
+    # Inject CSS with Markdown
+    st.markdown(hide_table_row_index, unsafe_allow_html=True)
+
     visit_sorted = sorted(visit_events, key=lambda event: event.event_properties.date)
     data = [
         {

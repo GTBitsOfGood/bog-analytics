@@ -1,10 +1,7 @@
-from datetime import datetime
 import streamlit as st
-import pandas as pd
-import numpy as np
 from data import visit_events, click_events, input_events
-from sidebar_widgets import init_days_slider, init_event_selectbox
-from visit_event_widgets import init_recent_events_table
+from widgets.sidebar_widgets import init_days_slider, init_event_selectbox
+from widgets.visit_event_widgets import init_recent_events_table
 from utils import EventTypes
 
 
