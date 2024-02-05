@@ -23,7 +23,7 @@ services:
       - "8501:8501"
     volumes:
       - ./dashboard:/app
-      - /app/venv
+      - ./dashboard/venv:/app/venv
       
   example-app:
     build:

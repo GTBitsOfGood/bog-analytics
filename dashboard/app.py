@@ -1,47 +1,44 @@
 from collections import defaultdict
 from datetime import datetime
 import streamlit as st
+from data import visit_events
+from widgets.sidebar_widgets import init_days_slider, init_event_selectbox
+from widgets.visit_event_widgets import init_recent_events_table, init_page_visit_graph
+from utils import EventTypes
 import pandas as pd
-import numpy as np
-from data import visit_events, click_events, input_events
+from datetime import datetime, timedelta
 
-st.title("Hello World!")
-EVENT_TYPES = ["Visit Events", "Click Events", "Input Events"]
-selected_event_type = st.sidebar.selectbox("Select Event Type", EVENT_TYPES)
 
-if selected_event_type == EVENT_TYPES[0]:
-    visit_sorted = sorted(visit_events, key=lambda event: event.event_properties.date)
-    data = [
-        {
-            "Page URL": event.event_properties.pageUrl,
-            "User ID": event.event_properties.user_id,
-            "Date": event.event_properties.date,
-        }
-        for event in visit_sorted
+def get_aggregated_visits(events, days=30):
+
+    end_date = datetime.now()
+    start_date = end_date - timedelta(days=days)
+    filtered_events = [
+        event
+        for event in events
+        if start_date <= datetime.fromisoformat(event.event_properties.date) <= end_date
     ]
 
-    df = pd.DataFrame(data)
-    df["Date"] = pd.to_datetime(df["Date"])
-    df["Date"] = df["Date"].dt.strftime("%B %d, %Y %I:%M %p")
+    page_visits = {}
+    for event in filtered_events:
+        page_url = event.event_properties.pageUrl
+        if page_url in page_visits:
+            page_visits[page_url] += 1
+        else:
+            page_visits[page_url] = 1
 
-    df = df.sort_values(by="Date", ascending=False)
-    df = df.head(5)
-    st.table(df)
+    return page_visits
 
 
-with st.sidebar:
-    # days-toggle slider
-    days_aggregation = st.slider(
-        label="Select Data Timeframe",
-        min_value=1,
-        max_value=30,
-        value=15,  # Default value of the slider
-    )
+st.title("Analytics Dashboard")
+selected_event_type = init_event_selectbox(st)
+days_aggregation = init_days_slider(st)
 
-print(selected_event_type)
+if selected_event_type == EventTypes.VISIT_EVENTS.value:
+    init_recent_events_table(st, visit_events)
+    init_page_visit_graph(st, visit_events)
 
-# 1. Add a boilerplate if statement so that if selected_event_type is equal to visit events, then you display bar graph
-if selected_event_type == EVENT_TYPES[1]:
+if selected_event_type == EventTypes.CLICK_EVENTS.value:
 
     object_clicks = defaultdict(int)
     for click_event in click_events:
@@ -52,3 +49,5 @@ if selected_event_type == EVENT_TYPES[1]:
         list(object_clicks.items()), columns=["Object Id", "Clicks"]
     )
     st.bar_chart(df_visits.set_index("Object Id"))
+if selected_event_type == EventTypes.INPUT_EVENTS.value:
+    pass
