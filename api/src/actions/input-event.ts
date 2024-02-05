@@ -4,6 +4,16 @@ import { InputEventModel } from "@/src/models/input-event";
 
 export const createInputEvent = async (event: Partial<InputEvent>) => {
     await dbConnect();
-    const createdEvent = InputEventModel.create(event);
+    const createdEvent = await InputEventModel.create(event);
     return createdEvent;
 }   
+
+export const getInputEvents = async (date?: Date) => {
+    await dbConnect();
+    let fromDate = new Date(Date.now() - 60 * 60 * 24 * 30 * 1000)
+    if (typeof date !== 'undefined') {
+        fromDate = date
+    }
+    const events = await InputEventModel.find({ date: { $gte: fromDate } })
+    return events
+}
