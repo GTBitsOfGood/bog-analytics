@@ -8,6 +8,24 @@ export interface BaseEvent extends Document {
     projectId: string | Types.ObjectId;
 }
 
+export interface VisitEvent extends BaseEvent {
+    eventProperties: VisitEventProperties
+}
+
+export interface VisitEventProperties {
+    pageUrl: string;
+    userId: string;
+    date: Date;
+}
+export interface InputEvent extends BaseEvent {
+    eventProperties: InputEventProperties
+}
+
+export interface InputEventProperties {
+    objectId: string;
+    userId: string;
+    textValue: string;
+}
 export interface ClickEvent extends BaseEvent {
     eventProperties: ClickEventProperties
 }
@@ -49,8 +67,11 @@ export interface InternalResponseData<T> {
 
 export enum EventCategories {
     INTERACTION = "Interaction",
+    ACTIVITY = "Activity",
 }
 
 export enum EventSubcategories {
     CLICK = "Click",
+    VISIT = "Visit",
+    INPUT = "Input",
 }
