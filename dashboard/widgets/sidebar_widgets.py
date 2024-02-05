@@ -11,7 +11,7 @@ def init_days_slider(st):
     with st.sidebar:
         # days-toggle slider
         return st.slider(
-            label="Select Data Timeframe",
+            label="Select Data Timeframe (Days)",
             min_value=1,
             max_value=30,
             value=15,  # Default value of the slider
