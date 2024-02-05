@@ -1,8 +1,8 @@
+import datetime
 import pandas as pd
 
 
 def init_recent_events_table(st, visit_events):
-    # CSS to inject contained in a string
     hide_table_row_index = """
         <style>
             thead tr th:first-child {display:none}
@@ -10,7 +10,6 @@ def init_recent_events_table(st, visit_events):
         </style>
     """
 
-    # Inject CSS with Markdown
     st.markdown(hide_table_row_index, unsafe_allow_html=True)
 
     visit_sorted = sorted(visit_events, key=lambda event: event.event_properties.date)
@@ -30,3 +29,16 @@ def init_recent_events_table(st, visit_events):
     df = df.sort_values(by="Date", ascending=False)
     df = df.head(5)
     st.table(df)
+
+
+def init_page_visit_graph(st, visit_events):
+    page_visits = {}
+    for event in visit_events:
+        page_url = event.event_properties.pageUrl
+        if page_url in page_visits:
+            page_visits[page_url] += 1
+        else:
+            page_visits[page_url] = 1
+
+    df_visits = pd.DataFrame(list(page_visits.items()), columns=["Page URL", "Visits"])
+    st.bar_chart(df_visits.set_index("Page URL"))
