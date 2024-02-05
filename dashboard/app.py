@@ -1,8 +1,31 @@
 import streamlit as st
-from data import visit_events, click_events, input_events
+from data import visit_events
 from widgets.sidebar_widgets import init_days_slider, init_event_selectbox
-from widgets.visit_event_widgets import init_recent_events_table
+from widgets.visit_event_widgets import init_recent_events_table, init_page_visit_graph
 from utils import EventTypes
+import pandas as pd
+from datetime import datetime, timedelta
+
+
+def get_aggregated_visits(events, days=30):
+
+    end_date = datetime.now()
+    start_date = end_date - timedelta(days=days)
+    filtered_events = [
+        event
+        for event in events
+        if start_date <= datetime.fromisoformat(event.event_properties.date) <= end_date
+    ]
+
+    page_visits = {}
+    for event in filtered_events:
+        page_url = event.event_properties.pageUrl
+        if page_url in page_visits:
+            page_visits[page_url] += 1
+        else:
+            page_visits[page_url] = 1
+
+    return page_visits
 
 
 st.title("Analytics Dashboard")
@@ -11,6 +34,7 @@ days_aggregation = init_days_slider(st)
 
 if selected_event_type == EventTypes.VISIT_EVENTS.value:
     init_recent_events_table(st, visit_events)
+    init_page_visit_graph(st, visit_events)
 
 if selected_event_type == EventTypes.CLICK_EVENTS.value:
     pass
