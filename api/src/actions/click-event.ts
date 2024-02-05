@@ -18,4 +18,9 @@ export const getClickEvents = async (date?: Date) => {
     return events
 }
 
+export const deleteClickEvents = async () => {
+    await dbConnect();
+    return await ClickEventModel.deleteMany();
+}
+
 

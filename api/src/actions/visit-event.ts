@@ -17,3 +17,8 @@ export const getVisitEvents = async (date?: Date) => {
     const events = await VisitEventModel.find({ date: { $gte: fromDate } })
     return events
 }
+
+export const deleteClickEvents = async () => {
+    await dbConnect();
+    return await VisitEventModel.deleteMany();
+}
