@@ -1,3 +1,5 @@
+from collections import defaultdict
+from datetime import datetime
 import streamlit as st
 from data import visit_events
 from widgets.sidebar_widgets import init_days_slider, init_event_selectbox
@@ -37,7 +39,15 @@ if selected_event_type == EventTypes.VISIT_EVENTS.value:
     init_page_visit_graph(st, visit_events)
 
 if selected_event_type == EventTypes.CLICK_EVENTS.value:
-    pass
 
+    object_clicks = defaultdict(int)
+    for click_event in click_events:
+        object_id = click_event.event_properties.object_id
+        object_clicks[object_id] += 1
+
+    df_visits = pd.DataFrame(
+        list(object_clicks.items()), columns=["Object Id", "Clicks"]
+    )
+    st.bar_chart(df_visits.set_index("Object Id"))
 if selected_event_type == EventTypes.INPUT_EVENTS.value:
     pass
