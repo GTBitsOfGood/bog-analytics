@@ -4,16 +4,13 @@ import { ClickEventModel } from "@/src/models/click-event";
 
 export const createClickEvent = async (event: Partial<ClickEvent>) => {
     await dbConnect();
-    const createdEvent = ClickEventModel.create(event);
+    const createdEvent = await ClickEventModel.create(event);
     return createdEvent;
 }
 
 export const getClickEvents = async (date?: Date) => {
     await dbConnect();
-    let fromDate = new Date(Date.now() - 60 * 60 * 24 * 30 * 1000)
-    if (typeof date !== 'undefined') {
-        fromDate = date
-    }
+    let fromDate = date ?? new Date(Date.now() - 60 * 60 * 24 * 30 * 1000)
     const events = await ClickEventModel.find({ date: { $gte: fromDate } })
     return events
 }
