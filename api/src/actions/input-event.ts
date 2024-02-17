@@ -1,6 +1,8 @@
 import { InputEvent } from "@/src/utils/types";
 import { dbConnect } from "@/src/utils/db-connect";
 import { InputEventModel } from "@/src/models/input-event";
+import ProjectModel from "@/src/models/project";
+
 import exp from "constants";
 
 export const createInputEvent = async (event: Partial<InputEvent>) => {
@@ -17,6 +19,16 @@ export const getInputEvents = async (date?: Date) => {
     }
     const events = await InputEventModel.find({ date: { $gte: fromDate } })
     return events
+}
+
+export const paginatedInputClickEvents = async (afterDate: Date, afterID: String, limit: number, projectName: String) => {
+    await dbConnect();
+    const project = await ProjectModel.findOne({ projectName: projectName })
+    if (project != null && project._id != null) {
+        let projectId = project._id;
+        const events = await InputEventModel.find({ date: { $gte: afterDate }, _id: { $gte: afterID }, projectId: projectId }).limit(limit);
+        return events
+    }
 }
 
 export const deleteClickEvents = async () => {

@@ -17,6 +17,15 @@ export const getVisitEvents = async (date?: Date) => {
     const events = await VisitEventModel.find({ date: { $gte: fromDate } })
     return events
 }
+export const paginatedVisitClickEvents = async (afterDate: Date, afterID: String, limit: number, projectName: String) => {
+    await dbConnect();
+    const project = await VisitEventModel.findOne({ projectName: projectName })
+    if (project != null && project._id != null) {
+        let projectId = project._id;
+        const events = await VisitEventModel.find({ date: { $gte: afterDate }, _id: { $gte: afterID }, projectId: projectId }).limit(limit);
+        return events
+    }
+}
 
 export const deleteClickEvents = async () => {
     await dbConnect();
