@@ -3,8 +3,15 @@ from datetime import datetime
 import streamlit as st
 from data import visit_events, click_events
 from widgets.sidebar_widgets import init_days_slider, init_event_selectbox
-from widgets.visit_event_widgets import init_recent_events_table, init_page_visit_graph, init_page_active_users_graph
-from widgets.click_event_widgets import init_object_click_bar_graph, init_object_active_users_bar_graph 
+from widgets.visit_event_widgets import (
+    init_recent_events_table,
+    init_page_visit_graph,
+    init_page_active_users_graph,
+)
+from widgets.click_event_widgets import (
+    init_object_click_bar_graph,
+    init_object_active_users_bar_graph,
+)
 from utils import EventTypes
 import pandas as pd
 from datetime import datetime, timedelta
