@@ -18,7 +18,7 @@ export const getClickEvents = async (date?: Date) => {
     return events
 }
 
-export const paginatedGetClickEvents = async (afterDate: Date, afterID: String, limit: number, projectName: String) => {
+export const paginatedGetClickEvents = async (afterDate: string, afterID: String, limit: number, projectName: String) => {
     await dbConnect();
     const project = await ProjectModel.findOne({ projectName: projectName })
     if (project != null && project._id != null) {
