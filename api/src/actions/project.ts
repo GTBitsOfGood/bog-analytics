@@ -8,8 +8,12 @@ export const createProject = async (project: Project) => {
     return createdProject
 }
 
-export const getProjectByWebToken = async (webToken: string): Promise<Project | null> => {
+export const getProjectByClientKey = async (clientApiKey: string): Promise<Project | null> => {
     await dbConnect();
+    return await ProjectModel.findOne({ clientApiKey });
+}
 
-    return null
+export const getProjectByServerKey = async (serverApiKey: string): Promise<Project | null> => {
+    await dbConnect();
+    return await ProjectModel.findOne({ serverApiKey });
 }

@@ -7,7 +7,7 @@ export const createClickEvent = async (apiKey: string, objectId: string, userId:
     return externalRequest<ClickEvent>({
         url: clickEventUrl,
         method: HttpMethod.POST,
-        apiKey: apiKey,
+        clientApiKey: apiKey,
         body: {
             objectId,
             userId

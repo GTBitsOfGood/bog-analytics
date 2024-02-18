@@ -4,7 +4,8 @@ import APIWrapper from "@/src/utils/api-wrapper";
 const healthRoute = APIWrapper({
     GET: {
         config: {
-            requireToken: false,
+            requireClientToken: false,
+            requireServerToken: false,
             developmentRoute: true
         },
         handler: async () => {

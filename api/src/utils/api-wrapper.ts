@@ -2,10 +2,11 @@ import mongoose from "mongoose";
 import {
     HttpMethod,
 } from "@/src/utils/types";
-import { Request, RequestHandler, Response } from "express"; import { getProjectByWebToken } from "../actions/project";
+import { Request, RequestHandler, Response } from "express"; import { getProjectByClientKey, getProjectByServerKey } from "@/src/actions/project";
 
 interface RouteConfig {
-    requireToken?: boolean;
+    requireClientToken?: boolean;
+    requireServerToken?: boolean;
     handleResponse?: boolean; // handleResponse if the route handles setting status code and body
     developmentRoute?: boolean // for routes we want for development purposes only 
 }
@@ -46,8 +47,8 @@ function APIWrapper(
         }
         try {
             // Handle user access token + roles restrictions
-            if (config?.requireToken) {
-                const project = await getProjectByWebToken(req.headers.accesstoken as string)
+            if (config?.requireClientToken) {
+                const project = await getProjectByClientKey(req.headers.clienttoken as string)
                 if (!project) {
                     return res.status(403).json({
                         success: false,
@@ -55,6 +56,17 @@ function APIWrapper(
                     });
                 }
             }
+
+            if (config?.requireServerToken) {
+                const project = await getProjectByServerKey(req.headers.clienttoken as string)
+                if (!project) {
+                    return res.status(403).json({
+                        success: false,
+                        message: "You do not have permissions to access this API route",
+                    });
+                }
+            }
+
 
             const data = await handler(req, res);
             if (config?.handleResponse) {
