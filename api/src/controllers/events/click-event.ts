@@ -27,24 +27,23 @@ const clickEventRoute = APIWrapper({
             await createClickEvent(event);
         },
     },
-});
-
-const clickEventPaginationRoute = APIWrapper({
     GET: {
         config: {
-            requireToken: true,
+            requireToken: false,
         },
         handler: async (req: Request) => {
-            const { afterTime, afterId, limit, projectName } = req.params;
+            const { afterId, projectName } = req.params;
 
-            if (!afterId || !afterTime || !limit || !projectName) {
+            //if limit is undefined, set it to 10
+            const limit = req.params.limit  ?? 10
+            const afterTime =  req.params.limit  ?? new Date(Date.now() - 60 * 60 * 24 * 30 * 1000)
+            if (!projectName) {
                 throw new Error("You must specify a project name to create a project!")
             }
-
             return await paginatedGetClickEvents(afterTime, afterId, parseInt(limit), projectName);
         },
     },
 });
 
+
 export const clickEvent = relogRequestHandler(clickEventRoute);
-export const paginatedClickEvents = relogRequestHandler(clickEventPaginationRoute)

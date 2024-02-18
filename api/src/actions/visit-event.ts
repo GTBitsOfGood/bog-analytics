@@ -1,6 +1,7 @@
 import { VisitEvent } from "@/src/utils/types";
 import { dbConnect } from "@/src/utils/db-connect";
 import { VisitEventModel } from "@/src/models/visit-event";
+import Project from "@/src/models/project";
 
 export const createVisitEvent = async (event: Partial<VisitEvent>) => {
     await dbConnect();
@@ -19,12 +20,19 @@ export const getVisitEvents = async (date?: Date) => {
 }
 export const paginatedGetVisitEvents = async (afterDate: String, afterID: String, limit: number, projectName: String) => {
     await dbConnect();
-    const project = await VisitEventModel.findOne({ projectName: projectName })
-    if (project != null && project._id != null) {
+    const project = await Project.findOne({ projectName: projectName })
+    if (project && project._id) {
         let projectId = project._id;
-        const events = await VisitEventModel.find({ date: { $gte: afterDate }, _id: { $gte: afterID }, projectId: projectId }).limit(limit);
+        const events = await VisitEventModel.find(
+            {
+                date: { $gte: afterDate },
+                ...(afterID && { _id: { $gte: afterID } }),
+                projectId: projectId
+            })
+            .limit(limit);
         return events
     }
+    return []
 }
 
 export const deleteClickEvents = async () => {
