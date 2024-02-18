@@ -8,7 +8,7 @@ import { Request } from "express";
 const clickEventRoute = APIWrapper({
     POST: {
         config: {
-            requireToken: true,
+            requireClientToken: true,
         },
         handler: async (req: Request) => {
             const { objectId, userId, } = req.body;
@@ -29,7 +29,7 @@ const clickEventRoute = APIWrapper({
     },
     GET: {
         config: {
-            requireToken: false,
+            requireClientToken: false,
         },
         handler: async (req: Request) => {
             const { afterId, projectName } = req.params;

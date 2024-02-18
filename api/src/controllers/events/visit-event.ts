@@ -8,7 +8,7 @@ import { Request } from "express";
 const visitEventRoute = APIWrapper({
     POST: {
         config: {
-            requireToken: true,
+            requireClientToken: true,
         },
         handler: async (req: Request) => {
             const { pageUrl, userId, date } = req.body;
@@ -30,7 +30,7 @@ const visitEventRoute = APIWrapper({
     },
     GET: {
         config: {
-            requireToken: false,
+            requireClientToken: false,
         },
         handler: async (req: Request) => {
             const { afterId, projectName } = req.params;
