@@ -11,7 +11,8 @@ export interface InternalRequestData {
     method: HttpMethod;
     body?: { [key: string]: unknown };
     queryParams?: { [key: string]: string | number | boolean | undefined };
-    apiKey?: string;
+    clientApiKey?: string;
+    serverApiKey?: string;
 }
 
 export interface InternalResponseData<T> {

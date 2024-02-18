@@ -4,45 +4,45 @@ import { ClickEvent } from "@/utils/types";
 
 // Class to be used client side
 export default class AnalyticsLogger {
-    private apiKey?: string;
+    private clientApiKey?: string;
 
-    public async authenticate(apiKey: string): Promise<void> {
-        this.apiKey = apiKey
+    public async authenticate(clientApiKey: string): Promise<void> {
+        this.clientApiKey = clientApiKey
     }
 
     public async logClickEvent(objectId: string, userId: string): Promise<ClickEvent | null> {
         try {
-            if (!this.apiKey) {
-                throw new Error('Please authenticate first using the authenticate method');
+            if (!this.clientApiKey) {
+                throw new Error('Please authenticate first with your client api key using the authenticate method');
             }
 
             // Client side API Key
-            const event = await createClickEvent(this.apiKey, objectId, userId);
+            const event = await createClickEvent(this.clientApiKey, objectId, userId);
             return event;
 
         } catch {
             await logMessage(`
-                Error: an error occurred when registering a click event\n\`\`\`- Project API Key: ${this.apiKey}\n- Object Id: ${objectId}\n- User Id: ${userId}\`\`\`
+                Error: an error occurred when registering a click event\n\`\`\`- Project Client API Key: ${this.clientApiKey}\n- Object Id: ${objectId}\n- User Id: ${userId}\`\`\`
             `)
             return null
         }
     }
 
     public logVisitEvent(objectId: string, userId: string): void {
-        if (!this.apiKey) {
+        if (!this.clientApiKey) {
             throw new Error('Please authenticate first using the authenticate method');
         }
 
-        // Perform click logging logic with apiKey, objectId, userId
+        // Perform click logging logic with clientApiKey, objectId, userId
         console.log(`Click logged for objectId: ${objectId} by userId: ${userId}`);
     }
 
     public logInputEvent(objectId: string, userId: string): void {
-        if (!this.apiKey) {
+        if (!this.clientApiKey) {
             throw new Error('Please authenticate first using the authenticate method');
         }
 
-        // Perform click logging logic with apiKey, objectId, userId
+        // Perform click logging logic with clientApiKey, objectId, userId
         console.log(`Click logged for objectId: ${objectId} by userId: ${userId}`);
     }
 

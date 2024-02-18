@@ -8,7 +8,7 @@ import { Request } from "express";
 const inputEventRoute = APIWrapper({
     POST: {
         config: {
-            requireToken: true,
+            requireClientToken: true,
         },
         handler: async (req: Request) => {
             const { objectId, userId, textValue } = req.body;
@@ -30,7 +30,7 @@ const inputEventRoute = APIWrapper({
     },
     GET: {
         config: {
-            requireToken: false,
+            requireClientToken: false,
         },
         handler: async (req: Request) => {
             const { afterId, projectName } = req.params;
