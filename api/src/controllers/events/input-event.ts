@@ -1,30 +1,31 @@
-import { createClickEvent, paginatedGetClickEvents } from "@/src/actions/click-event";
+import { createInputEvent, paginatedGetInputEvents } from "@/src/actions/input-event";
 import { relogRequestHandler } from "@/src/middleware/request-middleware";
 import APIWrapper from "@/src/utils/api-wrapper";
-import { ClickEvent } from "@/src/utils/types";
+import { InputEvent } from "@/src/utils/types";
 import { Request } from "express";
 
 
-const clickEventRoute = APIWrapper({
+const inputEventRoute = APIWrapper({
     POST: {
         config: {
             requireToken: true,
         },
         handler: async (req: Request) => {
-            const { objectId, userId, } = req.body;
+            const { objectId, userId, textValue } = req.body;
 
-            if (!objectId || !userId) {
+            if (!objectId || !userId || !textValue) {
                 throw new Error("You must specify a project name to create a project!")
             }
 
-            const event: Partial<ClickEvent> = {
+            const event: Partial<InputEvent> = {
                 eventProperties: {
                     objectId,
-                    userId
+                    userId,
+                    textValue
                 }
             }
 
-            await createClickEvent(event);
+            await createInputEvent(event);
         },
     },
     GET: {
@@ -38,10 +39,10 @@ const clickEventRoute = APIWrapper({
             if (!projectName) {
                 throw new Error("You must specify a project name to create a project!")
             }
-            return await paginatedGetClickEvents(afterTime, afterId, parseInt(limit), projectName);
+            return await paginatedGetInputEvents(afterTime, afterId, parseInt(limit), projectName);
         },
     },
 });
 
 
-export const clickEvent = relogRequestHandler(clickEventRoute);
+export const inputEvent = relogRequestHandler(inputEventRoute);
