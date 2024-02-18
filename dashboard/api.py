@@ -1,12 +1,13 @@
 import datetime
 import time
 import requests
+from utils import EventTypes
 
 base_url = "https://analytics.bitsofgood.org"
 
 
 def get_default_after_time():
-    thirty_days_ago = datetime.now() - datetime.timedelta(days=15)
+    thirty_days_ago = datetime.datetime.now() - datetime.timedelta(days=15)
     return int(time.mktime(thirty_days_ago.timetuple()))
 
 
@@ -109,3 +110,13 @@ def get_input_events(project_name, after_time):
         else:
             break
     return input_events
+
+
+def get_event_types(project_name):
+    # When we have custom events, we will want to change this to include both default and custom events
+    return [member.value for member in EventTypes]
+
+
+def get_projects():
+    # When we have the project api setup, we will want to retrieve real projects
+    return [f"project_{i}" for i in range(0, 3)]
