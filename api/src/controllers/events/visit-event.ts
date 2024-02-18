@@ -35,9 +35,8 @@ const visitEventRoute = APIWrapper({
         handler: async (req: Request) => {
             const { afterId, projectName } = req.params;
 
-            //if limit is undefined, set it to 10
-            const limit = req.params.limit  ?? 10
-            const afterTime =  req.params.limit  ?? new Date(Date.now() - 60 * 60 * 24 * 30 * 1000)
+            const limit = req.params.limit ?? 10
+            const afterTime = req.params.afterTime ?? new Date(Date.now() - 60 * 60 * 24 * 30 * 1000)
             if (!projectName) {
                 throw new Error("You must specify a project name to create a project!")
             }

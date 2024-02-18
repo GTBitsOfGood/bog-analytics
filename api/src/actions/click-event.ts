@@ -22,12 +22,11 @@ export const paginatedGetClickEvents = async (afterDate: string, afterID: String
     await dbConnect();
     const project = await ProjectModel.findOne({ projectName: projectName })
     if (project && project._id) {
-        let projectId = project._id;
         const events = await ClickEventModel.find(
             {
                 date: { $gte: afterDate },
-                ...(afterID && {_id: { $gte: afterID }}),
-                projectId: projectId
+                ...(afterID && { _id: { $gte: afterID } }),
+                projectId: project._id
             })
             .limit(limit);
         return events
