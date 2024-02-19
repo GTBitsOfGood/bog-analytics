@@ -36,6 +36,7 @@ export interface ClickEventProperties {
 }
 
 export interface Project {
+    _id: string | Types.ObjectId;
     clientApiKey: string;
     serverApiKey: string;
     projectName: string;

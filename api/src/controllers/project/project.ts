@@ -20,7 +20,7 @@ const projectRoute = APIWrapper({
             const clientApiKey: string = randomUUID();
             const serverApiKey: string = randomUUID();
 
-            const project: Project = {
+            const project: Partial<Project> = {
                 projectName, clientApiKey, serverApiKey
             }
 

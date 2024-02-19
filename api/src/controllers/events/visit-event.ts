@@ -3,6 +3,7 @@ import { relogRequestHandler } from "@/src/middleware/request-middleware";
 import APIWrapper from "@/src/utils/api-wrapper";
 import { VisitEvent } from "@/src/utils/types";
 import { Request } from "express";
+import { getProjectByClientKey } from "@/src/actions/project";
 
 
 const visitEventRoute = APIWrapper({
@@ -16,8 +17,14 @@ const visitEventRoute = APIWrapper({
             if (!pageUrl || !userId || !date) {
                 throw new Error("You must specify a project name to create a project!")
             }
+            const project = await getProjectByClientKey(req.headers.clienttoken as string);
+
+            if (!project) {
+                throw new Error("Project does not exist for client token")
+            }
 
             const event: Partial<VisitEvent> = {
+                projectId: project._id,
                 eventProperties: {
                     pageUrl,
                     userId,

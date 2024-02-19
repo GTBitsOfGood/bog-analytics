@@ -2,8 +2,6 @@ import { ClickEvent } from "@/src/utils/types";
 import { dbConnect } from "@/src/utils/db-connect";
 import { ClickEventModel } from "@/src/models/click-event";
 import ProjectModel from "@/src/models/project";
-import { Project } from "@/src/utils/types";
-import { after } from "node:test";
 
 export const createClickEvent = async (event: Partial<ClickEvent>) => {
     await dbConnect();

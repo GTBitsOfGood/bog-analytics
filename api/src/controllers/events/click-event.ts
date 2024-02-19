@@ -1,9 +1,9 @@
 import { createClickEvent, paginatedGetClickEvents } from "@/src/actions/click-event";
+import { getProjectByClientKey } from "@/src/actions/project";
 import { relogRequestHandler } from "@/src/middleware/request-middleware";
 import APIWrapper from "@/src/utils/api-wrapper";
 import { ClickEvent } from "@/src/utils/types";
 import { Request } from "express";
-
 
 const clickEventRoute = APIWrapper({
     POST: {
@@ -16,8 +16,13 @@ const clickEventRoute = APIWrapper({
             if (!objectId || !userId) {
                 throw new Error("You must specify a project name to create a project!")
             }
+            const project = await getProjectByClientKey(req.headers.clienttoken as string);
 
+            if (!project) {
+                throw new Error("Project does not exist for client token")
+            }
             const event: Partial<ClickEvent> = {
+                projectId: project._id,
                 eventProperties: {
                     objectId,
                     userId
