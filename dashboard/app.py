@@ -1,5 +1,5 @@
 import streamlit as st
-#from data import visit_events, click_events, input_events, custom_events, custom_graphs
+from data import visit_events, click_events, input_events, custom_events, custom_graphs
 from data import visit_events, click_events, input_events
 from widgets.sidebar_widgets import (
     init_days_slider,
@@ -22,8 +22,8 @@ selected_project = init_project_selectbox(st)
 selected_event_type = init_event_selectbox(st, selected_project)
 days_aggregation = init_days_slider(st, selected_event_type)
 
-def add_graph_titles():
-    if selected_event_type == EventTypes.VISIT_EVENTS.value:
+if selected_event_type == EventTypes.VISIT_EVENTS.value:
+if selected_event_type == EventTypes.VISIT_EVENTS.value:
         st.header("Visit Events")
         init_recent_events_table(st, visit_events)
         st.subheader("Page Visit Graph")

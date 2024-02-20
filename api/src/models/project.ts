@@ -2,9 +2,13 @@ import mongoose from "mongoose";
 import { Project } from "@/src/utils/types";
 
 export const ProjectSchema = new mongoose.Schema<Project>({
-    apiKey: {
+    clientApiKey: {
         type: String,
         required: true,
+    },
+    serverApiKey: {
+        type: String,
+        required: true
     },
     projectName: {
         type: String,
