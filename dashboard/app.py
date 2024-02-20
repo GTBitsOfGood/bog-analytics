@@ -1,40 +1,71 @@
-from datetime import datetime
 import streamlit as st
-import pandas as pd
-import numpy as np
+#from data import visit_events, click_events, input_events, custom_events, custom_graphs
 from data import visit_events, click_events, input_events
+from widgets.sidebar_widgets import (
+    init_days_slider,
+    init_event_selectbox,
+    init_project_selectbox,
+)
+from widgets.visit_event_widgets import (
+    init_recent_events_table,
+    init_page_visit_graph,
+    init_page_active_users_graph,
+)
+from widgets.click_event_widgets import (
+    init_object_click_bar_graph,
+    init_object_active_users_bar_graph,
+)
+from utils import EventTypes
 
-st.title("Hello World!")
-EVENT_TYPES = ["Visit Events", "Click Events", "Input Events"]
-selected_event_type = st.sidebar.selectbox("Select Event Type", EVENT_TYPES)
+st.title("Analytics Dashboard")
+selected_project = init_project_selectbox(st)
+selected_event_type = init_event_selectbox(st, selected_project)
+days_aggregation = init_days_slider(st, selected_event_type)
 
-if selected_event_type == EVENT_TYPES[0]:
-    visit_sorted = sorted(visit_events, key=lambda event: event.event_properties.date)
-    data = [
-        {
-            "Page URL": event.event_properties.pageUrl,
-            "User ID": event.event_properties.user_id,
-            "Date": event.event_properties.date,
-        }
-        for event in visit_sorted
-    ]
+def add_graph_titles():
+    if selected_event_type == EventTypes.VISIT_EVENTS.value:
+        st.header("Visit Events")
+        init_recent_events_table(st, visit_events)
+        st.subheader("Page Visit Graph")
+        init_page_visit_graph(st, visit_events)
+        st.subheader("Page Active Users Graph")
+        init_page_active_users_graph(st, visit_events)
 
-    df = pd.DataFrame(data)
-    df["Date"] = pd.to_datetime(df["Date"])
-    df["Date"] = df["Date"].dt.strftime("%B %d, %Y %I:%M %p")
+    elif selected_event_type == EventTypes.CLICK_EVENTS.value:
+        st.header("Click Events")
+        st.subheader("Object Click Bar Graph")
+        init_object_click_bar_graph(st, click_events)
+        st.subheader("Object Active Users Bar Graph")
+        init_object_active_users_bar_graph(st, click_events)
 
-    df = df.sort_values(by="Date", ascending=False)
-    df = df.head(5)
-    st.table(df)
+    elif selected_event_type == EventTypes.INPUT_EVENTS.value:
+        st.header("Input Events")
+        pass
+        # Add input event graphs here if applicable
+
+# Add titles and labels to graphs
+add_graph_titles()
 
 
-with st.sidebar:
-    # days-toggle slider
-    days_aggregation = st.slider(
-        label="Select Data Timeframe",
-        min_value=1,
-        max_value=30,
-        value=15,  # Default value of the slider
-    )
+# Additional layout refinements
+st.sidebar.markdown("---")  # Add a divider in the sidebar
+st.sidebar.subheader("Dashboard Settings")  # Add a subheader in the sidebar
+st.sidebar.info("Use the sidebar to adjust settings.") 
+st.sidebar.markdown("---")  # Add another divider in the sidebar
 
-print(selected_event_type)
+
+st.markdown("---")  
+st.caption("This is a Streamlit Analytics Dashboard. BITS OF GOOD")
+
+""" if selected_event_type == EventTypes.VISIT_EVENTS.value:
+    init_recent_events_table(st, visit_events)
+    init_page_visit_graph(st, visit_events)
+    init_page_active_users_graph(st, visit_events)
+
+if selected_event_type == EventTypes.CLICK_EVENTS.value:
+    init_object_click_bar_graph(st, click_events)
+    init_object_active_users_bar_graph(st, click_events)
+
+if selected_event_type == EventTypes.INPUT_EVENTS.value:
+    pass
+ """
