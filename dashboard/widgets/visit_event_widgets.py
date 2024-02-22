@@ -93,3 +93,32 @@ def init_page_active_users_graph(st, visit_events):
 
     # Display the chart using Streamlit
     st.altair_chart(chart, use_container_width=True)
+
+
+def init_visitors_over_time_graph(st, visit_events):
+    st.write("**Visitors Over Time Graph**")
+    data = {
+        "Date": [event.event_properties.date for event in visit_events],
+        "pageUrl": [event.event_properties.pageUrl for event in visit_events],
+        "Number of Visitors": [1 for _ in visit_events],
+    }
+    df = pd.DataFrame(data)
+    df["Date"] = pd.to_datetime(df["Date"]).dt.date
+    processed_data = df.groupby(["Date", "pageUrl"], as_index=False).count()
+    pages = processed_data["pageUrl"].unique()
+    selected_page = st.selectbox("Select a page to analyze:", ["All"] + list(pages))
+
+    if selected_page != "All":
+        filtered_data = processed_data[processed_data["pageUrl"] == selected_page]
+    else:
+        filtered_data = processed_data
+
+    filtered_data = filtered_data.sort_values("Date")
+
+    st.line_chart(
+        data=filtered_data,
+        x="Date",
+        y="Number of Visitors",
+        color="pageUrl" if selected_page == "All" else None,
+        use_container_width=True,
+    )
