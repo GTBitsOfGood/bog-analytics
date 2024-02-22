@@ -30,7 +30,7 @@ def init_object_click_bar_graph(st, click_events):
 
 
 def init_object_active_users_bar_graph(st, click_events):
-    st.subheader("**User Clicks Per Object Graph**")
+    st.write("**User Clicks Per Object Graph**")
     user_clicks_per_object = defaultdict(lambda: defaultdict(int))
     for click_event in click_events:
         object_id = click_event.event_properties.object_id
