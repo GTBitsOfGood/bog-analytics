@@ -1,5 +1,5 @@
 import { externalRequest } from "@/utils/requests"
-import { ClickEvent, HttpMethod } from "@/utils/types";
+import { HttpMethod } from "@/utils/types";
 import { urls } from "@/utils/urls"
 
 const logUrl = urls.loggerBaseUrl + urls.logMessage;

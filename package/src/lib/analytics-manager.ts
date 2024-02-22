@@ -1,12 +1,14 @@
-import { createClickEvent } from "@/actions/click-event";
 import { logMessage } from "@/actions/logs";
-import { ClickEvent } from "@/utils/types";
+
 
 // Class to be used server side
-export default class AnalyticsLogger {
+export default class AnalyticsManager {
     private serverApiKey?: string;
 
     public async authenticate(serverApiKey: string): Promise<void> {
+        if (isBrowser()) {
+            throw new Error("Analytics manager cannot be used client side!")
+        }
         this.serverApiKey = serverApiKey
     }
 

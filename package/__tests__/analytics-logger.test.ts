@@ -6,7 +6,7 @@ describe('Analytics Logger Module', () => {
     let logger: AnalyticsLogger;
     beforeAll(() => {
         logger = new AnalyticsLogger()
-        logger.authenticate({ clientApiKey: "" })
+        logger.authenticate("hello")
     })
     test('Click Event Log', async () => {
 

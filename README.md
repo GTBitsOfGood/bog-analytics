@@ -1,6 +1,6 @@
 # Bits of Good Analytics
 
-This is the unified Bits of Good analytics dashboard. It is designed with interoperability and plug-in-play in mind to be able to work with any Bits of Good project. There are three primary components to this analytics dashboard:
+This is the unified Bits of Good analytics dashboard. It is designed with interoperability and plug-in-play in mind to be able to work with any Bits of Good project. There are four primary components to this analytics dashboard:
 
 - **Dashboard Application:** This is the core of the analytics dashboard and is where all of the data visualizations are located. This is written and built complately using Streamlit and Python - it is deployed using Streamlit's cloud service.
 

@@ -3,5 +3,8 @@ export const urls = {
     loggerBaseUrl: "https://bit-bot-five.vercel.app",
     logMessage: "/bog/analytics-log",
     auth: "/api/auth",
-    clickEvent: "/api/click-event"
+    events: {
+        clickEvent: "/api/events/click-event",
+        visitEvent: "/api/events/visit-event"
+    }
 }

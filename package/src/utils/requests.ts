@@ -1,4 +1,4 @@
-import { InternalRequestData, InternalResponseData } from "@/utils/types";
+import { ExternalRequestData, ExternalResponseData } from "@/utils/types";
 
 export async function externalRequest<T>({
     url,
@@ -7,7 +7,7 @@ export async function externalRequest<T>({
     body,
     clientApiKey,
     serverApiKey
-}: InternalRequestData): Promise<T> {
+}: ExternalRequestData): Promise<T> {
     const requestInfo: RequestInit = {
         method,
         mode: "cors",
@@ -35,7 +35,7 @@ export async function externalRequest<T>({
     }
 
     const response = await fetch(url, requestInfo);
-    const responseBody = (await response.json()) as InternalResponseData<T>;
+    const responseBody = (await response.json()) as ExternalResponseData<T>;
 
     if (!responseBody) {
         throw new Error("Unable to connect to API.");

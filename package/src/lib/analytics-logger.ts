@@ -1,6 +1,8 @@
 import { createClickEvent } from "@/actions/click-event";
 import { logMessage } from "@/actions/logs";
-import { ClickEvent } from "@/utils/types";
+import { createVisitEvent } from "@/actions/visit-event";
+import { formatErrorMessage } from "@/utils/error";
+import { ClickEvent, VisitEvent } from "@/utils/types";
 
 // Class to be used client side
 export default class AnalyticsLogger {
@@ -21,20 +23,39 @@ export default class AnalyticsLogger {
             return event;
 
         } catch {
-            await logMessage(`
-                Error: an error occurred when registering a click event\n\`\`\`- Project Client API Key: ${this.clientApiKey}\n- Object Id: ${objectId}\n- User Id: ${userId}\`\`\`
-            `)
+            await logMessage(formatErrorMessage(
+                "an error occurred when registering an input event",
+                {
+                    clientApiKey: this.clientApiKey as string,
+                    objectId,
+                    userId
+                }
+            ))
             return null
         }
     }
 
-    public logVisitEvent(objectId: string, userId: string): void {
-        if (!this.clientApiKey) {
-            throw new Error('Please authenticate first using the authenticate method');
-        }
+    public async logVisitEvent(pageUrl: string, userId: string, date: Date): Promise<VisitEvent | null> {
+        try {
+            if (!this.clientApiKey) {
+                throw new Error('Please authenticate first with your client api key using the authenticate method');
+            }
 
-        // Perform click logging logic with clientApiKey, objectId, userId
-        console.log(`Click logged for objectId: ${objectId} by userId: ${userId}`);
+            // Client side API Key
+            const event = await createVisitEvent(this.clientApiKey, pageUrl, userId, date);
+            return event;
+
+        } catch {
+            await logMessage(formatErrorMessage(
+                "an error occurred when registering an input event",
+                {
+                    clientApiKey: this.clientApiKey as string,
+                    pageUrl,
+                    userId, date: date.toString()
+                }
+            ))
+            return null
+        }
     }
 
     public logInputEvent(objectId: string, userId: string): void {

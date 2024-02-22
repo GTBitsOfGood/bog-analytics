@@ -6,7 +6,7 @@ export enum HttpMethod {
     DELETE = "DELETE",
 }
 
-export interface InternalRequestData {
+export interface ExternalRequestData {
     url: string;
     method: HttpMethod;
     body?: { [key: string]: unknown };
@@ -15,7 +15,7 @@ export interface InternalRequestData {
     serverApiKey?: string;
 }
 
-export interface InternalResponseData<T> {
+export interface ExternalResponseData<T> {
     success: boolean;
     message?: string;
     payload?: T;
@@ -33,4 +33,14 @@ export interface ClickEvent extends BaseEvent {
 export interface ClickEventProperties {
     objectId: string;
     userId: string;
+}
+
+export interface VisitEvent extends BaseEvent {
+    eventProperties: VisitEventProperties
+}
+
+export interface VisitEventProperties {
+    pageUrl: string;
+    userId: string;
+    date: Date;
 }
