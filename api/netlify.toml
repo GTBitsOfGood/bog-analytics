@@ -6,5 +6,9 @@
   from = "/api/*"
   status = 200
   to = "/.netlify/functions/api/:splat"
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
 [build]
   command = "echo 'Building Functions'"
