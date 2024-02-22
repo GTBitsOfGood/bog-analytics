@@ -5,7 +5,8 @@ export async function externalRequest<T>({
     queryParams,
     method,
     body,
-    apiKey
+    clientApiKey,
+    serverApiKey
 }: InternalRequestData): Promise<T> {
     const requestInfo: RequestInit = {
         method,
@@ -13,7 +14,8 @@ export async function externalRequest<T>({
         credentials: "include",
         headers: {
             "Content-Type": "application/json",
-            "accesstoken": apiKey ?? ""
+            "clienttoken": clientApiKey ?? "",
+            "servertoken": serverApiKey ?? ""
         },
     };
     if (body) {

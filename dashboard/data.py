@@ -67,6 +67,23 @@ class InputEvent(BaseEvent):
         super().__init__(event_properties, category, subcategory)
 
 
+possible_custom_properties = [f"prop{i}" for i in range(0, 5)]
+
+
+class CustomEvent(BaseEvent):
+    def __init__(self, event_properties, category, subcategory) -> None:
+        super().__init__(event_properties, category, subcategory)
+
+
+class CustomGraphType:
+    def __init__(self, category, subcategory, xProperty, yProperty, graphType) -> None:
+        self.category = category
+        self.subcategory = subcategory
+        self.xProperty = xProperty
+        self.yProperty = yProperty
+        self.graphType = graphType
+
+
 possible_urls = ["/home", "/app", "/contact", "/dashboard"]
 possible_buttons = [f"button_{i}" for i in range(0, 5)]
 possible_inputs = [f"input_{i}" for i in range(0, 5)]
@@ -77,9 +94,16 @@ possible_dates = [
     for i in range(30)
 ]
 
+possible_custom_event_categories = [f"custom{i}" for i in range(0, 2)]
+possible_custom_event_subcategories = [f"custom{i}" for i in range(0, 2)]
+graph_types = ["bar", "line", "scatter"]
+
 visit_events = []
 click_events = []
 input_events = []
+custom_events = []
+custom_graphs = []
+
 for i in range(0, 100):
     visit_properties = VisitEventProperties(
         pageUrl=random.choice(possible_urls),
@@ -103,4 +127,37 @@ for i in range(0, 100):
 
     input_events.append(InputEvent(input_properties))
 
-    
+    custom_properties = {}
+    for prop in possible_custom_properties:
+        custom_properties[prop] = random.choice([i for i in range(10)])
+
+    custom_event = CustomEvent(
+        custom_properties,
+        random.choice(possible_custom_event_categories),
+        random.choice(possible_custom_event_subcategories),
+    )
+
+    custom_events.append(custom_event)
+
+created_graphs = set()
+for i in range(0, 10):
+    cat = random.choice(possible_custom_event_categories)
+    subcat = random.choice(possible_custom_event_subcategories)
+    xProp = random.choice(possible_custom_properties)
+    yProp = random.choice(possible_custom_properties)
+    graphType = random.choice(graph_types)
+
+    if f"{cat}{subcat}{xProp}{yProp}{graphType}" in created_graphs:
+        continue
+
+    created_graphs.add(f"{cat}{subcat}{xProp}{yProp}{graphType}")
+
+    custom_graphs.append(
+        CustomGraphType(
+            cat,
+            subcat,
+            xProp,
+            yProp,
+            graphType,
+        )
+    )

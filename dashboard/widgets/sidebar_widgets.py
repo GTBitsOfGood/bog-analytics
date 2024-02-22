@@ -1,13 +1,28 @@
+from api import get_event_types, get_projects
 from utils import EventTypes
 
 
-def init_event_selectbox(st):
+def init_project_selectbox(st):
+    return st.sidebar.selectbox("Select a Project", get_projects(), index=None)
+
+
+def init_event_selectbox(st, project_name=None):
+    if not project_name:
+        return None
     return st.sidebar.selectbox(
-        "Select Event Type", [member.value for member in EventTypes]
+        "Select Event Type", get_event_types(project_name), index=None
     )
 
 
-def init_days_slider(st):
+def init_sidebar_description(st):
+    st.sidebar.subheader("Dashboard Settings")
+    st.sidebar.info("Use the sidebar to adjust settings", icon="ℹ️")
+    st.sidebar.divider()
+
+
+def init_days_slider(st, event_type=None):
+    if not event_type:
+        return None
     with st.sidebar:
         # days-toggle slider
         return st.slider(
