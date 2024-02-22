@@ -2,22 +2,6 @@ import datetime
 import random
 import pandas as pd
 
-def get_aggregated_visit_data(visit_events):
-    # Convert the generated visit events into a structured format
-    data = {
-        'date': [event.event_properties.date for event in visit_events],
-        'pageUrl': [event.event_properties.pageUrl for event in visit_events],
-        'number of visitors': [1 for _ in visit_events]  # Each event represents a single visit
-    }
-    df = pd.DataFrame(data)
-    
-    # Convert date strings to datetime objects
-    df['date'] = pd.to_datetime(df['date']).dt.date
-    
-    # Aggregate data: count visits per day for each page
-    aggregated_data = df.groupby(['date', 'pageUrl'], as_index=False).count()
-    
-    return aggregated_data
 
 class BaseEvent:
     def __init__(self, event_properties, category, subcategory) -> None:

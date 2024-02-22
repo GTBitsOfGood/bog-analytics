@@ -10,6 +10,7 @@ from widgets.visit_event_widgets import (
     init_recent_events_table,
     init_page_visit_graph,
     init_page_active_users_graph,
+    init_visitors_over_time_graph,
 )
 from widgets.click_event_widgets import (
     init_object_click_bar_graph,
@@ -30,34 +31,11 @@ if selected_event_type == EventTypes.VISIT_EVENTS.value:
     init_recent_events_table(st, visit_events)
     init_page_visit_graph(st, visit_events)
     init_page_active_users_graph(st, visit_events)
+    init_visitors_over_time_graph(st, visit_events)
 elif selected_event_type == EventTypes.CLICK_EVENTS.value:
     st.header("Click Events")
     init_object_click_bar_graph(st, click_events)
     init_object_active_users_bar_graph(st, click_events)
-
 elif selected_event_type == EventTypes.INPUT_EVENTS.value:
     st.header("Input Events")
     pass
-
-# Aggregate the visit data
-aggregated_data = get_aggregated_visit_data(visit_events)
-
-# Create a dropdown for page selection
-pages = aggregated_data['pageUrl'].unique()
-selected_page = st.selectbox('Select a page to analyze:', ['All'] + list(pages))
-
-# Filter data based on the selected page
-if selected_page != 'All':
-    filtered_data = aggregated_data[aggregated_data['pageUrl'] == selected_page]
-else:
-    filtered_data = aggregated_data
-
-# Ensure the data is sorted by date for consistent plotting
-filtered_data = filtered_data.sort_values('date')    
-
-# Plotting
-st.line_chart(data=filtered_data,
-              x='date',
-              y='number of visitors',
-              color='pageUrl' if selected_page == 'All' else None,
-              use_container_width=True)
