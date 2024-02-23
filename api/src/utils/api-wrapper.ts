@@ -77,7 +77,7 @@ function APIWrapper(
             if (e instanceof mongoose.Error) {
                 return res.status(500).json({
                     success: false,
-                    message: "An Internal Server error occurred.",
+                    message: `An Internal Server error occurred: ${e.message}`,
                 });
             }
 

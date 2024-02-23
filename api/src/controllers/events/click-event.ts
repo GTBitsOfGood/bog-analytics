@@ -2,7 +2,7 @@ import { createClickEvent, paginatedGetClickEvents } from "@/src/actions/click-e
 import { getProjectByClientKey } from "@/src/actions/project";
 import { relogRequestHandler } from "@/src/middleware/request-middleware";
 import APIWrapper from "@/src/utils/api-wrapper";
-import { ClickEvent } from "@/src/utils/types";
+import { ClickEvent, EventCategories, EventSubcategories } from "@/src/utils/types";
 import { Request } from "express";
 
 const clickEventRoute = APIWrapper({
@@ -11,10 +11,9 @@ const clickEventRoute = APIWrapper({
             requireClientToken: true,
         },
         handler: async (req: Request) => {
-            const { objectId, userId, } = req.body;
-
+            const { objectId, userId } = req.body;
             if (!objectId || !userId) {
-                throw new Error("You must specify a project name to create a project!")
+                throw new Error("You must specify an object id and user id to create a click event!")
             }
             const project = await getProjectByClientKey(req.headers.clienttoken as string);
 
@@ -23,13 +22,16 @@ const clickEventRoute = APIWrapper({
             }
             const event: Partial<ClickEvent> = {
                 projectId: project._id,
+                category: EventCategories.INTERACTION,
+                subcategory: EventSubcategories.CLICK,
                 eventProperties: {
                     objectId,
                     userId
                 }
             }
 
-            await createClickEvent(event);
+            const createdEvent = await createClickEvent(event);
+            return createdEvent;
         },
     },
     GET: {
