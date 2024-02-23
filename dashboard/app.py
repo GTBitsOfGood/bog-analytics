@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas as pd
 from data import visit_events, click_events, input_events, custom_events, custom_graphs
 from widgets.sidebar_widgets import (
     init_days_slider,
@@ -16,6 +17,10 @@ from widgets.click_event_widgets import (
     init_object_click_bar_graph,
     init_object_active_users_bar_graph,
 )
+from widgets.input_event_widgets import (
+    init_input_object_frequency_graph
+)
+
 from utils import EventTypes
 
 st.title("Analytics Dashboard")
@@ -38,4 +43,5 @@ elif selected_event_type == EventTypes.CLICK_EVENTS.value:
     init_object_active_users_bar_graph(st, click_events)
 elif selected_event_type == EventTypes.INPUT_EVENTS.value:
     st.header("Input Events")
+    init_input_object_frequency_graph(st, input_events)
     pass
