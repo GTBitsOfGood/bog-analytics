@@ -17,3 +17,8 @@ export const getProjectByServerKey = async (serverApiKey: string): Promise<Proje
     await dbConnect();
     return await ProjectModel.findOne({ serverApiKey });
 }
+
+export const deleteProjectById = async (projectId: string) => {
+    await dbConnect();
+    return await ProjectModel.findOneAndDelete({ _id: projectId });
+}
