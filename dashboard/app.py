@@ -17,19 +17,27 @@ from widgets.click_event_widgets import (
     init_object_click_bar_graph,
     init_object_active_users_bar_graph,
 )
-from widgets.input_event_widgets import (
-    init_input_object_frequency_graph
-)
+from widgets.input_event_widgets import init_input_object_frequency_graph
 
 from utils import EventTypes
 
 st.title("Analytics Dashboard")
 st.caption("This is the Bits of Good Streamlit analytics dashboard")
+hide_st_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            header {visibility: hidden;}
+            div.embeddedAppMetaInfoBar_container__DxxL1 {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_st_style, unsafe_allow_html=True)
 
 init_sidebar_description(st)
 selected_project = init_project_selectbox(st)
 selected_event_type = init_event_selectbox(st, selected_project)
 days_aggregation = init_days_slider(st, selected_event_type)
+
 
 if selected_event_type == EventTypes.VISIT_EVENTS.value:
     st.header("Visit Events")
