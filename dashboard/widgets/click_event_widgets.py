@@ -14,7 +14,7 @@ def init_object_click_bar_graph(st, click_events):
         list(object_clicks.items()), columns=["Object Id", "Clicks"]
     )
 
-    # Create the bar chart
+    
     chart = (
         alt.Chart(df_visits)
         .mark_bar()
@@ -25,7 +25,7 @@ def init_object_click_bar_graph(st, click_events):
         .properties(width=600, height=400)
     )
 
-    # Display the chart using Streamlit
+    
     st.altair_chart(chart, use_container_width=True)
 
 
@@ -45,9 +45,9 @@ def init_object_active_users_bar_graph(st, click_events):
         pd.DataFrame(list(clicks_data.items()), columns=["User ID", "Clicks"])
         .sort_values(by="Clicks", ascending=False)
         .head(5)
-    )  # Focus on top 5 users
+    )  
 
-    # Create the bar chart
+    
     chart = (
         alt.Chart(df_clicks)
         .mark_bar()
@@ -58,5 +58,5 @@ def init_object_active_users_bar_graph(st, click_events):
         .properties(width=600, height=400)
     )
 
-    # Display the chart using Streamlit
+   
     st.altair_chart(chart, use_container_width=True)
