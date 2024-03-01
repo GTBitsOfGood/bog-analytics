@@ -17,6 +17,10 @@ from widgets.click_event_widgets import (
     init_object_click_bar_graph,
     init_object_active_users_bar_graph,
 )
+from widgets.input_event_widgets import (
+    init_input_object_frequency_graph,
+    init_input_value_frequency_graph
+)
 from widgets.input_event_widgets import init_input_object_frequency_graph
 from widgets.custom_event_graphs import init_plot_custom_graphs
 from utils import EventTypes
@@ -52,6 +56,7 @@ elif selected_event_type == EventTypes.CLICK_EVENTS.value:
 elif selected_event_type == EventTypes.INPUT_EVENTS.value:
     st.header("Input Events")
     init_input_object_frequency_graph(st, input_events)
+    init_input_value_frequency_graph(st, input_events)
     pass
 
 
