@@ -80,7 +80,6 @@ def init_page_active_users_graph(st, visit_events):
         .head(5)
     )
 
-    # Create the bar chart
     chart = (
         alt.Chart(df_user_visits)
         .mark_bar()
@@ -91,7 +90,7 @@ def init_page_active_users_graph(st, visit_events):
         .properties(width=600, height=400)
     )
 
-    # Display the chart using Streamlit
+   
     st.altair_chart(chart, use_container_width=True)
 
 
