@@ -1,6 +1,5 @@
 import bodyParser from 'body-parser';
 import compression from 'compression';
-import path from 'path';
 import express, { Request, Response, NextFunction } from 'express';
 import { router } from '@/src/routes';
 import { ApplicationError } from '@/src/errors/application-error';

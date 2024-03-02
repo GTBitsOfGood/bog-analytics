@@ -58,13 +58,14 @@ export default class AnalyticsLogger {
         }
     }
 
-    public logInputEvent(objectId: string, userId: string): void {
+    public async logInputEvent(objectId: string, userId: string): Promise<void> {
         if (!this.clientApiKey) {
             throw new Error('Please authenticate first using the authenticate method');
         }
+    }
 
-        // Perform click logging logic with clientApiKey, objectId, userId
-        console.log(`Click logged for objectId: ${objectId} by userId: ${userId}`);
+    public async logCustomEvent(): Promise<void> {
+
     }
 
 

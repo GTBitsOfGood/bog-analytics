@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from dashboard.scripts.data import (
+from scripts.data import (
     visit_events,
     click_events,
     input_events,
@@ -64,8 +64,7 @@ elif selected_event_type == EventTypes.INPUT_EVENTS.value:
     init_input_object_frequency_graph(st, input_events)
     init_input_value_frequency_graph(st, input_events)
     pass
-
-
-custom_charts = init_plot_custom_graphs(custom_events, custom_graphs)
-for chart in custom_charts:
-    st.altair_chart(chart, use_container_width=True)
+elif selected_event_type == EventTypes.CUSTOM_EVENTS.value:
+    custom_charts = init_plot_custom_graphs(custom_events, custom_graphs)
+    for chart in custom_charts:
+        st.altair_chart(chart, use_container_width=True)
