@@ -12,16 +12,9 @@ export let api = express();
 api.use(compression());
 api.use(bodyParser.json());
 api.use(bodyParser.urlencoded({ extended: true }));
-const allowedOrigins = ['http://localhost:8501', 'https://analytics.bitsofgood.org', 'https://bog-analytics.streamlit.app/'];
 
 api.use(cors({
-    origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    }
+    origin: "*"
 }));
 
 api.set('port', process.env.PORT || 3001);

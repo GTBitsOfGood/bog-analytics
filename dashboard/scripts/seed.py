@@ -1,8 +1,8 @@
 import requests
+import random
 
+random.seed(0)
 base_url = "http://localhost:3001"
-SERVER_API_KEY = ""
-CLIENT_API_KEY = ""
 
 
 def create_project(project_name):
@@ -15,13 +15,9 @@ def create_project(project_name):
         response = requests.post(url, json=body)
         response.raise_for_status()
         project = response.json()["payload"]
-
-        global SERVER_API_KEY, CLIENT_API_KEY
-        SERVER_API_KEY = project["serverApiKey"]
-        CLIENT_API_KEY = project["clientApiKey"]
-        return response.json()
-    except requests.exceptions.RequestException as err:
-        return {"success": False, "payload": {"error": str(err)}}
+        return project
+    except requests.exceptions.RequestException:
+        return None
 
 
 def create_click_event():
@@ -40,12 +36,16 @@ def create_custom_event():
     pass
 
 
-def create_custom_graph():
+def create_custom_event_type():
+    pass
+
+
+def create_custom_graph_type():
     pass
 
 
 def seed():
-    print("Creating Example Project")
+    print("Creating Projects")
     create_project("Example Project")
     pass
 

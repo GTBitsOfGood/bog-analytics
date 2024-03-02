@@ -1,6 +1,5 @@
 import datetime
 import random
-import pandas as pd
 
 
 class BaseEvent:
@@ -67,6 +66,8 @@ class CustomGraphType:
         self.yProperty = yProperty
         self.graphType = graphType
 
+
+random.seed(0)
 
 possible_urls = ["/home", "/app", "/contact", "/dashboard"]
 possible_buttons = [f"button_{i}" for i in range(0, 5)]

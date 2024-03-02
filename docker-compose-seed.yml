@@ -7,4 +7,3 @@ services:
       dockerfile: dashboard/Dockerfile.seed
     volumes:
       - ./dashboard:/app
-      # - ./dashboard/venv:/app/venv
