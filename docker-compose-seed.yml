@@ -1,0 +1,10 @@
+version: '3'
+services:
+  seed:
+    network_mode: "host"
+    build:
+      context: .
+      dockerfile: dashboard/Dockerfile.seed
+    volumes:
+      - ./dashboard:/app
+      # - ./dashboard/venv:/app/venv

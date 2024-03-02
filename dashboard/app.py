@@ -1,6 +1,12 @@
 import streamlit as st
 import pandas as pd
-from data import visit_events, click_events, input_events, custom_events, custom_graphs
+from dashboard.scripts.data import (
+    visit_events,
+    click_events,
+    input_events,
+    custom_events,
+    custom_graphs,
+)
 from widgets.sidebar_widgets import (
     init_days_slider,
     init_event_selectbox,
@@ -19,7 +25,7 @@ from widgets.click_event_widgets import (
 )
 from widgets.input_event_widgets import (
     init_input_object_frequency_graph,
-    init_input_value_frequency_graph
+    init_input_value_frequency_graph,
 )
 from widgets.input_event_widgets import init_input_object_frequency_graph
 from widgets.custom_event_graphs import init_plot_custom_graphs
