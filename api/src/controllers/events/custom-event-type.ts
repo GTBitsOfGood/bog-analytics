@@ -1,4 +1,4 @@
-import { createCustomEventType, getCustomEventTypesForProject } from "@/src/actions/custom-event-type";
+import { createCustomEventType, getCustomEventTypesForProject, deleteCustomEventType } from "@/src/actions/custom-event-type";
 import { getProjectIDByName } from "@/src/actions/project";
 import { getProjectByServerKey } from "@/src/actions/project";
 import { relogRequestHandler } from "@/src/middleware/request-middleware";
@@ -9,7 +9,7 @@ import { Request } from "express";
 const customEventTypeRoute = APIWrapper({
     POST: {
         config: {
-            requireClientToken: true,
+            requireClientToken: false,
             requireServerToken: true
         },
         handler: async (req: Request) => {
@@ -49,6 +49,24 @@ const customEventTypeRoute = APIWrapper({
             }
             const types = await getCustomEventTypesForProject(id);
             return types;
+        },
+    },
+    DELETE: {
+        config: {
+            requireClientToken: false,
+            requireServerToken: true
+        },
+        handler: async (req: Request) => {
+            const {category, subcategory} = req.body
+            if (!category || !subcategory) {
+                throw new Error("You must specify a category and subcategory to delete custom event types!")
+            }
+            const project = await getProjectByServerKey(req.headers.serverToken as string);
+
+            if (!project) {
+                throw new Error("Project does not exist")
+            }
+            deleteCustomEventType(project._id, category, subcategory)
         },
     },
 
