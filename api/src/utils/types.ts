@@ -52,6 +52,23 @@ export interface CustomEventType {
     properties: string[]
     projectId: string | Types.ObjectId;
 }
+export interface CustomEvent {
+    _id: string | Types.ObjectId;
+    projectId: string | Types.ObjectId;
+    eventTypeId: string | Types.ObjectId;
+    subcategory: string;
+    properties: string[]
+}
+export interface CustomGraphType {
+    _id: string | Types.ObjectId;
+    eventTypeId: string | Types.ObjectId;
+    projectId: string | Types.ObjectId;
+    graphTitle: string;
+    xProperty: string
+    yProperty: string
+    graphType: string
+    caption?: string
+}
 
 export enum HttpMethod {
     GET = "GET",
