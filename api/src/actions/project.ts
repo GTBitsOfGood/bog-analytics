@@ -8,6 +8,11 @@ export const createProject = async (project: Partial<Project>) => {
     return createdProject
 }
 
+export const getProjectByName = async (projectName: string) => {
+    await dbConnect();
+    const project = await ProjectModel.findOne({ projectName });
+    return project
+}
 export const getProjectByClientKey = async (clientApiKey: string): Promise<Project | null> => {
     await dbConnect();
     return await ProjectModel.findOne({ clientApiKey });
