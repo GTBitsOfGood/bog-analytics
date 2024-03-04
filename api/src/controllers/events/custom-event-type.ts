@@ -1,5 +1,6 @@
-import { createCustomEventType } from "@/src/actions/custom-event-type";
-import { getProjectByClientKey, getProjectByServerKey } from "@/src/actions/project";
+import { createCustomEventType, getCustomEventTypesForProject } from "@/src/actions/custom-event-type";
+import { getProjectIDByName } from "@/src/actions/project";
+import { getProjectByServerKey } from "@/src/actions/project";
 import { relogRequestHandler } from "@/src/middleware/request-middleware";
 import APIWrapper from "@/src/utils/api-wrapper";
 import { CustomEventType } from "@/src/utils/types";
@@ -29,6 +30,25 @@ const customEventTypeRoute = APIWrapper({
             }
             const createdType = await createCustomEventType(customEventType);
             return createdType;
+        },
+    },
+    GET: {
+        config: {
+            requireClientToken: false,
+            requireServerToken: false
+        },
+        handler: async (req: Request) => {
+            const projectName = req.query.projectName
+            if (!projectName) {
+                throw new Error("You must specify a project to get custom event types!")
+            }
+            const id = await getProjectIDByName(projectName as string);
+
+            if (!id) {
+                throw new Error("Project does not exist")
+            }
+            const types = await getCustomEventTypesForProject(id);
+            return types;
         },
     },
 

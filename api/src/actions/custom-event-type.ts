@@ -12,3 +12,9 @@ export const createCustomEventType = async (eventType: Partial<CustomEventType>)
     const createdEventType = await CustomEventTypeModel.create(eventType);
     return createdEventType;
 }
+
+export const getCustomEventTypesForProject = async (projectId: string) => {
+    await dbConnect();
+    const eventTypes = await CustomEventTypeModel.find({ projectId })
+    return eventTypes;
+}
