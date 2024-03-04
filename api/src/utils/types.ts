@@ -2,6 +2,7 @@ import {
     Document, Types
 } from 'mongoose';
 
+
 export interface BaseEvent extends Document {
     category: string;
     subcategory: string;
@@ -44,6 +45,13 @@ export interface Project {
     updatedAt?: Date;
 }
 
+export interface CustomEventType {
+    _id: string | Types.ObjectId;
+    category: string;
+    subcategory: string;
+    properties: string[]
+    projectId: string | Types.ObjectId;
+}
 
 export enum HttpMethod {
     GET = "GET",
