@@ -57,7 +57,7 @@ export interface CustomEvent {
     projectId: string | Types.ObjectId;
     eventTypeId: string | Types.ObjectId;
     subcategory: string;
-    properties: string[]
+    properties: string[] | Types.Mixed
 }
 export interface CustomGraphType {
     _id: string | Types.ObjectId;

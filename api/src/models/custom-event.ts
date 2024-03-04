@@ -9,7 +9,7 @@ export const CustomEventSchema = new mongoose.Schema<CustomEvent>({
         required: true,
     },
     properties: {
-        type: [String],
+        type: Schema.Types.Mixed,
         required: true
     },
     projectId: {
