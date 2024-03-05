@@ -58,7 +58,7 @@ function APIWrapper(
             }
 
             if (config?.requireServerToken) {
-                const project = await getProjectByServerKey(req.headers.clienttoken as string)
+                const project = await getProjectByServerKey(req.headers.servertoken as string)
                 if (!project) {
                     return res.status(403).json({
                         success: false,

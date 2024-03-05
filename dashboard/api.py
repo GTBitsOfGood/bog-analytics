@@ -112,17 +112,34 @@ def get_input_events(project_name, after_time):
     return input_events
 
 
+def get_custom_event_types_by_project(project_name):
+    custom_event_types_url = base_url + "/api/events/custom-event-type"
+    params = {"projectName": project_name}
+    try:
+        response = requests.get(custom_event_types_url, params=params)
+        response.raise_for_status()  # error
+        return response.json()["payload"]
+        return []
+    except requests.exceptions.RequestException as err:
+        return {"success": False, "payload": {"error": str(err)}}
+
+
 def get_event_types(project_name):
+    custom_event_types = get_custom_event_types_by_project(project_name)
+    custom_subcategories = [
+        custom_type["subcategory"] for custom_type in custom_event_types
+    ]
     # When we have custom events, we will want to change this to include both default and custom events
-    return [member.value for member in EventTypes]
+    default_types = [member.value for member in EventTypes]
+    default_types.extend(custom_subcategories)
+    return default_types
 
 
 def get_projects():
     # When we have the project api setup, we will want to retrieve real projects
-    return ["project_1", "project_2", "project_3"]
+    # return ["project_1", "project_2", "project_3"]
 
     project_url = base_url + "/api/project"
-
     response = requests.get(project_url)
     response.raise_for_status()  # error
     response = response.json()
