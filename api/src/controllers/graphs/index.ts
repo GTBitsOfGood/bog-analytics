@@ -1,0 +1,1 @@
+export { customGraphType } from '@/src/controllers/graphs/custom-graph-type';

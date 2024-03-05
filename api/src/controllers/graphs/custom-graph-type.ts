@@ -27,7 +27,7 @@ const customGraphTypeRoute = APIWrapper({
                 xProperty,
                 yProperty,
                 graphType,
-                
+
             }
             if (req.body.caption !== undefined) {
                 graphType.graphType = {
@@ -46,7 +46,7 @@ const customGraphTypeRoute = APIWrapper({
             requireServerToken: true
         },
         handler: async (req: Request) => {
-            const { graphId} = req.body
+            const { graphId } = req.body
             if (!graphId) {
                 throw new Error("You must specify a graph to delete!")
             }
@@ -61,7 +61,7 @@ const customGraphTypeRoute = APIWrapper({
             requireServerToken: false
         },
         handler: async (req: Request) => {
-            const { projectId, eventTypeId} = req.body
+            const { projectId, eventTypeId } = req.body
             if (!projectId || !eventTypeId) {
                 throw new Error("You must specify a project and event type to get custom event types!")
             }
@@ -74,4 +74,4 @@ const customGraphTypeRoute = APIWrapper({
 });
 
 
-export const customEvent = relogRequestHandler(customEventRoute);
+export const customGraphType = relogRequestHandler(customGraphTypeRoute);
