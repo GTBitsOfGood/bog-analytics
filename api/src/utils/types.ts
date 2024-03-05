@@ -55,9 +55,8 @@ export interface CustomEventType {
 }
 
 export interface CustomEvent extends BaseEvent {
-    _id: string | Types.ObjectId;
     eventTypeId: string | Types.ObjectId;
-    properties: string[] | Types.Array<string>;
+    properties: object;
 }
 
 export interface CustomGraphType {
