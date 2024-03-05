@@ -22,10 +22,10 @@ export const CustomEventSchema = new mongoose.Schema<CustomEvent>({
         required: true,
         ref: CustomEventTypeModel.modelName
     }
-});
+}, { timestamps: true });
 
 const CustomEventModel =
     (mongoose.models.CustomEvent as mongoose.Model<CustomEvent>) ||
-    mongoose.model<CustomEvent>("CustomEvent", CustomEvent);
+    mongoose.model<CustomEvent>("CustomEvent", CustomEventSchema);
 
 export default CustomEventModel;

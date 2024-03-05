@@ -16,7 +16,7 @@ export const BaseEventSchema = new mongoose.Schema<BaseEvent>({
         required: true,
         ref: ProjectModel.modelName
     }
-});
+}, { timestamps: true });
 
 const BaseEventModel =
     (mongoose.models.BaseEvent as mongoose.Model<BaseEvent>) ||

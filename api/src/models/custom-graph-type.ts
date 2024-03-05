@@ -3,11 +3,7 @@ import { CustomGraphType } from "@/src/utils/types";
 import ProjectModel from "@/src/models/project";
 import CustomEventTypeModel from "@/src/models/custom-event-type";
 
-export const CustomEventSchema = new mongoose.Schema<CustomEvent>({
-    subcategory: {
-        type: String,
-        required: true,
-    },
+export const CustomGraphTypeSchema = new mongoose.Schema<CustomGraphType>({
     projectId: {
         type: Schema.Types.ObjectId,
         required: true,
@@ -42,6 +38,6 @@ export const CustomEventSchema = new mongoose.Schema<CustomEvent>({
 
 const CustomGraphTypeModel =
     (mongoose.models.CustomGraphType as mongoose.Model<CustomGraphType>) ||
-    mongoose.model<CustomGraphType>("CustomGraphType", CustomGraphType);
+    mongoose.model<CustomGraphType>("CustomGraphType", CustomGraphTypeSchema);
 
 export default CustomGraphTypeModel;

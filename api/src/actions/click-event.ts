@@ -12,7 +12,7 @@ export const createClickEvent = async (event: Partial<ClickEvent>) => {
 export const getClickEvents = async (date?: Date) => {
     await dbConnect();
     let fromDate = date ?? new Date(Date.now() - 60 * 60 * 24 * 30 * 1000)
-    const events = await ClickEventModel.find({ date: { $gte: fromDate } })
+    const events = await ClickEventModel.find({ createdAt: { $gte: fromDate } })
     return events
 }
 
@@ -22,7 +22,7 @@ export const paginatedGetClickEvents = async (afterDate: Date, afterID: String, 
     if (project && project._id) {
         const events = await ClickEventModel.find(
             {
-                date: { $gte: afterDate },
+                createdAt: { $gte: afterDate },
                 ...(afterID && { _id: { $gte: afterID } }),
                 projectId: project._id
             })

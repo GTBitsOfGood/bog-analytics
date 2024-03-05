@@ -18,14 +18,18 @@ const customEventRoute = APIWrapper({
             if (!eventTypeId || !properties) {
                 throw new Error("You must specify a category and subcategory to create a custom event!")
             }
-            const project = await getProjectByClientKey(req.headers.clientToken as string);
+            const project = await getProjectByClientKey(req.headers.clienttoken as string);
 
             if (!project) {
                 throw new Error("Project does not exist for client token")
             }
 
-            const createdType = await createCustomEvent(project._id, eventTypeId, properties);
-            return createdType;
+            const createdEvent = await createCustomEvent(project._id.toString(), eventTypeId, properties);
+
+            if (!createdEvent) {
+                throw new Error("Failed to create custom event");
+            }
+            return createdEvent;
         },
     },
     GET: {
@@ -43,14 +47,18 @@ const customEventRoute = APIWrapper({
             if (!id) {
                 throw new Error("Project does not exist")
             }
-            const eventType = await getCustomEventTypeID(id, category as string, subcategory as string)
-            const { afterId } = req.params;
-            const limit = req.params.limit ?? 10
-            const afterTime = req.params.afterTime ?? new Date(Date.now() - 60 * 60 * 24 * 30 * 1000)
+            const eventType = await getCustomEventTypeID(id.toString(), category as string, subcategory as string);
+            if (!eventType) {
+                throw new Error("Event type does not exist");
+            }
+
+            const { afterId } = req.query;
+            const limit = req.query.limit ?? 10
+            const afterTime = req.query.afterTime ? new Date(req.query.afterTime as string) : new Date(Date.now() - 60 * 60 * 24 * 30 * 1000)
             if (!projectName) {
                 throw new Error("You must specify a project name to create a project!")
             }
-            let events = await paginatedGetCustomEvents(eventType._id, afterTime, afterId, parseInt(limit));
+            let events = await paginatedGetCustomEvents(eventType.toString(), afterTime, afterId as string, parseInt(limit as string));
             return events;
         },
     },

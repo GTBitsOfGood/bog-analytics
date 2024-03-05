@@ -14,10 +14,6 @@ const VisitEventSchema = new Schema<BaseEvent & {
             type: String,
             required: true,
         },
-        date: {
-            type: Date,
-            required: true,
-        }
     },
 });
 

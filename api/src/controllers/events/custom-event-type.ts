@@ -1,4 +1,4 @@
-import { createCustomEventType, getCustomEventTypesForProject, deleteCustomEventType } from "@/src/actions/custom-event-type";
+import { createCustomEventType, getCustomEventTypesForProject, deleteCustomEventType, findEventForProject } from "@/src/actions/custom-event-type";
 import { getProjectIDByName } from "@/src/actions/project";
 import { getProjectByServerKey } from "@/src/actions/project";
 import { relogRequestHandler } from "@/src/middleware/request-middleware";
@@ -28,6 +28,12 @@ const customEventTypeRoute = APIWrapper({
                 properties: properties,
                 projectId: project._id,
             }
+
+            const preexistingEventType = await findEventForProject(project._id, category, subcategory)
+            if (preexistingEventType != null) {
+                throw new Error("A custom event type with the same category and subcategory already exists")
+            }
+
             const createdType = await createCustomEventType(customEventType);
             return createdType;
         },
@@ -47,7 +53,7 @@ const customEventTypeRoute = APIWrapper({
             if (!id) {
                 throw new Error("Project does not exist")
             }
-            const types = await getCustomEventTypesForProject(id);
+            const types = await getCustomEventTypesForProject(id.toString());
             return types;
         },
     },
@@ -57,16 +63,16 @@ const customEventTypeRoute = APIWrapper({
             requireServerToken: true
         },
         handler: async (req: Request) => {
-            const {category, subcategory} = req.body
+            const { category, subcategory } = req.body
             if (!category || !subcategory) {
                 throw new Error("You must specify a category and subcategory to delete custom event types!")
             }
-            const project = await getProjectByServerKey(req.headers.serverToken as string);
+            const project = await getProjectByServerKey(req.headers.servertoken as string);
 
             if (!project) {
                 throw new Error("Project does not exist")
             }
-            deleteCustomEventType(project._id, category, subcategory)
+            await deleteCustomEventType(project._id.toString(), category, subcategory)
         },
     },
 

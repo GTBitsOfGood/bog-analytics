@@ -1,19 +1,24 @@
 import datetime
 import random
 
+possible_dates = [
+    (datetime.datetime.now() - datetime.timedelta(days=i)).isoformat()
+    for i in range(30)
+]
+
 
 class BaseEvent:
     def __init__(self, event_properties, category, subcategory) -> None:
         self.category = category
         self.subcategory = subcategory
         self.event_properties = event_properties
+        self.createdAt = random.choice(possible_dates)
 
 
 class VisitEventProperties:
-    def __init__(self, pageUrl, user_id, date) -> None:
+    def __init__(self, pageUrl, user_id) -> None:
         self.pageUrl = pageUrl
         self.user_id = user_id
-        self.date = date
 
 
 class VisitEvent(BaseEvent):
@@ -74,10 +79,6 @@ possible_buttons = [f"button_{i}" for i in range(0, 5)]
 possible_inputs = [f"input_{i}" for i in range(0, 5)]
 possible_users = [f"user_{i}" for i in range(0, 100)]
 possible_text_values = [f"text_{i}" for i in range(0, 5)]
-possible_dates = [
-    (datetime.datetime.now() - datetime.timedelta(days=i)).isoformat()
-    for i in range(30)
-]
 
 possible_custom_event_categories = [f"custom{i}" for i in range(0, 2)]
 possible_custom_event_subcategories = [f"custom{i}" for i in range(0, 2)]
@@ -93,7 +94,6 @@ for i in range(0, 100):
     visit_properties = VisitEventProperties(
         pageUrl=random.choice(possible_urls),
         user_id=random.choice(possible_users),
-        date=random.choice(possible_dates),
     )
     visit_events.append(VisitEvent(visit_properties))
 

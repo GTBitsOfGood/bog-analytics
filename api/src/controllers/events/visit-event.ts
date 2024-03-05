@@ -28,7 +28,6 @@ const visitEventRoute = APIWrapper({
                 eventProperties: {
                     pageUrl,
                     userId,
-                    date
                 }
             }
 

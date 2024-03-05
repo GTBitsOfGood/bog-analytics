@@ -16,7 +16,7 @@ const customGraphTypeRoute = APIWrapper({
             if (!eventTypeId || !xProperty || !yProperty || !graphType) {
                 throw new Error("You must specify an event type, x property, y property, and graph type to create a custom graph!")
             }
-            const project = await getProjectByClientKey(req.headers.serverToken as string);
+            const project = await getProjectByClientKey(req.headers.servertoken as string);
 
             if (!project) {
                 throw new Error("Project does not exist for client token")
@@ -27,16 +27,14 @@ const customGraphTypeRoute = APIWrapper({
                 xProperty,
                 yProperty,
                 graphType,
-
-            }
-            if (req.body.caption !== undefined) {
-                graphType.graphType = {
-                    ...graphType.graphType,
-                    caption: req.body.caption,
-                };
-            }
+                ...(req.body.caption !== undefined && { graphType: { ...graphType, caption: req.body.caption } })
+            };
 
             const createdGraphType = await createCustomGraphType(customGraphType);
+
+            if (!createdGraphType) {
+                throw new Error("Failed to create a custom graph");
+            }
             return createdGraphType;
         },
     },
@@ -65,7 +63,6 @@ const customGraphTypeRoute = APIWrapper({
             if (!projectId || !eventTypeId) {
                 throw new Error("You must specify a project and event type to get custom event types!")
             }
-            //api wrapper will check that server token is valid
             let graphTypes = await getCustomGraphTypes(eventTypeId, projectId);
             return graphTypes;
         },
