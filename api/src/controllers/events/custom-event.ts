@@ -58,4 +58,4 @@ const customEventRoute = APIWrapper({
 });
 
 
-export const customEventType = relogRequestHandler(customEventTypeRoute);
+export const customEvent = relogRequestHandler(customEventRoute);
