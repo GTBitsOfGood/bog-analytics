@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { trusted } from "mongoose";
 import { Project } from "@/src/utils/types";
 
 export const ProjectSchema = new mongoose.Schema<Project>({
@@ -13,6 +13,7 @@ export const ProjectSchema = new mongoose.Schema<Project>({
     projectName: {
         type: String,
         required: true,
+        unique: true
     },
 },
     {
