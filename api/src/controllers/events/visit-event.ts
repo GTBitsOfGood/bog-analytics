@@ -40,14 +40,13 @@ const visitEventRoute = APIWrapper({
             requireClientToken: false,
         },
         handler: async (req: Request) => {
-            const { afterId, projectName } = req.params;
-
-            const limit = req.params.limit ?? 10
-            const afterTime = req.params.afterTime ?? new Date(Date.now() - 60 * 60 * 24 * 30 * 1000)
+            const { afterId, projectName } = req.query;
+            const limit = req.query.limit ?? 10
+            const afterTime = req.query.afterTime ? new Date(req.query.afterTime as string) : new Date(Date.now() - 60 * 60 * 24 * 30 * 1000)
             if (!projectName) {
                 throw new Error("You must specify a project name to create a project!")
             }
-            return await paginatedGetVisitEvents(afterTime, afterId, parseInt(limit), projectName);
+            return await paginatedGetVisitEvents(afterTime, afterId as string, parseInt(limit as string), projectName as string);
         },
     },
 });
