@@ -14,8 +14,8 @@ def init_plot_custom_graphs(custom_events, custom_graphs):
         ]
 
         data = {
-            "x": [event.event_properties[graph.xProperty] for event in matching_events],
-            "y": [event.event_properties[graph.yProperty] for event in matching_events],
+            "x": [event.eventProperties[graph.xProperty] for event in matching_events],
+            "y": [event.eventProperties[graph.yProperty] for event in matching_events],
         }
         df = pd.DataFrame(data)
 
