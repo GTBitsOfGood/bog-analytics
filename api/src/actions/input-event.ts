@@ -16,7 +16,7 @@ export const getInputEvents = async (date?: Date) => {
     return events
 }
 
-export const paginatedGetInputEvents = async (afterDate: string, afterID: String, limit: number, projectName: String) => {
+export const paginatedGetInputEvents = async (afterDate: Date, afterID: String, limit: number, projectName: String) => {
     await dbConnect();
     const project = await ProjectModel.findOne({ projectName: projectName })
     if (project && project._id) {
