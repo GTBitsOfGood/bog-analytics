@@ -35,14 +35,14 @@ export default class AnalyticsLogger {
         }
     }
 
-    public async logVisitEvent(pageUrl: string, userId: string, date: Date): Promise<VisitEvent | null> {
+    public async logVisitEvent(pageUrl: string, userId: string): Promise<VisitEvent | null> {
         try {
             if (!this.clientApiKey) {
                 throw new Error('Please authenticate first with your client api key using the authenticate method');
             }
 
             // Client side API Key
-            const event = await createVisitEvent(this.clientApiKey, pageUrl, userId, date);
+            const event = await createVisitEvent(this.clientApiKey, pageUrl, userId);
             return event;
 
         } catch {
@@ -51,7 +51,7 @@ export default class AnalyticsLogger {
                 {
                     clientApiKey: this.clientApiKey as string,
                     pageUrl,
-                    userId, date: date.toString()
+                    userId
                 }
             ))
             return null

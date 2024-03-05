@@ -2,10 +2,13 @@ import {
     Document, Types
 } from 'mongoose';
 
+
 export interface BaseEvent extends Document {
     category: string;
     subcategory: string;
     projectId: string | Types.ObjectId;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
 }
 
 export interface VisitEvent extends BaseEvent {
@@ -15,7 +18,6 @@ export interface VisitEvent extends BaseEvent {
 export interface VisitEventProperties {
     pageUrl: string;
     userId: string;
-    date: Date;
 }
 export interface InputEvent extends BaseEvent {
     eventProperties: InputEventProperties
@@ -44,6 +46,32 @@ export interface Project {
     updatedAt?: Date;
 }
 
+export interface CustomEventType {
+    _id: string | Types.ObjectId;
+    category: string;
+    subcategory: string;
+    properties: string[]
+    projectId: string | Types.ObjectId;
+}
+
+export interface CustomEvent {
+    _id: string | Types.ObjectId;
+    projectId: string | Types.ObjectId;
+    eventTypeId: string | Types.ObjectId;
+    subcategory: string;
+    properties: string[] | Types.Array<string>;
+}
+
+export interface CustomGraphType {
+    _id: string | Types.ObjectId;
+    eventTypeId: string | Types.ObjectId;
+    projectId: string | Types.ObjectId;
+    graphTitle: string;
+    xProperty: string
+    yProperty: string
+    graphType: string
+    caption?: string
+}
 
 export enum HttpMethod {
     GET = "GET",
@@ -76,4 +104,10 @@ export enum EventSubcategories {
     CLICK = "Click",
     VISIT = "Visit",
     INPUT = "Input",
+}
+
+export enum GraphTypes {
+    BAR = "bar",
+    SCATTER = "scatter",
+    LINE = "line"
 }

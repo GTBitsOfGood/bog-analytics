@@ -14,12 +14,12 @@ def init_recent_events_table(st, visit_events):
 
     st.markdown(hide_table_row_index, unsafe_allow_html=True)
 
-    visit_sorted = sorted(visit_events, key=lambda event: event.event_properties.date)
+    visit_sorted = sorted(visit_events, key=lambda event: event.createdAt)
     data = [
         {
             "Page URL": event.event_properties.pageUrl,
             "User ID": event.event_properties.user_id,
-            "Date": event.event_properties.date,
+            "Date": event.createdAt,
         }
         for event in visit_sorted
     ]
@@ -90,14 +90,13 @@ def init_page_active_users_graph(st, visit_events):
         .properties(width=600, height=400)
     )
 
-   
     st.altair_chart(chart, use_container_width=True)
 
 
 def init_visitors_over_time_graph(st, visit_events):
     st.write("**Visitors Over Time Graph**")
     data = {
-        "Date": [event.event_properties.date for event in visit_events],
+        "Date": [event.createdAt for event in visit_events],
         "pageUrl": [event.event_properties.pageUrl for event in visit_events],
         "Number of Visitors": [1 for _ in visit_events],
     }

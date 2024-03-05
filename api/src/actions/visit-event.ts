@@ -12,7 +12,7 @@ export const createVisitEvent = async (event: Partial<VisitEvent>) => {
 export const getVisitEvents = async (date?: Date) => {
     await dbConnect();
     const fromDate = date ?? new Date(Date.now() - 60 * 60 * 24 * 30 * 1000)
-    const events = await VisitEventModel.find({ date: { $gte: fromDate } })
+    const events = await VisitEventModel.find({ createdAt: { $gte: fromDate } })
     return events
 }
 export const paginatedGetVisitEvents = async (afterDate: Date, afterID: string, limit: number, projectName: String) => {
@@ -22,7 +22,7 @@ export const paginatedGetVisitEvents = async (afterDate: Date, afterID: string, 
 
         const events = await VisitEventModel.find(
             {
-                date: { $gte: afterDate },
+                createdAt: { $gte: afterDate },
                 ...(afterID && { _id: { $gte: afterID } }),
                 projectId: project._id
             })

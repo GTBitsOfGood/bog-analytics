@@ -12,7 +12,7 @@ export const createInputEvent = async (event: Partial<InputEvent>) => {
 export const getInputEvents = async (date?: Date) => {
     await dbConnect();
     const fromDate = date ?? new Date(Date.now() - 60 * 60 * 24 * 30 * 1000)
-    const events = await InputEventModel.find({ date: { $gte: fromDate } })
+    const events = await InputEventModel.find({ createdAt: { $gte: fromDate } })
     return events
 }
 
@@ -22,7 +22,7 @@ export const paginatedGetInputEvents = async (afterDate: Date, afterID: String, 
     if (project && project._id) {
         const events = await InputEventModel.find(
             {
-                date: { $gte: afterDate },
+                createdAt: { $gte: afterDate },
                 ...(afterID && { _id: { $gte: afterID } }),
                 projectId: project._id
             })
