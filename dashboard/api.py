@@ -119,7 +119,7 @@ def get_event_types(project_name):
 
 def get_projects():
     # When we have the project api setup, we will want to retrieve real projects
-    # return ["project_1", "project_2", "project_3"]
+    return ["project_1", "project_2", "project_3"]
 
     project_url = base_url + "/api/project"
 
