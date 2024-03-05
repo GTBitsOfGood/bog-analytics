@@ -1,8 +1,6 @@
-import { CustomEventType, EventCategories } from "@/src/utils/types";
 import { dbConnect } from "@/src/utils/db-connect";
 import CustomEventTypeModel from "@/src/models/custom-event-type";
 import CustomEvent from "@/src/models/custom-event";
-import CustomGraphType from "@/src/models/custom-graph-type";
 
 
 export const createCustomEvent = async (projectId: string, eventTypeId: string, properties: object) => {

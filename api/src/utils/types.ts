@@ -96,7 +96,6 @@ export interface InternalResponseData<T> {
 export enum EventCategories {
     INTERACTION = "Interaction",
     ACTIVITY = "Activity",
-    CUSTOM = "Custom"
 }
 
 export enum EventSubcategories {
