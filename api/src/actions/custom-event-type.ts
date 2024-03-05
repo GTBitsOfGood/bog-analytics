@@ -21,6 +21,16 @@ export const getCustomEventTypesForProject = async (projectId: string) => {
     const eventTypes = await CustomEventTypeModel.find({ projectId })
     return eventTypes;
 }
+export const getCustomEventType = async (projectId: string, category: string, subcategory: string) => {
+    await dbConnect();
+    const eventType = await CustomEventTypeModel.find({ projectId, category, subcategory })
+    return eventType;
+}
+export const getCustomEventTypeID = async (projectId: string, category: string, subcategory: string) => {
+    await dbConnect();
+    const eventType = await CustomEventTypeModel.find({ projectId, category, subcategory })
+    return eventType._id;
+}
 export const deleteCustomEventType = async (projectId: string, category: string, subcategory: string) => {
     let deletedEventType = await CustomEventTypeModel.delete({ projectId, category, subcategory })
     if (deletedEventType == null) {
