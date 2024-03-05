@@ -24,6 +24,8 @@ services:
     volumes:
       - ./dashboard:/app
       - ./dashboard/venv:/app/venv
+    networks:
+      - bog-analytics-net      
       
   example-app:
     build:

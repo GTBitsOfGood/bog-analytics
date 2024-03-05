@@ -27,3 +27,9 @@ export const deleteProjectById = async (projectId: string) => {
     await dbConnect();
     return await ProjectModel.findOneAndDelete({ _id: projectId });
 }
+
+export const getAllProjects = async () => {
+    await dbConnect();
+    return await ProjectModel.find({}).select("projectName _id");
+
+}

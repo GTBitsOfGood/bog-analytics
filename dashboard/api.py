@@ -3,7 +3,7 @@ import time
 import requests
 from utils import EventTypes
 
-base_url = "https://analytics.bitsofgood.org"
+base_url = "http://api:3001"
 
 
 def get_default_after_time():
@@ -119,4 +119,11 @@ def get_event_types(project_name):
 
 def get_projects():
     # When we have the project api setup, we will want to retrieve real projects
-    return [f"project_{i}" for i in range(0, 3)]
+    # return ["project_1", "project_2", "project_3"]
+
+    project_url = base_url + "/api/project"
+
+    response = requests.get(project_url)
+    response.raise_for_status()  # error
+    response = response.json()
+    return [project["projectName"] for project in response["payload"]]
