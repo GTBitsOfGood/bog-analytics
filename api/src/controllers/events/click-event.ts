@@ -22,8 +22,6 @@ const clickEventRoute = APIWrapper({
             }
             const event: Partial<ClickEvent> = {
                 projectId: project._id,
-                category: EventCategories.INTERACTION,
-                subcategory: EventSubcategories.CLICK,
                 eventProperties: {
                     objectId,
                     userId

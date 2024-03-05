@@ -1,11 +1,11 @@
-import { InputEvent } from "@/src/utils/types";
+import { EventCategories, EventSubcategories, InputEvent } from "@/src/utils/types";
 import { dbConnect } from "@/src/utils/db-connect";
 import { InputEventModel } from "@/src/models/input-event";
 import ProjectModel from "@/src/models/project";
 
 export const createInputEvent = async (event: Partial<InputEvent>) => {
     await dbConnect();
-    const createdEvent = await InputEventModel.create(event);
+    const createdEvent = await InputEventModel.create({ ...event, category: EventCategories.INTERACTION, subcategory: EventSubcategories.INPUT });
     return createdEvent;
 }
 

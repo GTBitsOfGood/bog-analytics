@@ -54,11 +54,9 @@ export interface CustomEventType {
     projectId: string | Types.ObjectId;
 }
 
-export interface CustomEvent {
+export interface CustomEvent extends BaseEvent {
     _id: string | Types.ObjectId;
-    projectId: string | Types.ObjectId;
     eventTypeId: string | Types.ObjectId;
-    subcategory: string;
     properties: string[] | Types.Array<string>;
 }
 
@@ -98,6 +96,7 @@ export interface InternalResponseData<T> {
 export enum EventCategories {
     INTERACTION = "Interaction",
     ACTIVITY = "Activity",
+    CUSTOM = "Custom"
 }
 
 export enum EventSubcategories {

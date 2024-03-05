@@ -1,4 +1,4 @@
-import { CustomEventType } from "@/src/utils/types";
+import { CustomEventType, EventCategories } from "@/src/utils/types";
 import { dbConnect } from "@/src/utils/db-connect";
 import CustomEventTypeModel from "@/src/models/custom-event-type";
 import CustomEvent from "@/src/models/custom-event";
@@ -17,7 +17,13 @@ export const createCustomEvent = async (projectId: string, eventTypeId: string, 
         && Object.keys(typeProperties).every(k => properties.hasOwnProperty(k))) {
         return null;
     }
-    const createdEvent = await CustomEvent.create({ projectId, eventTypeId, properties });
+    const createdEvent = await CustomEvent.create({
+        projectId,
+        eventTypeId,
+        properties,
+        category: eventType.category,
+        subcategory: eventType.subcategory
+    });
     return createdEvent;
 }
 //one function to get eventTypeId, then this paginated method

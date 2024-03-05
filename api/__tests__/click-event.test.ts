@@ -1,4 +1,4 @@
-import { afterAll, beforeAll, describe, expect, test } from '@jest/globals';
+import { afterAll, beforeAll, describe, expect, test, afterEach } from '@jest/globals';
 import request, { Test } from "supertest";
 import { api } from "@/netlify/functions/api";
 import { Project } from '@/src/utils/types';
@@ -6,6 +6,7 @@ import { deleteProjectById } from '@/src/actions/project';
 import { Server, IncomingMessage, ServerResponse } from 'http';
 import TestAgent from 'supertest/lib/agent';
 import { MongoMemoryServer } from 'mongodb-memory-server';
+import { deleteClickEvents, getClickEvents } from '@/src/actions/click-event';
 
 let testProject: Project | null = null;
 let server: Server<typeof IncomingMessage, typeof ServerResponse>;
@@ -39,12 +40,21 @@ describe("/api/events/click-event", () => {
             userId: "exampleUserId"
         };
 
+        afterEach(async () => {
+            // Clean up click events
+            await deleteClickEvents();
+        })
+
         test("Create new click event with valid client token", async () => {
             const response = await agent
                 .post("/api/events/click-event")
                 .set("clienttoken", testProject?.clientApiKey as string)
                 .send(clickEventProperties);
             expect(response.status).toBe(200);
+
+            const events = await getClickEvents();
+            expect(events.length).toEqual(1);
+
         });
 
         test("Create new click event without valid client token", async () => {
@@ -53,6 +63,10 @@ describe("/api/events/click-event", () => {
                 .set("clienttoken", "invalid client token")
                 .send(clickEventProperties);
             expect(response.status).toBe(403);
+
+
+            const events = await getClickEvents();
+            expect(events.length).toEqual(0);
         });
     });
 });

@@ -1,11 +1,11 @@
-import { ClickEvent } from "@/src/utils/types";
+import { ClickEvent, EventCategories, EventSubcategories } from "@/src/utils/types";
 import { dbConnect } from "@/src/utils/db-connect";
 import { ClickEventModel } from "@/src/models/click-event";
 import ProjectModel from "@/src/models/project";
 
 export const createClickEvent = async (event: Partial<ClickEvent>) => {
     await dbConnect();
-    const createdEvent = await ClickEventModel.create(event);
+    const createdEvent = await ClickEventModel.create({ ...event, category: EventCategories.INTERACTION, subcategory: EventSubcategories.CLICK });
     return createdEvent;
 }
 

@@ -1,11 +1,11 @@
-import { VisitEvent } from "@/src/utils/types";
+import { EventCategories, EventSubcategories, VisitEvent } from "@/src/utils/types";
 import { dbConnect } from "@/src/utils/db-connect";
 import { VisitEventModel } from "@/src/models/visit-event";
 import Project from "@/src/models/project";
 
 export const createVisitEvent = async (event: Partial<VisitEvent>) => {
     await dbConnect();
-    const createdEvent = await VisitEventModel.create(event);
+    const createdEvent = await VisitEventModel.create({ ...event, category: EventCategories.ACTIVITY, subcategory: EventSubcategories.VISIT });
     return createdEvent;
 }
 
@@ -15,6 +15,7 @@ export const getVisitEvents = async (date?: Date) => {
     const events = await VisitEventModel.find({ createdAt: { $gte: fromDate } })
     return events
 }
+
 export const paginatedGetVisitEvents = async (afterDate: Date, afterID: string, limit: number, projectName: String) => {
     await dbConnect();
     const project = await Project.findOne({ projectName: projectName })
