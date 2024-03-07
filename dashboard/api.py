@@ -31,7 +31,7 @@ def get_paginated_visit_events(
         return {"success": False, "payload": {"error": str(err)}}
 
 
-def get_visit_events(project_name, after_time, st):
+def get_visit_events(project_name, after_time):
     visit_events = []
     after_id = None
     while True:
@@ -43,7 +43,6 @@ def get_visit_events(project_name, after_time, st):
                 break
         else:
             break
-    st.write(visit_events)
     return visit_events
 
 
@@ -69,8 +68,9 @@ def get_paginated_click_events(
 
 def get_click_events(project_name, after_time):
     click_events = []
+    after_id = None
     while True:
-        page = get_click_events(project_name, after_time, 10, after_id)
+        page = get_paginated_click_events(project_name, after_time, 10, after_id)
         if page.get("success") and page.get("payload"):
             click_events.extend(page["payload"]["events"])
             after_id = page["payload"].get("afterId")
@@ -102,8 +102,9 @@ def get_paginated_input_events(
 
 def get_input_events(project_name, after_time):
     input_events = []
+    after_id = None
     while True:
-        page = get_input_events(project_name, after_time, 10, after_id)
+        page = get_paginated_input_events(project_name, after_time, 10, after_id)
         if page.get("success") and page.get("payload"):
             input_events.extend(page["payload"]["events"])
             after_id = page["payload"].get("afterId")
