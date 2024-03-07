@@ -37,7 +37,7 @@ ClickEventSchema.pre("save", async function (this: Document & BaseEvent, next: (
 });
 
 
-export const ClickEventModel = (mongoose.models.ClickEvent as mongoose.Model<ClickEvent>) || mongoose.model("ClickEvent", ClickEventSchema);
+export const ClickEventModel = (mongoose.models.ClickEvent as mongoose.Model<ClickEvent>) || mongoose.model("ClickEvent", ClickEventSchema, "clickevents");
 
 export default EventDiscriminator as mongoose.Model<Document & BaseEvent & {
     eventProperties: ClickEventProperties

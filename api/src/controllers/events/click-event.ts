@@ -2,7 +2,7 @@ import { createClickEvent, paginatedGetClickEvents } from "@/src/actions/click-e
 import { getProjectByClientKey } from "@/src/actions/project";
 import { relogRequestHandler } from "@/src/middleware/request-middleware";
 import APIWrapper from "@/src/utils/api-wrapper";
-import { ClickEvent, EventCategories, EventSubcategories } from "@/src/utils/types";
+import { ClickEvent } from "@/src/utils/types";
 import { Request } from "express";
 
 const clickEventRoute = APIWrapper({
