@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 from scripts.data import (
-    visit_events,
+    # visit_events,
     click_events,
     input_events,
     custom_events,
@@ -29,7 +29,9 @@ from widgets.input_event_widgets import (
 )
 from widgets.input_event_widgets import init_input_object_frequency_graph
 from widgets.custom_event_graphs import init_plot_custom_graphs
-from utils import EventTypes
+
+from api import get_visit_events
+from utils import *
 
 st.title("Analytics Dashboard")
 st.caption("This is the Bits of Good Streamlit analytics dashboard")
@@ -46,10 +48,14 @@ st.markdown(hide_st_style, unsafe_allow_html=True)
 init_sidebar_description(st)
 selected_project = init_project_selectbox(st)
 selected_event_type = init_event_selectbox(st, selected_project)
-days_aggregation = init_days_slider(st, selected_event_type)
+days_ago = init_days_slider(st, selected_event_type)
+visit_events = None
 
+if days_ago:
+    time_iso_string = get_iso_string_n_days_ago(int(days_ago))
+    visit_events = get_visit_events(selected_project, time_iso_string)
 
-if selected_event_type == EventTypes.VISIT_EVENTS.value:
+if selected_event_type == EventTypes.VISIT_EVENTS.value and visit_events:
     st.header("Visit Events")
     init_recent_events_table(st, visit_events)
     init_page_visit_graph(st, visit_events)

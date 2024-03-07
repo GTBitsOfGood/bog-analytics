@@ -33,8 +33,9 @@ def get_paginated_visit_events(
 
 def get_visit_events(project_name, after_time):
     visit_events = []
+    after_id = None
     while True:
-        page = get_visit_events(project_name, after_time, 10, after_id)
+        page = get_paginated_visit_events(project_name, after_time, 10, after_id)
         if page.get("success") and page.get("payload"):
             visit_events.extend(page["payload"]["events"])
             after_id = page["payload"].get("afterId")
