@@ -36,7 +36,6 @@ def get_visit_events(project_name, after_time, st):
     after_id = None
     while True:
         page = get_paginated_visit_events(project_name, after_time, 10, after_id)
-        st.write(page)
         if page.get("success") and page.get("payload"):
             visit_events.extend(page["payload"]["events"])
             after_id = page["payload"].get("afterId")
@@ -44,6 +43,7 @@ def get_visit_events(project_name, after_time, st):
                 break
         else:
             break
+    st.write(visit_events)
     return visit_events
 
 
