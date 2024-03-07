@@ -23,7 +23,7 @@ export const paginatedGetClickEvents = async (afterDate: Date, afterID: String, 
         const events = await ClickEventModel.find(
             {
                 createdAt: { $gte: afterDate },
-                ...(afterID && { _id: { $gte: afterID } }),
+                ...(afterID && { _id: { $gt: afterID } }),
                 projectId: project._id
             })
             .limit(limit);

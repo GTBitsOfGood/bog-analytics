@@ -43,7 +43,12 @@ const clickEventRoute = APIWrapper({
             if (!projectName) {
                 throw new Error("You must specify a project name to create a project!")
             }
-            return await paginatedGetClickEvents(afterTime, afterId as string, parseInt(limit as string), projectName as string);
+            const events: ClickEvent[] = await paginatedGetClickEvents(afterTime, afterId as string, parseInt(limit as string), projectName as string);
+            return {
+                events,
+                afterId: events.length ? events[events.length - 1]._id : null
+            }
+
         },
     },
 });
