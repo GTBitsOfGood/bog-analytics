@@ -37,7 +37,7 @@ VisitEventSchema.pre("save", async function (this: Document & BaseEvent, next: (
 });
 
 
-export const VisitEventModel = (mongoose.models.VisitEvent as mongoose.Model<VisitEvent>) || mongoose.model("VisitEvent", VisitEventSchema);
+export const VisitEventModel = (mongoose.models.VisitEvent as mongoose.Model<VisitEvent>) || mongoose.model("VisitEvent", VisitEventSchema, "visitevents");
 
 export default EventDiscriminator as mongoose.Model<Document & BaseEvent & {
     eventProperties: VisitEventProperties

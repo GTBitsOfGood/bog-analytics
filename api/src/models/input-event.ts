@@ -41,7 +41,7 @@ InputEventSchema.pre("save", async function (this: Document & BaseEvent, next: (
 });
 
 
-export const InputEventModel = (mongoose.models.InputEvent as mongoose.Model<InputEvent>) || mongoose.model("InputEvent", InputEventSchema);
+export const InputEventModel = (mongoose.models.InputEvent as mongoose.Model<InputEvent>) || mongoose.model("InputEvent", InputEventSchema, "inputevents");
 
 export default EventDiscriminator as mongoose.Model<Document & BaseEvent & {
     eventProperties: InputEventProperties
