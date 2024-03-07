@@ -56,7 +56,7 @@ const customEventRoute = APIWrapper({
             const limit = req.query.limit ?? 10
             const afterTime = req.query.afterTime ? new Date(req.query.afterTime as string) : new Date(Date.now() - 60 * 60 * 24 * 30 * 1000)
             if (!projectName) {
-                throw new Error("You must specify a project name to create a project!")
+                throw new Error("You must specify a project name!")
             }
             const events = await paginatedGetCustomEvents(eventType.toString(), afterTime, afterId as string, parseInt(limit as string));
             return {
