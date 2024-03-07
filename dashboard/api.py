@@ -14,7 +14,7 @@ def get_default_after_time():
 def get_paginated_visit_events(
     project_name, after_time=get_default_after_time(), limit=10, after_id=None
 ):
-    url = base_url + "/api/events/visit-events"
+    url = base_url + "/api/events/visit-event"
     params = {
         "projectName": project_name,
         "afterTime": after_time,
@@ -31,11 +31,12 @@ def get_paginated_visit_events(
         return {"success": False, "payload": {"error": str(err)}}
 
 
-def get_visit_events(project_name, after_time):
+def get_visit_events(project_name, after_time, st):
     visit_events = []
     after_id = None
     while True:
         page = get_paginated_visit_events(project_name, after_time, 10, after_id)
+        st.write(page)
         if page.get("success") and page.get("payload"):
             visit_events.extend(page["payload"]["events"])
             after_id = page["payload"].get("afterId")

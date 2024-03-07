@@ -53,7 +53,7 @@ visit_events = None
 
 if days_ago:
     time_iso_string = get_iso_string_n_days_ago(int(days_ago))
-    visit_events = get_visit_events(selected_project, time_iso_string)
+    visit_events = get_visit_events(selected_project, time_iso_string, st)
 
 if selected_event_type == EventTypes.VISIT_EVENTS.value and visit_events:
     st.header("Visit Events")
