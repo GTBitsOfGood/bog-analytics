@@ -58,8 +58,11 @@ const customEventRoute = APIWrapper({
             if (!projectName) {
                 throw new Error("You must specify a project name to create a project!")
             }
-            let events = await paginatedGetCustomEvents(eventType.toString(), afterTime, afterId as string, parseInt(limit as string));
-            return events;
+            const events = await paginatedGetCustomEvents(eventType.toString(), afterTime, afterId as string, parseInt(limit as string));
+            return {
+                events,
+                afterId: events.length ? events[events.length - 1]._id : null
+            }
         },
     },
 

@@ -30,7 +30,7 @@ export const paginatedGetCustomEvents = async (eventTypeId: string, afterDate: D
     const events = await CustomEvent.find(
         {
             createdAt: { $gte: afterDate },
-            ...(afterID && { _id: { $gte: afterID } }),
+            ...(afterID && { _id: { $gt: afterID } }),
             eventTypeId
         })
         .limit(limit);

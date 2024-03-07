@@ -24,7 +24,7 @@ export const paginatedGetVisitEvents = async (afterDate: Date, afterID: string, 
         const events = await VisitEventModel.find(
             {
                 createdAt: { $gte: afterDate },
-                ...(afterID && { _id: { $gte: afterID } }),
+                ...(afterID && { _id: { $gt: afterID } }),
                 projectId: project._id
             })
             .limit(limit);
