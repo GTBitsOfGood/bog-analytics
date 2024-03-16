@@ -4,7 +4,7 @@ import { getProjectIDByName } from "@/src/actions/project";
 import { getProjectByClientKey } from "@/src/actions/project";
 import { relogRequestHandler } from "@/src/middleware/request-middleware";
 import APIWrapper from "@/src/utils/api-wrapper";
-import { CustomEvent } from "@/src/utils/types";
+import { CustomEvent, EventEnvironment } from "@/src/utils/types";
 import { Request } from "express";
 
 const customEventRoute = APIWrapper({
@@ -14,7 +14,7 @@ const customEventRoute = APIWrapper({
             requireServerToken: false
         },
         handler: async (req: Request) => {
-            const { eventTypeId, properties } = req.body;
+            const { eventTypeId, properties, environment } = req.body;
             if (!eventTypeId || !properties) {
                 throw new Error("You must specify a category and subcategory to create a custom event!")
             }
@@ -23,8 +23,14 @@ const customEventRoute = APIWrapper({
             if (!project) {
                 throw new Error("Project does not exist for client token")
             }
+            const event: Partial<CustomEvent> = {
+                projectId: project._id,
+                properties,
+                eventTypeId,
+                environment
+            }
 
-            const createdEvent = await createCustomEvent(project._id.toString(), eventTypeId, properties);
+            const createdEvent = await createCustomEvent(event);
 
             if (!createdEvent) {
                 throw new Error("Failed to create custom event");
@@ -38,7 +44,7 @@ const customEventRoute = APIWrapper({
             requireServerToken: false
         },
         handler: async (req: Request) => {
-            const { projectName, category, subcategory } = req.query
+            const { projectName, category, subcategory, environment } = req.query
             if (!projectName) {
                 throw new Error("You must specify a project to get custom event types!")
             }
@@ -58,7 +64,7 @@ const customEventRoute = APIWrapper({
             if (!projectName) {
                 throw new Error("You must specify a project name!")
             }
-            const events = await paginatedGetCustomEvents(eventType.toString(), afterTime, afterId as string, parseInt(limit as string));
+            const events = await paginatedGetCustomEvents(eventType.toString(), afterTime, afterId as string, parseInt(limit as string), environment as EventEnvironment);
             return {
                 events,
                 afterId: events.length ? events[events.length - 1]._id : null

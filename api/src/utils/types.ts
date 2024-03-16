@@ -7,10 +7,16 @@ export interface BaseEvent extends Document {
     category: string;
     subcategory: string;
     projectId: string | Types.ObjectId;
+    environment: EventEnvironment;
     createdAt?: Date | string;
     updatedAt?: Date | string;
 }
-
+export interface BaseEventWithoutCategory extends Document {
+    projectId: string | Types.ObjectId;
+    environment: EventEnvironment;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+}
 export interface VisitEvent extends BaseEvent {
     eventProperties: VisitEventProperties
 }
@@ -54,7 +60,7 @@ export interface CustomEventType {
     projectId: string | Types.ObjectId;
 }
 
-export interface CustomEvent extends BaseEvent {
+export interface CustomEvent extends BaseEventWithoutCategory {
     eventTypeId: string | Types.ObjectId;
     properties: object;
 }
@@ -107,4 +113,10 @@ export enum GraphTypes {
     BAR = "bar",
     SCATTER = "scatter",
     LINE = "line"
+}
+
+export enum EventEnvironment {
+    DEVELOPMENT = "development",
+    STAGING = "staging",
+    PRODUCTION = "production"
 }
