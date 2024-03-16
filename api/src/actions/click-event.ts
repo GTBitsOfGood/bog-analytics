@@ -1,4 +1,4 @@
-import { ClickEvent, EventCategories, EventSubcategories } from "@/src/utils/types";
+import { ClickEvent, EventCategories, EventEnvironment, EventSubcategories } from "@/src/utils/types";
 import { dbConnect } from "@/src/utils/db-connect";
 import { ClickEventModel } from "@/src/models/click-event";
 import ProjectModel from "@/src/models/project";
@@ -16,7 +16,7 @@ export const getClickEvents = async (date?: Date) => {
     return events
 }
 
-export const paginatedGetClickEvents = async (afterDate: Date, afterID: String, limit: number, projectName: String) => {
+export const paginatedGetClickEvents = async (afterDate: Date, afterID: String, limit: number, projectName: String, environment: EventEnvironment) => {
     await dbConnect();
     const project = await ProjectModel.findOne({ projectName: projectName })
     if (project && project._id) {
@@ -24,7 +24,8 @@ export const paginatedGetClickEvents = async (afterDate: Date, afterID: String, 
             {
                 createdAt: { $gte: afterDate },
                 ...(afterID && { _id: { $gt: afterID } }),
-                projectId: project._id
+                projectId: project._id,
+                ...(environment && { environment })
             })
             .limit(limit);
         return events

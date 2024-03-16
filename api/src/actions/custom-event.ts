@@ -1,37 +1,33 @@
 import { dbConnect } from "@/src/utils/db-connect";
+import CustomEventModel from "@/src/models/custom-event";
+import { CustomEvent, EventEnvironment } from "@/src/utils/types";
 import CustomEventTypeModel from "@/src/models/custom-event-type";
-import CustomEvent from "@/src/models/custom-event";
 
 
-export const createCustomEvent = async (projectId: string, eventTypeId: string, properties: object) => {
+export const createCustomEvent = async (event: Partial<CustomEvent>) => {
     await dbConnect();
-    let eventType = await CustomEventTypeModel.findOne({ _id: eventTypeId, projectId })
+    let eventType = await CustomEventTypeModel.findOne({ _id: event.eventTypeId, projectId: event.projectId })
 
     if (!eventType) {
         return null;
     }
     let typeProperties = eventType.properties;
-    if (Object.keys(typeProperties).length === Object.keys(properties).length
-        && Object.keys(typeProperties).every(k => properties.hasOwnProperty(k))) {
+    if (Object.keys(typeProperties).length === Object.keys((event?.properties as Record<string, string | number | Date>)).length
+        && Object.keys(typeProperties).every(k => event?.properties?.hasOwnProperty(k))) {
         return null;
     }
-    const createdEvent = await CustomEvent.create({
-        projectId,
-        eventTypeId,
-        properties,
-        category: eventType.category,
-        subcategory: eventType.subcategory
-    });
+    const createdEvent = await CustomEventModel.create(event);
     return createdEvent;
 }
 //one function to get eventTypeId, then this paginated method
-export const paginatedGetCustomEvents = async (eventTypeId: string, afterDate: Date, afterID: string, limit: number) => {
+export const paginatedGetCustomEvents = async (eventTypeId: string, afterDate: Date, afterID: string, limit: number, environment: EventEnvironment) => {
     await dbConnect();
-    const events = await CustomEvent.find(
+    const events = await CustomEventModel.find(
         {
             createdAt: { $gte: afterDate },
             ...(afterID && { _id: { $gt: afterID } }),
-            eventTypeId
+            eventTypeId,
+            ...(environment && { environment })
         })
         .limit(limit);
     return events
