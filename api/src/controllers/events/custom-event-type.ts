@@ -26,7 +26,7 @@ const customEventTypeRoute = APIWrapper({
                 category: category,
                 subcategory: subcategory,
                 properties: properties,
-                projectId: project._id,
+                projectId: project._id
             }
 
             const preexistingEventType = await findEventForProject(project._id, category, subcategory)

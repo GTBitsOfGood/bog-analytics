@@ -37,7 +37,8 @@ describe("/api/events/click-event", () => {
     describe("POST /api/events/click-event", () => {
         const clickEventProperties = {
             objectId: "exampleObjectId",
-            userId: "exampleUserId"
+            userId: "exampleUserId",
+            environment: "development"
         };
 
         afterEach(async () => {

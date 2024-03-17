@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { BaseEvent } from "@/src/utils/types";
+import { BaseEvent, EventEnvironment } from "@/src/utils/types";
 import ProjectModel from "@/src/models/project";
 
 export const BaseEventSchema = new mongoose.Schema<BaseEvent>({
@@ -15,6 +15,12 @@ export const BaseEventSchema = new mongoose.Schema<BaseEvent>({
         type: Schema.Types.ObjectId,
         required: true,
         ref: ProjectModel.modelName
+    },
+    environment: {
+        type: String,
+        required: true,
+        enum: Object.values(EventEnvironment),
+        default: EventEnvironment.DEVELOPMENT
     }
 }, { timestamps: true });
 

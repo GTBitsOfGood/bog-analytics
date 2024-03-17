@@ -1,4 +1,4 @@
-import { EventCategories, EventSubcategories, InputEvent } from "@/src/utils/types";
+import { EventCategories, EventEnvironment, EventSubcategories, InputEvent } from "@/src/utils/types";
 import { dbConnect } from "@/src/utils/db-connect";
 import { InputEventModel } from "@/src/models/input-event";
 import ProjectModel from "@/src/models/project";
@@ -16,7 +16,7 @@ export const getInputEvents = async (date?: Date) => {
     return events
 }
 
-export const paginatedGetInputEvents = async (afterDate: Date, afterID: String, limit: number, projectName: String) => {
+export const paginatedGetInputEvents = async (afterDate: Date, afterID: String, limit: number, projectName: String, environment: EventEnvironment) => {
     await dbConnect();
     const project = await ProjectModel.findOne({ projectName: projectName })
     if (project && project._id) {
@@ -24,7 +24,8 @@ export const paginatedGetInputEvents = async (afterDate: Date, afterID: String, 
             {
                 createdAt: { $gte: afterDate },
                 ...(afterID && { _id: { $gt: afterID } }),
-                projectId: project._id
+                projectId: project._id,
+                ...(environment && { environment })
             })
             .limit(limit);
         return events
