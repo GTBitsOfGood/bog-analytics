@@ -34,7 +34,8 @@ const inputEventRoute = APIWrapper({
                 environment
             }
 
-            await createInputEvent(event);
+            const createdEvent = await createInputEvent(event);
+            return createdEvent;
         },
     },
     GET: {

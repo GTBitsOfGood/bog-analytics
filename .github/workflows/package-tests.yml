@@ -1,0 +1,37 @@
+name: Package Jest Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      docker:
+        image: docker:stable
+        options: --privileged
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Build and run Docker services
+      run: docker-compose -f docker-compose.yml up -d
+
+    - name: Wait for API to be ready
+      run: docker-compose -f docker-compose.yml exec api sh -c 'until nc -z localhost 3001; do sleep 1; done'
+
+    - name: Install dependencies and run tests
+      run: |
+        cd package
+        yarn install
+        yarn test
+
+    - name: Stop Docker services
+      run: docker-compose -f docker-compose.yml down

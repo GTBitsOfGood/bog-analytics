@@ -32,7 +32,8 @@ const visitEventRoute = APIWrapper({
                 environment
             }
 
-            await createVisitEvent(event);
+            const createdEvent = await createVisitEvent(event);
+            return createdEvent;
         },
     },
     GET: {

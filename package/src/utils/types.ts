@@ -87,3 +87,12 @@ export enum EventEnvironment {
     STAGING = "staging",
     PRODUCTION = "production"
 }
+
+export interface Project {
+    _id: string;
+    clientApiKey: string;
+    serverApiKey: string;
+    projectName: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+}
