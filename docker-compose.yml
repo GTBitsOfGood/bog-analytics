@@ -46,19 +46,6 @@ services:
       - bog-analytics-net
     volumes:
       - mongodb-data:/data/db
-  
-  package-test:
-    build:
-      context: .
-      dockerfile: package/Dockerfile.dev
-    volumes:
-      - ./package:/app
-      - /app/node_modules
-    networks:
-      - bog-analytics-net
-    depends_on:
-      - api
-
 networks:
   bog-analytics-net:
     driver: bridge

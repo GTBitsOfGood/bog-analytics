@@ -1,5 +1,5 @@
 function getBaseUrl() {
-    return process.env.NODE_ENV === "production" ? "https://analytics.bitsofgood.org" : "http://api:3001"
+    return process.env.NODE_ENV === "production" ? "https://analytics.bitsofgood.org" : "http://127.0.0.1:3001"
 }
 
 export const urls = {

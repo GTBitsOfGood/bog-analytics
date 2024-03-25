@@ -1,0 +1,10 @@
+version: '3'
+services:
+  package-test:
+    network_mode: "host"
+    build:
+      context: .
+      dockerfile: package/Dockerfile.dev
+    volumes:
+      - ./package:/app
+      - /app/node_modules
