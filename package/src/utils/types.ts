@@ -81,3 +81,18 @@ export interface InputEventProperties {
     userId: string;
     textValue: string;
 }
+
+export enum EventEnvironment {
+    DEVELOPMENT = "development",
+    STAGING = "staging",
+    PRODUCTION = "production"
+}
+
+export interface Project {
+    _id: string;
+    clientApiKey: string;
+    serverApiKey: string;
+    projectName: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+}

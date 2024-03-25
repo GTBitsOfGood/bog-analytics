@@ -1,5 +1,5 @@
 import { createCustomGraphType, getCustomGraphTypes, deleteCustomGraphType } from "@/src/actions/custom-graph-type";
-import { getProjectByClientKey } from "@/src/actions/project";
+import { getProjectByClientKey, getProjectIDByName } from "@/src/actions/project";
 import { relogRequestHandler } from "@/src/middleware/request-middleware";
 import APIWrapper from "@/src/utils/api-wrapper";
 import { CustomGraphType } from "@/src/utils/types";
@@ -59,11 +59,13 @@ const customGraphTypeRoute = APIWrapper({
             requireServerToken: false
         },
         handler: async (req: Request) => {
-            const { projectId, eventTypeId } = req.body
+            const { projectName, eventTypeId } = req.query;
+            const projectId = await getProjectIDByName(projectName as string);
+
             if (!projectId || !eventTypeId) {
                 throw new Error("You must specify a project and event type to get custom event types!")
             }
-            let graphTypes = await getCustomGraphTypes(eventTypeId, projectId);
+            let graphTypes = await getCustomGraphTypes(eventTypeId as string, projectId as string);
             return graphTypes;
         },
     },

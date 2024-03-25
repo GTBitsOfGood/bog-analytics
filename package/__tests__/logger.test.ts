@@ -8,7 +8,8 @@ describe('Slackbot Logger Module', () => {
         await logMessage(formatErrorMessage("This is a jest test message for what an average error log might look like", {
             "Project API Key": "Sample Project API Key",
             "Object Id": "Sample Object Id",
-            "User Id": "Sample User Id"
+            "User Id": "Sample User Id",
+            "Environment": process.env.NODE_ENV as string
         }))
     })
 })

@@ -46,7 +46,6 @@ services:
       - bog-analytics-net
     volumes:
       - mongodb-data:/data/db
-
 networks:
   bog-analytics-net:
     driver: bridge
