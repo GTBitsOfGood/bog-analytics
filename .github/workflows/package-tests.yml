@@ -16,25 +16,10 @@ jobs:
       docker:
         image: docker:latest
         options: --privileged
-        # ports:
-        #   - 3001:3001
           
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
       
     - name: Build and run docker containers
-      run: docker-compose up -d
-      
-    - name: Wait for API to be ready
-      run: |
-        while [ "$(curl -s -o /dev/null -w ''%{http_code}'' http://127.0.0.1:3001/api/health)" != "200" ]; do sleep 5; done
-        
-    - name: Change directory to package
-      run: cd package/
-      
-    - name: Install dependencies
-      run: yarn install
-      
-    - name: Run package tests
-      run: yarn test
+      run: docker-compose up -d && docker-compose run package-test
