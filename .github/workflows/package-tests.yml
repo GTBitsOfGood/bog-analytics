@@ -22,16 +22,16 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Build and run Docker services
-      run: docker-compose -f docker-compose.yml up -d
+      run: docker-compose -f docker-compose.yml up -d && cd package && yarn install && yarn test
 
     # - name: Wait for API to be ready
     #   run: docker-compose -f docker-compose.yml exec api sh -c 'until nc -z localhost 3001; do sleep 1; done'
 
-    - name: Install dependencies and run tests
-      run: |
-        cd package
-        yarn install
-        yarn test
+    # - name: Install dependencies and run tests
+    #   run: |
+    #     cd package
+    #     yarn install
+    #     yarn test
 
     - name: Stop Docker services
       run: docker-compose -f docker-compose.yml down
