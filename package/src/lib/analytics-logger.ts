@@ -2,7 +2,10 @@ import { createClickEvent } from "@/actions/click-event";
 import { logMessage } from "@/actions/logs";
 import { createVisitEvent } from "@/actions/visit-event";
 import { formatErrorMessage } from "@/utils/error";
-import { ClickEvent, VisitEvent } from "@/utils/types";
+import { externalRequest } from "@/utils/requests";
+import { ClickEvent, VisitEvent, InputEvent, CustomEvent } from "@/utils/types";
+import { createInputEvent } from "@/actions/input-event";
+import { createCustomEvent } from "@/actions/custom-event";
 
 // Class to be used client side
 export default class AnalyticsLogger {
@@ -28,7 +31,7 @@ export default class AnalyticsLogger {
                 {
                     clientApiKey: this.clientApiKey as string,
                     objectId,
-                    userId
+                    userId,
                 }
             ))
             return null
@@ -58,15 +61,48 @@ export default class AnalyticsLogger {
         }
     }
 
-    public async logInputEvent(objectId: string, userId: string): Promise<void> {
-        if (!this.clientApiKey) {
-            throw new Error('Please authenticate first using the authenticate method');
+    public async logInputEvent(objectId: string, userId: string, textValue: string): Promise<InputEvent | null> {
+        try {
+            if (!this.clientApiKey) {
+                throw new Error('Please authenticate first using the authenticate method');
+            }
+            // Client side API Key
+            const event =  await createInputEvent(this.clientApiKey, objectId, userId, textValue);
+            return event;
+
+        } catch {
+            await logMessage(formatErrorMessage(
+                "an error occurred when registering an input event",
+                {
+                    clientApiKey: this.clientApiKey as string,
+                    objectId,
+                    userId,
+                    textValue
+                }
+            ))
+            return null
         }
     }
 
-    public async logCustomEvent(): Promise<void> {
-
+    public async logCustomEvent(eventTypeId: string, properties: string): Promise<CustomEvent | null> {
+        try {
+            if (!this.clientApiKey) {
+                throw new Error('Please authenticate first with your client api key using the authenticate method');
+            }
+            
+            // Client side API Key
+            const event = await createCustomEvent(this.clientApiKey, eventTypeId, properties);
+            return event;
+        } catch {
+            await logMessage(formatErrorMessage(
+                "an error occurred when registering an input event",
+                {
+                    clientApiKey: this.clientApiKey as string,
+                    eventTypeId,
+                    properties
+                }
+            ))
+            return null
+        }
     }
-
-
 }

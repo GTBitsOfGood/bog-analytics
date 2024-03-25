@@ -5,6 +5,10 @@ export const urls = {
     auth: "/api/auth",
     events: {
         clickEvent: "/api/events/click-event",
-        visitEvent: "/api/events/visit-event"
+        visitEvent: "/api/events/visit-event",
+        inputEvent: "/api/events/input-event",
+        customEvent: "/api/events/custom-event",
+        customEventType: "/api/events/custom-event-type",
+        customGraphType: "/api/events/custom-graph-type"
     }
 }
