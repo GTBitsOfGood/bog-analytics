@@ -1,9 +1,9 @@
 import { externalRequest } from "@/utils/requests"
-import { InputEvent, HttpMethod } from "@/utils/types";
+import { InputEvent, HttpMethod, EventEnvironment } from "@/utils/types";
 import { urls } from "@/utils/urls"
 
 const inputEventUrl = urls.apiBaseUrl + urls.events.inputEvent;
-export const createInputEvent = async (apiKey: string, objectId: string, userId: string, textValue: string): Promise<InputEvent> => {
+export const createInputEvent = async (apiKey: string, objectId: string, userId: string, textValue: string, environment: EventEnvironment): Promise<InputEvent> => {
     return externalRequest<InputEvent>({
         url: inputEventUrl,
         method: HttpMethod.POST,
@@ -11,7 +11,8 @@ export const createInputEvent = async (apiKey: string, objectId: string, userId:
         body: {
             objectId,
             userId,
-            textValue
+            textValue,
+            environment
         }
     })
 }

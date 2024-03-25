@@ -9,6 +9,6 @@ export const urls = {
         inputEvent: "/api/events/input-event",
         customEvent: "/api/events/custom-event",
         customEventType: "/api/events/custom-event-type",
-        customGraphType: "/api/events/custom-graph-type"
+        customGraphType: "/api/graphs/custom-graph-type"
     }
 }

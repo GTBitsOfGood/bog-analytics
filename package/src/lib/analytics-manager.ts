@@ -1,9 +1,7 @@
 import { logMessage } from "@/actions/logs";
-import { urls } from "@/utils/urls";
-import { HttpMethod } from "@/utils/types";
-import { externalRequest } from "@/utils/requests";
 import { createCustomEventType } from "@/actions/custom-event-type";
-import { createCustomGraphType } from "@/actions/custom-graph-event";
+import { createCustomGraphType } from "@/actions/custom-graph-type";
+import { CustomEventType, CustomGraphType } from "@/utils/types";
 
 // Class to be used server side
 export default class AnalyticsManager {
@@ -19,14 +17,15 @@ export default class AnalyticsManager {
         this.serverApiKey = serverApiKey
     }
 
-    public async defineCustomEvent(category: string, subcategory: string, properties: string) {
+    public async defineCustomEvent(customEventType: Partial<CustomEventType>) {
+        const { category, subcategory, properties } = customEventType;
         try {
             if (!this.serverApiKey) {
                 throw new Error('Please authenticate with your server api key first using the authenticate method');
             }
-            const event = await createCustomEventType(this.serverApiKey, category, subcategory, properties);
+            const event = await createCustomEventType(this.serverApiKey, category as string, subcategory as string, properties as string[]);
             return event;
-            
+
         } catch {
             await logMessage(`
                 Error: an error occurred when defining a custom event\n\`\`\`- Project Server API Key: ${this.serverApiKey}\n\`\`\`
@@ -34,13 +33,14 @@ export default class AnalyticsManager {
             return null
         }
     }
-    
-    public async defineCustomGraph(eventTypeId: string, xProperty: string, yProperty: string, graphType: string) {
+
+    public async defineCustomGraph(customGraphType: Partial<CustomGraphType>) {
+        const { eventTypeId, xProperty, yProperty, graphType } = customGraphType;
         try {
             if (!this.serverApiKey) {
                 throw new Error('Please authenticate with your server api key first using the authenticate method');
             }
-            const event = await createCustomGraphType(this.serverApiKey, eventTypeId, xProperty, yProperty, graphType);
+            const event = await createCustomGraphType(this.serverApiKey, eventTypeId as string, xProperty as string, yProperty as string, graphType as string);
             return event;
 
         } catch {

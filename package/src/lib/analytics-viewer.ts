@@ -1,37 +1,42 @@
-import { HttpMethod } from "@/utils/types";
-import { externalRequest } from "@/utils/requests";
-import { CustomEventType, CustomGraphType } from "@/utils/types";
-import { customEventTypeUrl } from "@/actions/custom-event-type";
-import { customGraphTypeUrl } from "@/actions/custom-graph-event";
+import { CustomEventType } from "@/utils/types";
+import { getCustomGraphTypes } from "@/actions/custom-graph-type";
+import { getCustomEventTypes } from "@/actions/custom-event-type";
+import { logMessage } from "@/actions/logs";
+import { formatErrorMessage } from "@/utils/error";
 
 export default class AnalyticsViewer {
-    public async getCustomEventTypes(projectName: string) {
+    public async getCustomEventTypes(projectName: string): Promise<CustomEventType[] | null> {
         try {
-            const projectUrl = `${customEventTypeUrl}?projectName=${encodeURIComponent(projectName)}`;
-        
-            const customEventTypes = await externalRequest<CustomEventType[]>({
-                url: projectUrl,
-                method: HttpMethod.GET,
-            });
+            const customEventTypes = await getCustomEventTypes(projectName)
             return customEventTypes;
 
         } catch {
-            return null
+            await logMessage(formatErrorMessage(
+                "an error occurred when retrieving custom event types",
+                {
+                    projectName
+                }
+            ))
+
+            return null;
         }
     }
 
-    public async getCustomGraphTypes(customEventTypeId: string) {
+    public async getCustomGraphTypesbyId(projectName: string, eventTypeId: string) {
         try {
-            const graphTypesUrl = `${customGraphTypeUrl}?eventTypeId=${encodeURIComponent(customEventTypeId)}`;
-
-            const graphTypes = await externalRequest<CustomGraphType[]>({
-                url: graphTypesUrl,
-                method: HttpMethod.GET,
-            });
+            const graphTypes = getCustomGraphTypes(projectName, eventTypeId);
             return graphTypes;
-    
+
         } catch {
-            return null
+            await logMessage(formatErrorMessage(
+                "an error occurred when retrieving custom graph types",
+                {
+                    projectName,
+                    eventTypeId
+                }
+            ))
+
+            return null;
         }
     }
 }

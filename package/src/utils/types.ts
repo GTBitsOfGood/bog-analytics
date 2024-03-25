@@ -81,3 +81,9 @@ export interface InputEventProperties {
     userId: string;
     textValue: string;
 }
+
+export enum EventEnvironment {
+    DEVELOPMENT = "development",
+    STAGING = "staging",
+    PRODUCTION = "production"
+}
