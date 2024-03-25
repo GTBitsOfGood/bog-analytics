@@ -16,8 +16,8 @@ jobs:
       docker:
         image: docker:latest
         options: --privileged
-        ports:
-          - 3001:3001
+        # ports:
+        #   - 3001:3001
           
     steps:
     - name: Checkout code
