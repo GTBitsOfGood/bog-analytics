@@ -1,5 +1,7 @@
 import { logMessage } from "@/actions/logs";
-
+import { createCustomEventType } from "@/actions/custom-event-type";
+import { createCustomGraphType } from "@/actions/custom-graph-type";
+import { CustomEventType, CustomGraphType } from "@/utils/types";
 
 // Class to be used server side
 export default class AnalyticsManager {
@@ -15,11 +17,14 @@ export default class AnalyticsManager {
         this.serverApiKey = serverApiKey
     }
 
-    public async defineCustomEvent() {
+    public async defineCustomEvent(customEventType: Partial<CustomEventType>) {
+        const { category, subcategory, properties } = customEventType;
         try {
             if (!this.serverApiKey) {
                 throw new Error('Please authenticate with your server api key first using the authenticate method');
             }
+            const event = await createCustomEventType(this.serverApiKey, category as string, subcategory as string, properties as string[]);
+            return event;
 
         } catch {
             await logMessage(`
@@ -29,11 +34,14 @@ export default class AnalyticsManager {
         }
     }
 
-    public async defineCustomGraph() {
+    public async defineCustomGraph(customGraphType: Partial<CustomGraphType>) {
+        const { eventTypeId, xProperty, yProperty, graphType } = customGraphType;
         try {
             if (!this.serverApiKey) {
                 throw new Error('Please authenticate with your server api key first using the authenticate method');
             }
+            const event = await createCustomGraphType(this.serverApiKey, eventTypeId as string, xProperty as string, yProperty as string, graphType as string);
+            return event;
 
         } catch {
             await logMessage(`
