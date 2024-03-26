@@ -3,7 +3,8 @@ import pandas as pd
 import streamlit as st
 
 def init_input_object_frequency_graph(st, input_events):
-    st.write("**Input Object Frequency Graph**")
+    st.write("#### **Input Object Frequency Graph**")
+    st.write("The following graph shows the frequency of input events for each object.")
     df = pd.DataFrame([event.event_properties.__dict__ for event in input_events])
     
     object_counts = df['object_id'].value_counts().reset_index()
@@ -23,7 +24,8 @@ def init_input_object_frequency_graph(st, input_events):
     st.altair_chart(chart, use_container_width=True)
 
 def init_input_value_frequency_graph(st, input_events):
-    st.write("**Text Value Frequency Graph for Selected Object**")
+    st.write("#### **Text Value Frequency Graph for Selected Object**")
+    st.write("This graph displays the frequency of text values entered for a selected object.")
     df = pd.DataFrame([vars(event.eventProperties) for event in input_events])
 
     # create a select box for the user to select an object

@@ -79,16 +79,21 @@ if selected_event_type == EventTypes.VISIT_EVENTS.value:
     init_page_visit_graph(st, visit_events)
     init_page_active_users_graph(st, visit_events)
     init_visitors_over_time_graph(st, visit_events)
+
 elif selected_event_type == EventTypes.CLICK_EVENTS.value:
     st.header("⭐ Click Events")
     init_object_click_bar_graph(st, click_events)
     init_object_active_users_bar_graph(st, click_events)
+
 elif selected_event_type == EventTypes.INPUT_EVENTS.value:
     st.header("⭐ Input Events")
     init_input_object_frequency_graph(st, input_events)
     init_input_value_frequency_graph(st, input_events)
     pass
+
 elif selected_event_type == EventTypes.CUSTOM_EVENTS.value:
+    st.header("⭐ Custom Events")
+    st.write("The following custom graphs represent various custom event categories and subcategories.")
     custom_charts = init_plot_custom_graphs(custom_events, custom_graphs)
     for chart in custom_charts:
         st.altair_chart(chart, use_container_width=True)
