@@ -23,6 +23,31 @@ from widgets.click_event_widgets import (
     init_object_click_bar_graph,
     init_object_active_users_bar_graph,
 )
+
+from utils import EventTypes
+
+col1, col2 = st.columns([1, 5])
+
+with col1:
+    st.image("images/bog_mainlogo.jpeg", width=100)
+
+with col2:
+    st.markdown(
+        """
+<h1 style='text-align: left;'>BITS OF GOOD <br/>Analytics Dashboard</h1>
+""",
+        unsafe_allow_html=True,
+    )
+
+st.markdown(
+    """Learn more about Bits of Good Projects @
+[https://bitsofgood.org](https://bitsofgood.org/)
+""",
+    unsafe_allow_html=True,
+)
+st.caption(
+    "This is the unified Bits of Good Streamlit Analytics Dashboard. The functionality of this dashboard is aimed to be interoperable and ingest data from our websites to reprocess it into a unified interface."
+)
 from widgets.input_event_widgets import (
     init_input_object_frequency_graph,
     init_input_value_frequency_graph,

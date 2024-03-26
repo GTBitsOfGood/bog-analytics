@@ -15,6 +15,10 @@ def init_event_selectbox(st, project_name=None):
 
 
 def init_sidebar_description(st):
+    st.sidebar.image("images/bitsofgood_logo.jpeg", use_column_width=True)
+    st.sidebar.write(
+        "The Bits of Good Unified Analytics Dashboard - Built Using Streamlit & Express.js"
+    )
     st.sidebar.subheader("Dashboard Settings")
     st.sidebar.info("Use the sidebar to adjust settings", icon="ℹ️")
     st.sidebar.divider()
