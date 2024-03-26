@@ -17,7 +17,7 @@ def init_object_click_bar_graph(st, click_events):
     # Create the bar chart
     chart = (
         alt.Chart(df_visits)
-        .mark_bar()
+        .mark_bar(color="#FF8A54")
         .encode(
             x=alt.X("Object Id", axis=alt.Axis(title="Object ID")),
             y=alt.Y("Clicks", axis=alt.Axis(title="Number of Clicks")),
@@ -50,7 +50,7 @@ def init_object_active_users_bar_graph(st, click_events):
     # Create the bar chart
     chart = (
         alt.Chart(df_clicks)
-        .mark_bar()
+        .mark_bar(color="#FFB654")
         .encode(
             x=alt.X("User ID", axis=alt.Axis(title="User ID")),
             y=alt.Y("Clicks", axis=alt.Axis(title="Number of Clicks")),

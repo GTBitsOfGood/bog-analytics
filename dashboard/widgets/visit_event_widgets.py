@@ -49,7 +49,7 @@ def init_page_visit_graph(st, visit_events):
     # Create the bar chart
     chart = (
         alt.Chart(df_visits)
-        .mark_bar()
+        .mark_bar(color="#FFB654")
         .encode(
             x=alt.X("Page URL", axis=alt.Axis(title="Page URL")),
             y=alt.Y("Visits", axis=alt.Axis(title="Number of Visits")),
@@ -83,7 +83,7 @@ def init_page_active_users_graph(st, visit_events):
     # Create the bar chart
     chart = (
         alt.Chart(df_user_visits)
-        .mark_bar()
+        .mark_bar(color="#FF8A54")
         .encode(
             x=alt.X("User ID", axis=alt.Axis(title="User ID")),
             y=alt.Y("Visits", axis=alt.Axis(title="Number of Visits")),
