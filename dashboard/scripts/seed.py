@@ -183,6 +183,7 @@ def seed():
 
     print("Creating Input Events")
     for i in range(num_events):
+        project = random.choice(projects)
         create_input_event(
             project["clientApiKey"],
             random.choice(objects),
@@ -202,6 +203,9 @@ def seed():
             random.choice(subcategories),
             random.sample(properties, random.randint(2, len(properties))),
         )
+
+        if not event_type:
+            continue
         project_to_event_types[project["_id"]].append(event_type)
         custom_event_types.append(event_type)
 
@@ -212,6 +216,8 @@ def seed():
             project = random.choice(projects)
 
         event_type = random.choice(project_to_event_types[project["_id"]])
+        if not event_type:
+            continue
         property_names = event_type["properties"]
         props = {}
 
@@ -233,6 +239,9 @@ def seed():
             project = random.choice(projects)
 
         event_type = random.choice(project_to_event_types[project["_id"]])
+        if not event_type:
+            continue
+
         props = event_type["properties"]
         create_custom_graph_type(
             project["serverApiKey"],

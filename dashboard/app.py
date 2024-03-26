@@ -31,7 +31,9 @@ col1, col2 = st.columns([1, 5])
 
 with col1:
     print()
-    st.image(f"{pathlib.Path(__file__).parent.resolve()}/images/bog_mainlogo.jpeg", width=100)
+    st.image(
+        f"{pathlib.Path(__file__).parent.resolve()}/images/bog_mainlogo.jpeg", width=100
+    )
 
 with col2:
     st.markdown(
@@ -106,8 +108,10 @@ if selected_event_type == EventTypes.VISIT_EVENTS.value:
         init_page_visit_graph(st, visit_events)
         init_page_active_users_graph(st, visit_events)
         init_visitors_over_time_graph(st, visit_events)
+
 elif selected_event_type == EventTypes.CLICK_EVENTS.value:
     click_events = None
+
     if days_ago:
         click_events = get_click_events(selected_project, time_iso_string)
 

@@ -49,7 +49,7 @@ def get_visit_events(project_name, after_time):
 def get_paginated_click_events(
     project_name, after_time=get_default_after_time(), limit=10, after_id=None
 ):
-    url = base_url + "/api/events/click-events"
+    url = base_url + "/api/events/click-event"
     params = {
         "projectName": project_name,
         "afterTime": after_time,
@@ -84,7 +84,7 @@ def get_click_events(project_name, after_time):
 def get_paginated_input_events(
     project_name, after_time=get_default_after_time(), limit=10, after_id=None
 ):
-    url = base_url + "/api/events/input-events"
+    url = base_url + "/api/events/input-event"
     params = {
         "projectName": project_name,
         "afterTime": after_time,
