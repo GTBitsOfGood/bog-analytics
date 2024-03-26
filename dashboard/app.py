@@ -48,6 +48,13 @@ st.markdown(
 st.caption(
     "This is the unified Bits of Good Streamlit Analytics Dashboard. The functionality of this dashboard is aimed to be interoperable and ingest data from our websites to reprocess it into a unified interface."
 )
+st.caption("Our Analytics Dashboard provides valuable insights into user interactions and behaviors across our digital platforms. With a user-friendly interface and comprehensive data visualization, this dashboard empowers our team to make informed decisions and optimize user experiences.")
+# Key Features Section
+st.caption(" #### Key Features:")
+st.caption("- Graphical Representation: The dashboard presents data in visually appealing graphs and charts, making it easy to understand trends and patterns at a glance.")
+st.caption("- Interactive Controls: Users can filter data, select specific time ranges, and drill down into detailed analytics using interactive controls, enhancing the flexibility and depth of analysis.")
+st.caption("- Real-time Updates: The dashboard is updated in real-time, ensuring that users have access to the latest information and insights as they unfold.")
+st.caption("- Customizable Widgets: Tailored widgets allow users to focus on specific metrics or areas of interest, providing a personalized experience tailored to their needs.")
 from widgets.input_event_widgets import (
     init_input_object_frequency_graph,
     init_input_value_frequency_graph,
@@ -56,7 +63,10 @@ from widgets.custom_event_graphs import init_plot_custom_graphs
 from utils import EventTypes
 
 st.title("Analytics Dashboard")
-st.caption("This is the Bits of Good Streamlit analytics dashboard")
+
+
+
+
 hide_st_style = """
             <style>
             #MainMenu {visibility: hidden;}
