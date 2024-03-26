@@ -1,4 +1,4 @@
-import mongoose, { trusted } from "mongoose";
+import mongoose from "mongoose";
 import { Project } from "@/src/utils/types";
 
 export const ProjectSchema = new mongoose.Schema<Project>({
