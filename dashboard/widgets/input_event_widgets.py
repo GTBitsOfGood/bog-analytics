@@ -6,7 +6,6 @@ import streamlit as st
 def init_input_object_frequency_graph(st, input_events):
     st.write("#### **Input Object Frequency Graph**")
     st.write("The following graph shows the frequency of input events for each object.")
-    print(input_events[0])
     df = pd.DataFrame([event.eventProperties.__dict__ for event in input_events])
 
     object_counts = df["objectId"].value_counts().reset_index()
