@@ -3,7 +3,7 @@ import { CustomGraphType, HttpMethod } from "@/utils/types";
 import { urls } from "@/utils/urls"
 
 export const customGraphTypeUrl = urls.apiBaseUrl + urls.events.customGraphType;
-export const createCustomGraphType = async (apiKey: string, eventTypeId: string, xProperty: string, yProperty: string, graphType: string): Promise<CustomGraphType> => {
+export const createCustomGraphType = async (apiKey: string, eventTypeId: string, xProperty: string, yProperty: string, graphType: string, graphTitle: string): Promise<CustomGraphType> => {
     return externalRequest<CustomGraphType>({
         url: customGraphTypeUrl,
         method: HttpMethod.POST,
@@ -12,7 +12,8 @@ export const createCustomGraphType = async (apiKey: string, eventTypeId: string,
             eventTypeId,
             xProperty,
             yProperty,
-            graphType
+            graphType,
+            graphTitle
         }
     })
 }
