@@ -1,6 +1,6 @@
 from api import get_event_types, get_projects
 from utils import EventTypes
-
+import pathlib
 
 def init_project_selectbox(st):
     return st.sidebar.selectbox("📂 Select a Project", get_projects(), index=None)
@@ -15,7 +15,7 @@ def init_event_selectbox(st, project_name=None):
 
 
 def init_sidebar_description(st):
-    st.sidebar.image("images/bitsofgood_logo.jpeg", use_column_width=True)
+    st.sidebar.image(f"{pathlib.Path(__file__).parent.parent.resolve()}/images/bitsofgood_logo.jpeg", use_column_width=True)
     st.sidebar.write(
         "The Bits of Good Unified Analytics Dashboard - Built Using Streamlit & Express.js"
     )

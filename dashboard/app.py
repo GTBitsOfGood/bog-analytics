@@ -25,11 +25,13 @@ from widgets.click_event_widgets import (
 )
 
 from utils import EventTypes
+import pathlib
 
 col1, col2 = st.columns([1, 5])
 
 with col1:
-    st.image("images/bog_mainlogo.jpeg", width=100)
+    print()
+    st.image(f"{pathlib.Path(__file__).parent.resolve()}/images/bog_mainlogo.jpeg", width=100)
 
 with col2:
     st.markdown(
