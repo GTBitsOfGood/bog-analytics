@@ -30,12 +30,14 @@ def init_recent_events_table(st, visit_events):
 
     df = df.sort_values(by="Date", ascending=False)
     df = df.head(5)
-    st.write("**Recent Events Table**")
+    st.write("#### **Recent Events Table:**")
+    st.write("Below is a table showing the most recent events, including the page URL, user ID, and date.")
     st.table(df)
 
 
 def init_page_visit_graph(st, visit_events):
-    st.write("**Page Visit Frequency Graph**")
+    st.write("#### **Page Visit Frequency Graph:**")
+    st.write("The following graph displays the frequency of visits to different pages.")
     page_visits = {}
     for event in visit_events:
         page_url = event.eventProperties.pageUrl
@@ -62,7 +64,8 @@ def init_page_visit_graph(st, visit_events):
 
 
 def init_page_active_users_graph(st, visit_events):
-    st.write("**Page Specific User Visit Frequency Graph**")
+    st.write("#### **Page Specific User Visit Frequency Graph:**")
+    st.write("This graph shows the frequency of visits to a specific page by different users.")
     page_user_visits = defaultdict(lambda: defaultdict(int))
     for event in visit_events:
         page_url = event.eventProperties.pageUrl
@@ -94,7 +97,8 @@ def init_page_active_users_graph(st, visit_events):
 
 
 def init_visitors_over_time_graph(st, visit_events):
-    st.write("**Visitors Over Time Graph**")
+    st.write("#### **Visitors Over Time Graph:**")
+    st.write("The graph below shoes the number of visitors over time.")
     data = {
         "Date": [event.createdAt for event in visit_events],
         "pageUrl": [event.eventProperties.pageUrl for event in visit_events],
