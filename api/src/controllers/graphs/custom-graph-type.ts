@@ -1,5 +1,5 @@
 import { createCustomGraphType, getCustomGraphTypes, deleteCustomGraphType } from "@/src/actions/custom-graph-type";
-import { getProjectByClientKey, getProjectIDByName } from "@/src/actions/project";
+import { getProjectByServerKey, getProjectIDByName } from "@/src/actions/project";
 import { relogRequestHandler } from "@/src/middleware/request-middleware";
 import APIWrapper from "@/src/utils/api-wrapper";
 import { CustomGraphType } from "@/src/utils/types";
@@ -12,11 +12,11 @@ const customGraphTypeRoute = APIWrapper({
             requireServerToken: true
         },
         handler: async (req: Request) => {
-            const { eventTypeId, xProperty, yProperty, graphType } = req.body;
-            if (!eventTypeId || !xProperty || !yProperty || !graphType) {
+            const { eventTypeId, xProperty, yProperty, graphType, graphTitle } = req.body;
+            if (!eventTypeId || !xProperty || !yProperty || !graphType || !graphTitle) {
                 throw new Error("You must specify an event type, x property, y property, and graph type to create a custom graph!")
             }
-            const project = await getProjectByClientKey(req.headers.servertoken as string);
+            const project = await getProjectByServerKey(req.headers.servertoken as string);
 
             if (!project) {
                 throw new Error("Project does not exist for client token")
@@ -27,11 +27,11 @@ const customGraphTypeRoute = APIWrapper({
                 xProperty,
                 yProperty,
                 graphType,
-                ...(req.body.caption !== undefined && { graphType: { ...graphType, caption: req.body.caption } })
+                graphTitle,
+                ...(req.body.caption !== undefined && { caption: req.body.caption })
             };
-
             const createdGraphType = await createCustomGraphType(customGraphType);
-
+            console.log("HERE 4", createdGraphType);
             if (!createdGraphType) {
                 throw new Error("Failed to create a custom graph");
             }
