@@ -14,12 +14,12 @@ def init_recent_events_table(st, visit_events):
 
     st.markdown(hide_table_row_index, unsafe_allow_html=True)
 
-    visit_sorted = sorted(visit_events, key=lambda event: event["createdAt"])
+    visit_sorted = sorted(visit_events, key=lambda event: event.createdAt)
     data = [
         {
-            "Page URL": event["eventProperties"]["pageUrl"],
-            "User ID": event["eventProperties"]["userId"],
-            "Date": event["createdAt"],
+            "Page URL": event.eventProperties.pageUrl,
+            "User ID": event.eventProperties.userId,
+            "Date": event.createdAt,
         }
         for event in visit_sorted
     ]
@@ -30,15 +30,17 @@ def init_recent_events_table(st, visit_events):
 
     df = df.sort_values(by="Date", ascending=False)
     df = df.head(5)
-    st.write("**Recent Events Table**")
+    st.write("#### **Recent Events Table:**")
+    st.write("Below is a table showing the most recent events, including the page URL, user ID, and date.")
     st.table(df)
 
 
 def init_page_visit_graph(st, visit_events):
-    st.write("**Page Visit Frequency Graph**")
+    st.write("#### **Page Visit Frequency Graph:**")
+    st.write("The following graph displays the frequency of visits to different pages.")
     page_visits = {}
     for event in visit_events:
-        page_url = event["eventProperties"]["pageUrl"]
+        page_url = event.eventProperties.pageUrl
         if page_url in page_visits:
             page_visits[page_url] += 1
         else:
@@ -62,11 +64,12 @@ def init_page_visit_graph(st, visit_events):
 
 
 def init_page_active_users_graph(st, visit_events):
-    st.write("**Page Specific User Visit Frequency Graph**")
+    st.write("#### **Page Specific User Visit Frequency Graph:**")
+    st.write("This graph shows the frequency of visits to a specific page by different users.")
     page_user_visits = defaultdict(lambda: defaultdict(int))
     for event in visit_events:
-        page_url = event["eventProperties"]["pageUrl"]
-        userId = event["eventProperties"]["userId"]
+        page_url = event.eventProperties.pageUrl
+        userId = event.eventProperties.userId
         page_user_visits[page_url][userId] += 1
 
     page_urls = list(page_user_visits.keys())
@@ -94,10 +97,11 @@ def init_page_active_users_graph(st, visit_events):
 
 
 def init_visitors_over_time_graph(st, visit_events):
-    st.write("**Visitors Over Time Graph**")
+    st.write("#### **Visitors Over Time Graph:**")
+    st.write("The graph below shoes the number of visitors over time.")
     data = {
-        "Date": [event["createdAt"] for event in visit_events],
-        "pageUrl": [event["eventProperties"]["pageUrl"] for event in visit_events],
+        "Date": [event.createdAt for event in visit_events],
+        "pageUrl": [event.eventProperties.pageUrl for event in visit_events],
         "Number of Visitors": [1 for _ in visit_events],
     }
     df = pd.DataFrame(data)
