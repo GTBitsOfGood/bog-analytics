@@ -35,12 +35,12 @@ export default class AnalyticsManager {
     }
 
     public async defineCustomGraph(customGraphType: Partial<CustomGraphType>) {
-        const { eventTypeId, xProperty, yProperty, graphType } = customGraphType;
+        const { eventTypeId, xProperty, yProperty, graphType, graphTitle } = customGraphType;
         try {
             if (!this.serverApiKey) {
                 throw new Error('Please authenticate with your server api key first using the authenticate method');
             }
-            const event = await createCustomGraphType(this.serverApiKey, eventTypeId as string, xProperty as string, yProperty as string, graphType as string);
+            const event = await createCustomGraphType(this.serverApiKey, eventTypeId as string, xProperty as string, yProperty as string, graphType as string, graphTitle as string);
             return event;
 
         } catch {

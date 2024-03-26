@@ -23,11 +23,35 @@ from widgets.click_event_widgets import (
     init_object_click_bar_graph,
     init_object_active_users_bar_graph,
 )
+
+from utils import EventTypes
+
+col1, col2 = st.columns([1, 5])
+
+with col1:
+    st.image("bog_mainlogo.jpeg", width=100)
+
+with col2:
+    st.markdown(
+        """
+<h1 style='text-align: left;'>BITS OF GOOD <br/>Analytics Dashboard</h1>
+""",
+        unsafe_allow_html=True,
+    )
+
+st.markdown(
+    """Learn more about Bits of Good Projects @
+[https://bitsofgood.org](https://bitsofgood.org/)
+""",
+    unsafe_allow_html=True,
+)
+st.caption(
+    "This is the unified Bits of Good Streamlit Analytics Dashboard. The functionality of this dashboard is aimed to be interoperable and ingest data from our websites to reprocess it into a unified interface."
+)
 from widgets.input_event_widgets import (
     init_input_object_frequency_graph,
     init_input_value_frequency_graph,
 )
-from widgets.input_event_widgets import init_input_object_frequency_graph
 from widgets.custom_event_graphs import init_plot_custom_graphs
 
 from api import get_visit_events, get_click_events, get_input_events
@@ -60,7 +84,7 @@ if selected_event_type == EventTypes.VISIT_EVENTS.value:
         visit_events = get_visit_events(selected_project, time_iso_string)
 
     if visit_events:
-        st.header("Visit Events")
+        st.header("⭐ Visit Events")
         init_recent_events_table(st, visit_events)
         init_page_visit_graph(st, visit_events)
         init_page_active_users_graph(st, visit_events)
@@ -71,7 +95,7 @@ elif selected_event_type == EventTypes.CLICK_EVENTS.value:
         click_events = get_click_events(selected_project, time_iso_string)
 
     if click_events:
-        st.header("Click Events")
+        st.header("⭐ Click Events")
         init_object_click_bar_graph(st, click_events)
         init_object_active_users_bar_graph(st, click_events)
 elif selected_event_type == EventTypes.INPUT_EVENTS.value:
@@ -80,7 +104,7 @@ elif selected_event_type == EventTypes.INPUT_EVENTS.value:
         input_events = get_input_events(selected_project, time_iso_string)
 
     if input_events:
-        st.header("Input Events")
+        st.header("⭐ Input Events")
         init_input_object_frequency_graph(st, input_events)
         init_input_value_frequency_graph(st, input_events)
 
