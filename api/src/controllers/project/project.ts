@@ -1,4 +1,4 @@
-import { createProject } from "@/src/actions/project";
+import { createProject, getAllProjects, getProjectIDByName } from "@/src/actions/project";
 import { relogRequestHandler } from "@/src/middleware/request-middleware";
 import APIWrapper from "@/src/utils/api-wrapper";
 import { Project } from "@/src/utils/types";
@@ -24,10 +24,22 @@ const projectRoute = APIWrapper({
                 projectName, clientApiKey, serverApiKey
             }
 
+            const preexistingProject = await getProjectIDByName(projectName);
+            if (preexistingProject) {
+                throw new Error("A project with this name already exists")
+            }
+
             const createdProject = await createProject(project);
             return createdProject
         },
     },
+    GET: {
+        config: {},
+        handler: async (req: Request) => {
+            return getAllProjects();
+        }
+    }
+
 });
 
 export const project = relogRequestHandler(projectRoute);

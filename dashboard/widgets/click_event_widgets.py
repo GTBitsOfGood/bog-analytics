@@ -7,14 +7,13 @@ def init_object_click_bar_graph(st, click_events):
     st.write("**Clicks Per Object Graph**")
     object_clicks = defaultdict(int)
     for click_event in click_events:
-        object_id = click_event.event_properties.object_id
-        object_clicks[object_id] += 1
+        objectId = click_event.eventProperties.objectId
+        object_clicks[objectId] += 1
 
     df_visits = pd.DataFrame(
         list(object_clicks.items()), columns=["Object Id", "Clicks"]
     )
 
-    # Create the bar chart
     chart = (
         alt.Chart(df_visits)
         .mark_bar(color="#FF8A54")
@@ -25,7 +24,6 @@ def init_object_click_bar_graph(st, click_events):
         .properties(width=600, height=400)
     )
 
-    # Display the chart using Streamlit
     st.altair_chart(chart, use_container_width=True)
 
 
@@ -33,21 +31,20 @@ def init_object_active_users_bar_graph(st, click_events):
     st.write("**User Clicks Per Object Graph**")
     user_clicks_per_object = defaultdict(lambda: defaultdict(int))
     for click_event in click_events:
-        object_id = click_event.event_properties.object_id
-        user_id = click_event.event_properties.user_id
-        user_clicks_per_object[object_id][user_id] += 1
+        objectId = click_event.eventProperties.objectId
+        userId = click_event.eventProperties.userId
+        user_clicks_per_object[objectId][userId] += 1
 
-    object_ids = list(user_clicks_per_object.keys())
-    selected_object_id = st.selectbox("Select an Object to inspect", object_ids)
+    objectIds = list(user_clicks_per_object.keys())
+    selected_objectId = st.selectbox("Select an Object to inspect", objectIds)
 
-    clicks_data = user_clicks_per_object[selected_object_id]
+    clicks_data = user_clicks_per_object[selected_objectId]
     df_clicks = (
         pd.DataFrame(list(clicks_data.items()), columns=["User ID", "Clicks"])
         .sort_values(by="Clicks", ascending=False)
         .head(5)
-    )  # Focus on top 5 users
+    )
 
-    # Create the bar chart
     chart = (
         alt.Chart(df_clicks)
         .mark_bar(color="#FFB654")
@@ -58,5 +55,4 @@ def init_object_active_users_bar_graph(st, click_events):
         .properties(width=600, height=400)
     )
 
-    # Display the chart using Streamlit
     st.altair_chart(chart, use_container_width=True)

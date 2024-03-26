@@ -2,7 +2,7 @@ import { createInputEvent, paginatedGetInputEvents } from "@/src/actions/input-e
 import { getProjectByClientKey } from "@/src/actions/project";
 import { relogRequestHandler } from "@/src/middleware/request-middleware";
 import APIWrapper from "@/src/utils/api-wrapper";
-import { InputEvent } from "@/src/utils/types";
+import { EventEnvironment, InputEvent } from "@/src/utils/types";
 import { Request } from "express";
 
 
@@ -12,10 +12,10 @@ const inputEventRoute = APIWrapper({
             requireClientToken: true,
         },
         handler: async (req: Request) => {
-            const { objectId, userId, textValue } = req.body;
+            const { objectId, userId, textValue, environment } = req.body;
 
             if (!objectId || !userId || !textValue) {
-                throw new Error("You must specify a project name to create a project!")
+                throw new Error("You must specify an objectId, userId, and textValue!")
             }
 
             const project = await getProjectByClientKey(req.headers.clienttoken as string);
@@ -30,10 +30,12 @@ const inputEventRoute = APIWrapper({
                     objectId,
                     userId,
                     textValue
-                }
+                },
+                environment
             }
 
-            await createInputEvent(event);
+            const createdEvent = await createInputEvent(event);
+            return createdEvent;
         },
     },
     GET: {
@@ -41,13 +43,17 @@ const inputEventRoute = APIWrapper({
             requireClientToken: false,
         },
         handler: async (req: Request) => {
-            const { afterId, projectName } = req.params;
-            const limit = req.params.limit ?? 10
-            const afterTime = req.params.afterTime ?? new Date(Date.now() - 60 * 60 * 24 * 30 * 1000)
+            const { afterId, projectName, environment } = req.query;
+            const limit = req.query.limit ?? 10
+            const afterTime = req.query.afterTime ? new Date(req.query.afterTime as string) : new Date(Date.now() - 60 * 60 * 24 * 30 * 1000)
             if (!projectName) {
-                throw new Error("You must specify a project name to create a project!")
+                throw new Error("You must specify a project name!")
             }
-            return await paginatedGetInputEvents(afterTime, afterId, parseInt(limit), projectName);
+            const events: InputEvent[] = await paginatedGetInputEvents(afterTime, afterId as string, parseInt(limit as string), projectName as string, environment as EventEnvironment);
+            return {
+                events,
+                afterId: events.length ? events[events.length - 1]._id : null
+            }
         },
     },
 });

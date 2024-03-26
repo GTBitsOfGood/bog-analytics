@@ -24,6 +24,8 @@ services:
     volumes:
       - ./dashboard:/app
       - ./dashboard/venv:/app/venv
+    networks:
+      - bog-analytics-net      
       
   example-app:
     build:
@@ -44,7 +46,6 @@ services:
       - bog-analytics-net
     volumes:
       - mongodb-data:/data/db
-
 networks:
   bog-analytics-net:
     driver: bridge

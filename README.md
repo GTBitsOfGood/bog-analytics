@@ -21,6 +21,7 @@ We define a couple of different event types that are unified across Bits of Good
         "ObjectId": "id of the object (i.e. a specific button, tab, etc.) that was clicked",
         "UserId": "id of the user who clicked said event"
      }
+     "Created At": "Date the event was created at"
 }
 ```
 - Visit Events: These are events that occur when a user visits a specific page in an application (i.e. a user visits `/app` or `/home`)
@@ -31,8 +32,8 @@ We define a couple of different event types that are unified across Bits of Good
     "Event Properties": {
         "PageUrl": "URL of the page that was visited in the app",
         "UserId": "user who visited that page",
-        "Date": "date when they visited a page"
-     }
+     },
+     "Created At": "Date the event was created at"
 }
 ```
 - Input Events: These are events where a user inputs a specific piece of information into a input box 
@@ -44,7 +45,8 @@ We define a couple of different event types that are unified across Bits of Good
         "ObjectId": "id of the object (i.e. a specific text field) where the user inputted data",
         "UserId": "id of the user who inputted the text",
         "TextValue": "value of the text that was submitted into the text field"
-     }
+     },
+     "Created At": "Date the event was created at"
 }
 ```
 

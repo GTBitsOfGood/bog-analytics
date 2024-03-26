@@ -1,0 +1,28 @@
+# Use an official Python runtime as the base image (Choose the Python version you need)
+FROM python:3.8
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the requirements file to the working directory
+COPY dashboard/requirements.txt ./
+
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    curl \
+    software-properties-common \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create a virtual environment and install Python dependencies
+RUN python -m venv venv && \
+    . venv/bin/activate && \
+    pip install -r requirements.txt
+
+RUN chmod -R 777 venv/
+
+# Copy the rest of the application code to the container
+COPY dashboard ./
+RUN pip install requests
+# Start the Streamlit application with hot reloading
+CMD ["python", "scripts/seed.py"]
