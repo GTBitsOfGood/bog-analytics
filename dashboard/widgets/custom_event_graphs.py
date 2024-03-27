@@ -11,7 +11,7 @@ from utils import get_iso_string_n_days_ago
 def init_plot_custom_graphs(custom_events, custom_graphs):
     charts = []
     for graph in custom_graphs:
-        data_pairs = []
+        st.write(f"**{graph['graphTitle']}**")
         graph_type = graph["graphType"]
 
         # For bar, we will get all the different x's and calculate their frequency
@@ -40,9 +40,14 @@ def init_plot_custom_graphs(custom_events, custom_graphs):
             st.altair_chart(chart, use_container_width=True)
         # For line, we will show how the value of x and its respective y change over time. y must be numeric
         elif graph_type == "line" or graph_type == "scatter":
+            graph_x, graph_y = graph["xProperty"], graph["yProperty"]
+            if graph_x == graph_y:
+                graph_x = f"(x) {graph_x}"
+                graph_y = f"(y) {graph_y}"
+
             data = {
-                graph["xProperty"]: [],
-                graph["yProperty"]: [],
+                graph_x: [],
+                graph_y: [],
                 "Time (Seconds)": [],
             }
             for event in custom_events:
@@ -51,10 +56,10 @@ def init_plot_custom_graphs(custom_events, custom_graphs):
 
                 if not y.isnumeric():
                     continue
-                data[graph["xProperty"]].append(x)
-                data[graph["yProperty"]].append(float(y))
+                data[graph_x].append(x)
+                data[graph_y].append(float(y))
                 data["Time (Seconds)"].append(event["createdAt"])
-            if len(data[graph["xProperty"]]) > 0:
+            if len(data[graph_x]) > 0:
                 df = pd.DataFrame(data)
                 df["Time (Seconds)"] = pd.to_datetime(df["Time (Seconds)"]).dt.second
                 filtered_data = df
@@ -65,16 +70,16 @@ def init_plot_custom_graphs(custom_events, custom_graphs):
                     st.line_chart(
                         data=filtered_data,
                         x="Time (Seconds)",
-                        y=graph["yProperty"],
-                        color=graph["xProperty"],
+                        y=graph_y,
+                        color=graph_x,
                         use_container_width=True,
                     )
                 elif graph_type == "scatter":
                     st.scatter_chart(
                         data=filtered_data,
                         x="Time (Seconds)",
-                        y=graph["yProperty"],
-                        color=graph["xProperty"],
+                        y=graph_y,
+                        color=graph_x,
                         use_container_width=True,
                     )
     return charts
