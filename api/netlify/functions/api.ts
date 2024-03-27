@@ -3,9 +3,11 @@ import compression from 'compression';
 import express, { Request, Response, NextFunction } from 'express';
 import { router } from '@/src/routes';
 import { ApplicationError } from '@/src/errors/application-error';
+import swaggerUi from 'swagger-ui-express';
 import cors from "cors"
 
 import serverless from "serverless-http";
+import swaggerJsdoc from 'swagger-jsdoc';
 export let api = express();
 
 api.use(compression());
@@ -30,4 +32,40 @@ api.use((err: ApplicationError, req: Request, res: Response, next: NextFunction)
     });
 });
 
+const options = {
+    definition: {
+        openapi: "3.1.0",
+        info: {
+            title: "Bits of Good Analytics API",
+            version: "1.0.0",
+            description:
+                "The Unified Bits of Good Analytics API",
+            license: {
+                name: "MIT",
+                url: "https://spdx.org/licenses/MIT.html",
+            },
+            contact: {
+                name: "Bits of Good",
+                url: "https://bitsofgood.org",
+                email: "hello@bitsofgood.org",
+            },
+        },
+        servers: [
+            {
+                url: "https://analytics.bitsofgood.org",
+            },
+            {
+                url: "http://localhost:3001",
+            },
+        ],
+    },
+    apis: ["./model-docs.js", "./route-docs.js"],
+};
+
+const specs = swaggerJsdoc(options);
+api.use(
+    "/docs",
+    swaggerUi.serve,
+    swaggerUi.setup(specs, { explorer: true })
+);
 export const handler = serverless(api);
