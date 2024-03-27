@@ -13,7 +13,11 @@ def get_default_after_time():
 
 
 def get_paginated_visit_events(
-    project_name, after_time=get_default_after_time(), limit=10, after_id=None
+    project_name,
+    after_time=get_default_after_time(),
+    limit=10,
+    after_id=None,
+    environment=None,
 ):
     url = base_url + "/api/events/visit-event"
     params = {
@@ -23,6 +27,9 @@ def get_paginated_visit_events(
     }
     if after_id:
         params["afterId"] = after_id
+
+    if environment:
+        params["environment"] = environment
 
     try:
         response = requests.get(url, params=params)
