@@ -8,6 +8,12 @@ class EventTypes(Enum):
     INPUT_EVENTS = "Input Events"
 
 
+class Environments(Enum):
+    DEVELOPMENT = "Development"
+    STAGING = "Staging"
+    PRODUCTION = "Production"
+
+
 def get_iso_string_n_days_ago(n):
     today = datetime.now()
     print(today)

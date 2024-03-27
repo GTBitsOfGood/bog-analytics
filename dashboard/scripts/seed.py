@@ -145,7 +145,7 @@ def seed():
     categories = [f"category_{i}" for i in range(0, 10)]
     subcategories = [f"subcategory_{i}" for i in range(0, 10)]
     properties = [f"prop_{i}" for i in range(0, 10)]
-    property_values = [f"val_{i}" for i in range(0, 10)]
+    property_values = [f"{i}" for i in range(0, 10)]
     graph_titles = [f"graph_title_{i}" for i in range(0, 100)]
     graph_types = ["bar", "line", "scatter"]
 
