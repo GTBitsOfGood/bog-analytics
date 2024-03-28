@@ -30,15 +30,22 @@ export interface BaseEvent {
 }
 
 export interface CustomEventType {
-    _id: string;
+    _id?: string;
     category: string;
     subcategory: string;
     properties: string[]
     projectId: string;
 }
 
-export interface CustomEvent extends BaseEvent {
+export interface BaseEventWithoutCategory {
     _id: string;
+    projectId: string;
+    environment: EventEnvironment;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+}
+
+export interface CustomEvent extends BaseEventWithoutCategory {
     eventTypeId: string;
     properties: object;
 }

@@ -1,12 +1,14 @@
 import { beforeAll, describe, expect, test } from '@jest/globals';
-import { AnalyticsLogger } from '@/index';
+import { AnalyticsLogger, AnalyticsManager } from '@/index';
 import { externalRequest } from '@/utils/requests';
 import { urls } from '@/utils/urls';
-import { ClickEventProperties, EventEnvironment, HttpMethod, InputEventProperties, Project, VisitEventProperties } from '@/utils/types';
+import { ClickEventProperties, CustomEventType, EventEnvironment, HttpMethod, InputEventProperties, Project, VisitEventProperties } from '@/utils/types';
 import { randomUUID } from "crypto";
 
 describe('Analytics Logger Module', () => {
     let developmentLogger: AnalyticsLogger;
+    let analyticsManager: AnalyticsManager;
+
     let clickEventProperties: ClickEventProperties = {
         objectId: "object 1",
         userId: "user 1"
@@ -23,6 +25,8 @@ describe('Analytics Logger Module', () => {
         textValue: "text 1"
     }
 
+    let customEventType: CustomEventType;
+
     beforeAll(async () => {
         developmentLogger = new AnalyticsLogger()
         const project = await externalRequest<Project>({
@@ -33,6 +37,19 @@ describe('Analytics Logger Module', () => {
             }
         })
         developmentLogger.authenticate(project.clientApiKey, EventEnvironment.DEVELOPMENT);
+        analyticsManager = new AnalyticsManager();
+        analyticsManager.authenticate(project.serverApiKey);
+
+        customEventType = {
+            category: "category 1",
+            subcategory: "subcategory 1",
+            properties: [
+                "prop1",
+                "prop2"
+            ],
+            projectId: project._id
+        }
+
     })
 
 
@@ -56,4 +73,15 @@ describe('Analytics Logger Module', () => {
     })
 
 
+    test('Basic Custom Event Test', async () => {
+        const eventType = await analyticsManager.defineCustomEvent(customEventType) as CustomEventType;
+        const customEvent = await developmentLogger.logCustomEvent({
+            eventTypeId: eventType._id, properties: {
+                "prop1": "val1",
+                "prop2": "val2"
+            }
+        });
+        expect(customEvent?.eventTypeId).toEqual(eventType._id);
+
+    })
 })

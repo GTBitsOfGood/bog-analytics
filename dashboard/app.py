@@ -1,12 +1,13 @@
 import streamlit as st
 import pandas as pd
-from scripts.data import (
-    # visit_events,
-    # click_events,
-    # input_events,
-    custom_events,
-    # custom_graphs,
-)
+
+# from scripts.data import (
+#     visit_events,
+#     click_events,
+#     input_events,
+#     custom_events,
+#     custom_graphs,
+# )
 from widgets.sidebar_widgets import (
     init_days_slider,
     init_environment_selectbox,

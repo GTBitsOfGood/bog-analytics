@@ -16,7 +16,7 @@ export default class AnalyticsLogger {
         this.environment = envrionment ?? EventEnvironment.DEVELOPMENT;
     }
 
-    public async logClickEvent(clickEvent: Partial<ClickEventProperties>): Promise<ClickEvent | null> {
+    public async logClickEvent(clickEvent: ClickEventProperties): Promise<ClickEvent | null> {
         const { objectId, userId } = clickEvent;
 
         try {
@@ -24,6 +24,9 @@ export default class AnalyticsLogger {
                 throw new Error('Please authenticate first with your client api key using the authenticate method');
             }
 
+            if (!objectId || !userId) {
+                throw new Error('Please specify an objectId and userId')
+            }
 
             // Client side API Key
             const event = await createClickEvent(this.clientApiKey, objectId as string, userId as string, this.environment as EventEnvironment);
@@ -42,12 +45,17 @@ export default class AnalyticsLogger {
         }
     }
 
-    public async logVisitEvent(visitEvent: Partial<VisitEventProperties>): Promise<VisitEvent | null> {
+    public async logVisitEvent(visitEvent: VisitEventProperties): Promise<VisitEvent | null> {
         const { pageUrl, userId } = visitEvent;
         try {
             if (!this.clientApiKey) {
                 throw new Error('Please authenticate first with your client api key using the authenticate method');
             }
+
+            if (!pageUrl || !userId) {
+                throw new Error('Please specify a userId and pageUrl')
+            }
+
 
             // Client side API Key
             const event = await createVisitEvent(this.clientApiKey, pageUrl as string, userId as string, this.environment as EventEnvironment);
@@ -66,13 +74,18 @@ export default class AnalyticsLogger {
         }
     }
 
-    public async logInputEvent(inputEvent: Partial<InputEventProperties>): Promise<InputEvent | null> {
+    public async logInputEvent(inputEvent: InputEventProperties): Promise<InputEvent | null> {
         const { objectId, userId, textValue } = inputEvent;
 
         try {
             if (!this.clientApiKey) {
                 throw new Error('Please authenticate first using the authenticate method');
             }
+
+            if (!objectId || !userId || !textValue) {
+                throw new Error('Please specify an objectId, userId, and textValue')
+            }
+
             // Client side API Key
             const event = await createInputEvent(this.clientApiKey, objectId as string, userId as string, textValue as string, this.environment as EventEnvironment);
             return event;
@@ -93,9 +106,14 @@ export default class AnalyticsLogger {
 
     public async logCustomEvent(customEvent: Partial<CustomEvent>): Promise<CustomEvent | null> {
         const { eventTypeId, properties } = customEvent;
+
         try {
             if (!this.clientApiKey) {
                 throw new Error('Please authenticate first with your client api key using the authenticate method');
+            }
+
+            if (!eventTypeId || !properties) {
+                throw new Error('Please specify an eventTypeId and properties')
             }
 
             // Client side API Key

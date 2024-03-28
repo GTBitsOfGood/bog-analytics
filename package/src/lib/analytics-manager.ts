@@ -2,6 +2,7 @@ import { logMessage } from "@/actions/logs";
 import { createCustomEventType } from "@/actions/custom-event-type";
 import { createCustomGraphType } from "@/actions/custom-graph-type";
 import { CustomEventType, CustomGraphType } from "@/utils/types";
+import { isBrowser } from "@/utils/env";
 
 // Class to be used server side
 export default class AnalyticsManager {
