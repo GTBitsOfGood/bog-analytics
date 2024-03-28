@@ -2,8 +2,9 @@ import datetime
 import time
 import requests
 from utils import EventTypes
+import os
 
-base_url = "http://api:3001"
+base_url = os.getenv("API_BASE_URL") if os.getenv("API_BASE_URL") else "http://api:3001"
 event_type_labels_to_event_mapping = {}
 
 
