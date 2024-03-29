@@ -7,11 +7,14 @@ import { isBrowser } from "@/utils/env";
 // Class to be used server side
 export default class AnalyticsManager {
     private serverApiKey?: string;
+    private apiBaseUrl?: string;
 
-    constructor() {
+    constructor(apiBaseUrl?: string) {
         if (isBrowser()) {
             throw new Error("Analytics manager cannot be used client side!")
         }
+
+        this.apiBaseUrl = apiBaseUrl ?? "https://analytics.bitsofgood.org"
     }
 
     public async authenticate(serverApiKey: string): Promise<void> {
@@ -24,7 +27,7 @@ export default class AnalyticsManager {
             if (!this.serverApiKey) {
                 throw new Error('Please authenticate with your server api key first using the authenticate method');
             }
-            const event = await createCustomEventType(this.serverApiKey, category as string, subcategory as string, properties as string[]);
+            const event = await createCustomEventType(this.apiBaseUrl as string, this.serverApiKey, category as string, subcategory as string, properties as string[]);
             return event;
 
         } catch {
@@ -41,7 +44,7 @@ export default class AnalyticsManager {
             if (!this.serverApiKey) {
                 throw new Error('Please authenticate with your server api key first using the authenticate method');
             }
-            const event = await createCustomGraphType(this.serverApiKey, eventTypeId as string, xProperty as string, yProperty as string, graphType as string, graphTitle as string);
+            const event = await createCustomGraphType(this.apiBaseUrl as string, this.serverApiKey, eventTypeId as string, xProperty as string, yProperty as string, graphType as string, graphTitle as string);
             return event;
 
         } catch {

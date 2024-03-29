@@ -2,10 +2,9 @@ import { externalRequest } from "@/utils/requests"
 import { CustomGraphType, HttpMethod } from "@/utils/types";
 import { urls } from "@/utils/urls"
 
-export const customGraphTypeUrl = urls.apiBaseUrl + urls.events.customGraphType;
-export const createCustomGraphType = async (apiKey: string, eventTypeId: string, xProperty: string, yProperty: string, graphType: string, graphTitle: string): Promise<CustomGraphType> => {
+export const createCustomGraphType = async (apiBaseUrl: string, apiKey: string, eventTypeId: string, xProperty: string, yProperty: string, graphType: string, graphTitle: string): Promise<CustomGraphType> => {
     return externalRequest<CustomGraphType>({
-        url: customGraphTypeUrl,
+        url: apiBaseUrl + urls.events.customGraphType,
         method: HttpMethod.POST,
         serverApiKey: apiKey,
         body: {
@@ -18,9 +17,9 @@ export const createCustomGraphType = async (apiKey: string, eventTypeId: string,
     })
 }
 
-export const getCustomGraphTypes = async (projectName: string, eventTypeId: string): Promise<CustomGraphType[]> => {
+export const getCustomGraphTypes = async (apiBaseUrl: string, projectName: string, eventTypeId: string): Promise<CustomGraphType[]> => {
     return externalRequest<CustomGraphType[]>({
-        url: customGraphTypeUrl,
+        url: apiBaseUrl + urls.events.customGraphType,
         method: HttpMethod.GET,
         queryParams: {
             projectName,

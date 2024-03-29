@@ -2,10 +2,9 @@ import { externalRequest } from "@/utils/requests"
 import { CustomEventType, HttpMethod } from "@/utils/types";
 import { urls } from "@/utils/urls"
 
-const customEventTypeUrl = urls.apiBaseUrl + urls.events.customEventType;
-export const createCustomEventType = async (apiKey: string, category: string, subcategory: string, properties: string[]): Promise<CustomEventType> => {
+export const createCustomEventType = async (apiBaseUrl: string, apiKey: string, category: string, subcategory: string, properties: string[]): Promise<CustomEventType> => {
     return externalRequest<CustomEventType>({
-        url: customEventTypeUrl,
+        url: apiBaseUrl + urls.events.customEventType,
         method: HttpMethod.POST,
         serverApiKey: apiKey,
         body: {
@@ -16,9 +15,9 @@ export const createCustomEventType = async (apiKey: string, category: string, su
     })
 }
 
-export const getCustomEventTypes = async (projectName: string): Promise<CustomEventType[]> => {
+export const getCustomEventTypes = async (apiBaseUrl: string, projectName: string): Promise<CustomEventType[]> => {
     return externalRequest<CustomEventType[]>({
-        url: customEventTypeUrl,
+        url: apiBaseUrl + urls.events.customEventType,
         method: HttpMethod.GET,
         queryParams: {
             projectName

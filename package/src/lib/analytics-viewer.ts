@@ -5,9 +5,15 @@ import { logMessage } from "@/actions/logs";
 import { formatErrorMessage } from "@/utils/error";
 
 export default class AnalyticsViewer {
+    private apiBaseUrl?: string;
+
+    constructor(apiBaseUrl?: string) {
+        this.apiBaseUrl = apiBaseUrl ?? "https://analytics.bitsofgood.org"
+    }
+
     public async getCustomEventTypes(projectName: string): Promise<CustomEventType[] | null> {
         try {
-            const customEventTypes = await getCustomEventTypes(projectName)
+            const customEventTypes = await getCustomEventTypes(this.apiBaseUrl as string, projectName)
             return customEventTypes;
 
         } catch {
@@ -24,7 +30,7 @@ export default class AnalyticsViewer {
 
     public async getCustomGraphTypesbyId(projectName: string, eventTypeId: string) {
         try {
-            const graphTypes = getCustomGraphTypes(projectName, eventTypeId);
+            const graphTypes = getCustomGraphTypes(this.apiBaseUrl as string, projectName, eventTypeId);
             return graphTypes;
 
         } catch {

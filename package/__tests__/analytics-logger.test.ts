@@ -28,16 +28,17 @@ describe('Analytics Logger Module', () => {
     let customEventType: CustomEventType;
 
     beforeAll(async () => {
-        developmentLogger = new AnalyticsLogger()
+        developmentLogger = new AnalyticsLogger("http://127.0.0.1:3001", EventEnvironment.DEVELOPMENT)
         const project = await externalRequest<Project>({
-            url: urls.apiBaseUrl + urls.project,
+            url: "http://127.0.0.1:3001" + urls.project,
             method: HttpMethod.POST,
             body: {
                 projectName: randomUUID()
             }
         })
-        developmentLogger.authenticate(project.clientApiKey, EventEnvironment.DEVELOPMENT);
-        analyticsManager = new AnalyticsManager();
+        developmentLogger.authenticate(project.clientApiKey);
+
+        analyticsManager = new AnalyticsManager("http://127.0.0.1:3001");
         analyticsManager.authenticate(project.serverApiKey);
 
         customEventType = {

@@ -10,10 +10,14 @@ import { createCustomEvent } from "@/actions/custom-event";
 export default class AnalyticsLogger {
     private clientApiKey?: string;
     private environment?: EventEnvironment;
+    private apiBaseUrl?: string; // used for unittesting puposes
 
-    public async authenticate(clientApiKey: string, envrionment?: EventEnvironment): Promise<void> {
+    constructor(apiBaseUrl: string, environment?: EventEnvironment) {
+        this.apiBaseUrl = apiBaseUrl ?? "https://analytics.bitsofgood.org"
+        this.environment = environment ?? EventEnvironment.DEVELOPMENT;
+    }
+    public async authenticate(clientApiKey: string): Promise<void> {
         this.clientApiKey = clientApiKey;
-        this.environment = envrionment ?? EventEnvironment.DEVELOPMENT;
     }
 
     public async logClickEvent(clickEvent: ClickEventProperties): Promise<ClickEvent | null> {
@@ -29,7 +33,7 @@ export default class AnalyticsLogger {
             }
 
             // Client side API Key
-            const event = await createClickEvent(this.clientApiKey, objectId as string, userId as string, this.environment as EventEnvironment);
+            const event = await createClickEvent(this.apiBaseUrl as string, this.clientApiKey, objectId as string, userId as string, this.environment as EventEnvironment);
             return event;
 
         } catch {
@@ -58,7 +62,7 @@ export default class AnalyticsLogger {
 
 
             // Client side API Key
-            const event = await createVisitEvent(this.clientApiKey, pageUrl as string, userId as string, this.environment as EventEnvironment);
+            const event = await createVisitEvent(this.apiBaseUrl as string, this.clientApiKey, pageUrl as string, userId as string, this.environment as EventEnvironment);
             return event;
 
         } catch {
@@ -87,7 +91,7 @@ export default class AnalyticsLogger {
             }
 
             // Client side API Key
-            const event = await createInputEvent(this.clientApiKey, objectId as string, userId as string, textValue as string, this.environment as EventEnvironment);
+            const event = await createInputEvent(this.apiBaseUrl as string, this.clientApiKey, objectId as string, userId as string, textValue as string, this.environment as EventEnvironment);
             return event;
 
         } catch {
@@ -117,7 +121,7 @@ export default class AnalyticsLogger {
             }
 
             // Client side API Key
-            const event = await createCustomEvent(this.clientApiKey, eventTypeId as string, properties as object, this.environment as EventEnvironment);
+            const event = await createCustomEvent(this.apiBaseUrl as string, this.clientApiKey, eventTypeId as string, properties as object, this.environment as EventEnvironment);
             return event;
         } catch {
             await logMessage(formatErrorMessage(
