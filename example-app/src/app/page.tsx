@@ -2,16 +2,16 @@
 
 import Image from 'next/image'
 import styles from './page.module.css'
-import { AnalyticsLogger } from "bog-analytics";
+import { AnalyticsLogger, EventEnvironment } from "bog-analytics"
 import { useEffect } from 'react';
 
 export default function Home() {
 
   useEffect(() => {
-    const logger = new AnalyticsLogger();
+    const logger = new AnalyticsLogger("https://analytics.bitsofgood.org", EventEnvironment.DEVELOPMENT);
     const loadLogger = async () => {
       logger.authenticate("57a0a660-a4c3-43fe-9178-a7d7ca69b0fe")
-      logger.logClickEvent("object1", "user1")
+      await logger.logClickEvent({ objectId: "object 1", userId: "user 1" })
     }
 
     loadLogger().then().catch()

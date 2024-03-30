@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "bog-analytics": "^0.0.2",
+    "bog-analytics": "^0.0.6",
     "next": "14.0.1",
     "react": "^18",
     "react-dom": "^18"

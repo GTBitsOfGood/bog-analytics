@@ -1,9 +1,10 @@
 {
     "name": "bog-analytics",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "scripts": {
         "build": "tsup",
-        "test": "jest"
+        "test": "jest",
+        "prepublish": "yarn build"
     },
     "main": "./dist/index.js",
     "module": "./dist/index.mjs",
