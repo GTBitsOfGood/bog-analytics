@@ -7,7 +7,7 @@ import { formatErrorMessage } from "@/utils/error";
 export default class AnalyticsViewer {
     private apiBaseUrl?: string;
 
-    constructor(apiBaseUrl?: string) {
+    constructor({ apiBaseUrl }: { apiBaseUrl?: string }) {
         this.apiBaseUrl = apiBaseUrl ?? "https://analytics.bitsofgood.org"
     }
 

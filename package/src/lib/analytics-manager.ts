@@ -9,7 +9,7 @@ export default class AnalyticsManager {
     private serverApiKey?: string;
     private apiBaseUrl?: string;
 
-    constructor(apiBaseUrl?: string) {
+    constructor({ apiBaseUrl }: { apiBaseUrl?: string }) {
         if (isBrowser()) {
             throw new Error("Analytics manager cannot be used client side!")
         }

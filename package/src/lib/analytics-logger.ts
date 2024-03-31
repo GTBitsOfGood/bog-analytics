@@ -12,7 +12,7 @@ export default class AnalyticsLogger {
     private environment?: EventEnvironment;
     private apiBaseUrl?: string; // used for unittesting puposes
 
-    constructor(apiBaseUrl: string, environment?: EventEnvironment) {
+    constructor({ apiBaseUrl, environment }: { apiBaseUrl?: string, environment?: EventEnvironment }) {
         this.apiBaseUrl = apiBaseUrl ?? "https://analytics.bitsofgood.org"
         this.environment = environment ?? EventEnvironment.DEVELOPMENT;
     }
