@@ -27,17 +27,6 @@ services:
     networks:
       - bog-analytics-net      
       
-  example-app:
-    build:
-      context: .
-      dockerfile: example-app/Dockerfile.dev
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./example-app:/app
-      - /app/node_modules
-      - /app/.next
-
   mongo:
     image: mongo
     ports:

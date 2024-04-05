@@ -1,12 +1,10 @@
 # Bits of Good Analytics
 
-This is the unified Bits of Good analytics dashboard. It is designed with interoperability and plug-in-play in mind to be able to work with any Bits of Good project. There are four primary components to this analytics dashboard:
+This is the unified Bits of Good analytics platform. It is designed with interoperability and plug-in-play in mind to be able to work with any Bits of Good project. There are three primary components to this analytics platform:
 
 - **Dashboard Application:** This is the core of the analytics dashboard and is where all of the data visualizations are located. This is written and built complately using Streamlit and Python - it is deployed using Streamlit's cloud service.
 
 - **Analytics Processing API:** This is the data API that ingests data from our websites and reprocesses it into a unified interface (defined by the events in the event interfaces section) which enables this dashboard to be interoperable throughout Bits of Good projects.
-
-- **Project Application:** This is the Bits of Good application that we want to interface with. For testing purposes, we have created a Next.js application in `example-app` which has Amplitude Analytics integrated for us to test on real data.
 
 - **Package:** A publically accessible NPM package to interface with the Analytics Processing API.
 ## Event Interfaces
