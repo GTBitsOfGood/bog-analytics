@@ -15,4 +15,4 @@
   to = "/index.html"
   status = 200
 [build]
-  command = "echo 'Building Functions'"
+  command = "yarn generate-docs"
