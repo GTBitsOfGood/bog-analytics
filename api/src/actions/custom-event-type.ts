@@ -1,8 +1,8 @@
 import { CustomEventType } from "@/src/utils/types";
 import { dbConnect } from "@/src/utils/db-connect";
 import CustomEventTypeModel from "@/src/models/custom-event-type";
-import CustomEvent from "@/src/models/custom-event";
-import CustomGraphType from "@/src/models/custom-graph-type";
+import CustomEventModel from "@/src/models/custom-event";
+import CustomGraphTypeModel from "@/src/models/custom-graph-type";
 import { Types } from "mongoose";
 
 
@@ -39,7 +39,7 @@ export const deleteCustomEventType = async (projectId: string, category: string,
     }
     let eventTypeId = deletedEventType._id
 
-    await CustomEvent.deleteMany({ eventTypeId })
-    await CustomGraphType.deleteMany({ eventTypeId })
+    await CustomEventModel.deleteMany({ eventTypeId })
+    await CustomGraphTypeModel.deleteMany({ eventTypeId })
     await CustomEventTypeModel.deleteOne({ projectId, category, subcategory })
 }
