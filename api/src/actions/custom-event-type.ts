@@ -6,12 +6,12 @@ import CustomGraphTypeModel from "@/src/models/custom-graph-type";
 import { Types } from "mongoose";
 
 
-export const findEventForProject = async (projectId: string | Types.ObjectId, category: string, subcategory: string) => {
+export const findEventTypeForProject = async (projectId: string | Types.ObjectId, category: string, subcategory: string) => {
     await dbConnect();
     return await CustomEventTypeModel.findOne({ projectId, category, subcategory })
 
 }
-export const findEventForProjectByID = async (projectId: string | Types.ObjectId, eventTypeId: string | Types.ObjectId) => {
+export const findEventTypeForProjectByID = async (projectId: string | Types.ObjectId, eventTypeId: string | Types.ObjectId) => {
     await dbConnect();
     return await CustomEventTypeModel.findOne({ projectId, _id: eventTypeId })
 }

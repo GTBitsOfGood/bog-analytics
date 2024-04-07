@@ -1,4 +1,4 @@
-import { createCustomEventType, getCustomEventTypesForProject, deleteCustomEventType, findEventForProject } from "@/src/actions/custom-event-type";
+import { createCustomEventType, getCustomEventTypesForProject, deleteCustomEventType, findEventTypeForProject } from "@/src/actions/custom-event-type";
 import { getProjectIDByName } from "@/src/actions/project";
 import { getProjectByServerKey } from "@/src/actions/project";
 import { relogRequestHandler } from "@/src/middleware/request-middleware";
@@ -29,7 +29,7 @@ const customEventTypeRoute = APIWrapper({
                 projectId: project._id
             }
 
-            const preexistingEventType = await findEventForProject(project._id, category, subcategory)
+            const preexistingEventType = await findEventTypeForProject(project._id, category, subcategory)
             if (preexistingEventType != null) {
                 throw new Error("A custom event type with the same category and subcategory already exists")
             }

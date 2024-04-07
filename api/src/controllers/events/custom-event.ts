@@ -1,5 +1,5 @@
 import { createCustomEvent, paginatedGetCustomEvents } from "@/src/actions/custom-event";
-import { getCustomEventTypeID, getCustomEventsByEventTypeId } from "@/src/actions/custom-event-type";
+import { getCustomEventTypeID, findEventTypeForProjectByID } from "@/src/actions/custom-event-type";
 import { getProjectIDByName } from "@/src/actions/project";
 import { getProjectByClientKey } from "@/src/actions/project";
 import { relogRequestHandler } from "@/src/middleware/request-middleware";
@@ -28,7 +28,7 @@ const customEventRoute = APIWrapper({
                 eventTypeId,
                 environment
             }
-            const eventType = await getCustomEventsByEventTypeId(project._id.toString(), eventTypeId);
+            const eventType = await findEventTypeForProjectByID(project._id.toString(), eventTypeId);
             if (!eventType) {
                 throw new Error("Event type does not exist");
             }
