@@ -7,23 +7,11 @@ import CustomEventTypeModel from "@/src/models/custom-event-type";
 export const createCustomGraphType = async (newGraph: Partial<CustomGraphType>) => {
     await dbConnect();
     let eventTypeId = newGraph.eventTypeId
-    let eventType = await CustomEventTypeModel.findOne({ _id: eventTypeId })
-    console.log("HEREE 1")
+    let eventType = await CustomEventTypeModel.findOne({ _id: eventTypeId, projectId: newGraph.projectId })
     if (!eventType) {
         return null;
     }
-    console.log("HEREE 2")
-    let typeProperties = eventType.properties;
-    if (!typeProperties.includes(newGraph.xProperty as string) || !typeProperties.includes(newGraph.yProperty as string)) {
-        return null;
-    }
-    console.log("HEREE 3")
-    if (!Object.values(GraphTypes).includes(newGraph.graphType as GraphTypes)) {
-        return null;
-    }
-    console.log("HEREE 4", newGraph)
     const createdGraphType = await CustomGraphTypeModel.create(newGraph);
-    console.log("INNER HERE 4", createdGraphType)
     return createdGraphType;
 }
 
@@ -36,4 +24,9 @@ export const deleteCustomGraphType = async (_id: string) => {
     await dbConnect();
     const deletedGraphType = await CustomGraphTypeModel.deleteOne({ _id })
     return deletedGraphType
+}
+
+export const deleteAllCustomGraphTypes = async () => {
+    await dbConnect();
+    await CustomGraphTypeModel.deleteMany();
 }

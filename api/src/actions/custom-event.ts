@@ -9,7 +9,6 @@ export const createCustomEvent = async (event: Partial<CustomEvent>) => {
     await dbConnect();
     let eventId = new ObjectId(event.eventTypeId);
     let eventType = await CustomEventTypeModel.findOne({ _id: eventId, projectId: event.projectId })
-    console.log(eventType)
     if (!eventType) {
         console.log("event type not found")
         return null;
@@ -23,7 +22,6 @@ export const createCustomEvent = async (event: Partial<CustomEvent>) => {
         console.log("properties length not equal")
         return null;
     }
-    console.log(Object.values(typeProperties))
     for (const key in event?.properties) {
         let has = false;
         for (let i = 0; i < typeProperties.length; i++) {

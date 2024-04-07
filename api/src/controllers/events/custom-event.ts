@@ -18,11 +18,9 @@ const customEventRoute = APIWrapper({
             if (!eventTypeId || !properties) {
                 throw new Error("You must specify a category and subcategory to create a custom event!")
             }
-            console.log(req.headers.clienttoken as string)
             const project = await getProjectByClientKey(req.headers.clienttoken as string);
             // let eTypeId = eventTypeId.toString().trim();
             // console.log(eTypeId)
-            console.log(project?._id)
             if (!project) {
                 throw new Error("Project does not exist for client token")
             }

@@ -31,7 +31,6 @@ const customGraphTypeRoute = APIWrapper({
                 ...(req.body.caption !== undefined && { caption: req.body.caption })
             };
             const createdGraphType = await createCustomGraphType(customGraphType);
-            console.log("HERE 4", createdGraphType);
             if (!createdGraphType) {
                 throw new Error("Failed to create a custom graph");
             }
