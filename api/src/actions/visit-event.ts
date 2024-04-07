@@ -34,7 +34,7 @@ export const paginatedGetVisitEvents = async (afterDate: Date, afterID: string, 
     return []
 }
 
-export const deleteClickEvents = async () => {
+export const deleteVisitEvents = async () => {
     await dbConnect();
     return await VisitEventModel.deleteMany();
 }

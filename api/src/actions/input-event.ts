@@ -33,7 +33,7 @@ export const paginatedGetInputEvents = async (afterDate: Date, afterID: String, 
     return []
 }
 
-export const deleteClickEvents = async () => {
+export const deleteInputEvents = async () => {
     await dbConnect();
     return await InputEventModel.deleteMany();
 }
