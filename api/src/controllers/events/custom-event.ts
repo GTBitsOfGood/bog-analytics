@@ -1,11 +1,11 @@
 import { createCustomEvent, paginatedGetCustomEvents } from "@/src/actions/custom-event";
-import { getCustomEventTypeID } from "@/src/actions/custom-event-type";
+import { getCustomEventTypeID, getCustomEventsByEventTypeId } from "@/src/actions/custom-event-type";
 import { getProjectIDByName } from "@/src/actions/project";
 import { getProjectByClientKey } from "@/src/actions/project";
 import { relogRequestHandler } from "@/src/middleware/request-middleware";
 import APIWrapper from "@/src/utils/api-wrapper";
 import { CustomEvent, EventEnvironment } from "@/src/utils/types";
-import e, { Request } from "express";
+import { Request } from "express";
 
 const customEventRoute = APIWrapper({
     POST: {
@@ -19,8 +19,6 @@ const customEventRoute = APIWrapper({
                 throw new Error("You must specify a category and subcategory to create a custom event!")
             }
             const project = await getProjectByClientKey(req.headers.clienttoken as string);
-            // let eTypeId = eventTypeId.toString().trim();
-            // console.log(eTypeId)
             if (!project) {
                 throw new Error("Project does not exist for client token")
             }
@@ -30,7 +28,28 @@ const customEventRoute = APIWrapper({
                 eventTypeId,
                 environment
             }
+            const eventType = await getCustomEventsByEventTypeId(project._id.toString(), eventTypeId);
+            if (!eventType) {
+                throw new Error("Event type does not exist");
+            }
 
+            const typeProperties = eventType.properties;
+            if (Object.keys(typeProperties).length !== Object.keys((event?.properties as Record<string, string | number | Date>)).length) {
+                throw new Error("Event properties do not match event type properties")
+            }
+            for (const key in event?.properties) {
+                let has = false;
+                for (let i = 0; i < typeProperties.length; i++) {
+                    let value = typeProperties[i]
+                    if (value == key) {
+                        has = true;
+                        break;
+                    }
+                }
+                if (has == false) {
+                    throw new Error("Event properties do not match event type properties")
+                }
+            }
             const createdEvent = await createCustomEvent(event);
 
             if (!createdEvent) {

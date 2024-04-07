@@ -11,6 +11,10 @@ export const findEventForProject = async (projectId: string | Types.ObjectId, ca
     return await CustomEventTypeModel.findOne({ projectId, category, subcategory })
 
 }
+export const findEventForProjectByID = async (projectId: string | Types.ObjectId, eventTypeId: string | Types.ObjectId) => {
+    await dbConnect();
+    return await CustomEventTypeModel.findOne({ projectId, _id: eventTypeId })
+}
 export const createCustomEventType = async (eventType: Partial<CustomEventType>) => {
     await dbConnect();
     const createdEventType = await CustomEventTypeModel.create(eventType);
