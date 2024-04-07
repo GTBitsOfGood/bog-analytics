@@ -5,7 +5,7 @@ import { getProjectByClientKey } from "@/src/actions/project";
 import { relogRequestHandler } from "@/src/middleware/request-middleware";
 import APIWrapper from "@/src/utils/api-wrapper";
 import { CustomEvent, EventEnvironment } from "@/src/utils/types";
-import { Request } from "express";
+import e, { Request } from "express";
 
 const customEventRoute = APIWrapper({
     POST: {
@@ -18,8 +18,11 @@ const customEventRoute = APIWrapper({
             if (!eventTypeId || !properties) {
                 throw new Error("You must specify a category and subcategory to create a custom event!")
             }
+            console.log(req.headers.clienttoken as string)
             const project = await getProjectByClientKey(req.headers.clienttoken as string);
-
+            // let eTypeId = eventTypeId.toString().trim();
+            // console.log(eTypeId)
+            console.log(project?._id)
             if (!project) {
                 throw new Error("Project does not exist for client token")
             }

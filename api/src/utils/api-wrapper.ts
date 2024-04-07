@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import {
     HttpMethod,
 } from "@/src/utils/types";
-import { Request, RequestHandler, Response } from "express"; import { getProjectByClientKey, getProjectByServerKey } from "@/src/actions/project";
+import { Request, RequestHandler, Response } from "express"; import { getAllProjects, getProjectByClientKey, getProjectByServerKey } from "@/src/actions/project";
 
 interface RouteConfig {
     requireClientToken?: boolean;
