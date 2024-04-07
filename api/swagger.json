@@ -62,9 +62,7 @@
             "in": "query",
             "name": "limit",
             "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 100
+              "type": "integer"
             },
             "description": "The maximum number of events to retrieve. Defaults to 10."
           },
@@ -98,7 +96,32 @@
                           "items": {
                             "$ref": "#/components/schemas/ClickEvent"
                           },
-                          "example": []
+                          "example": [
+                            {
+                              "eventProperties": {
+                                "objectId": "12345",
+                                "userId": "user123"
+                              },
+                              "category": "Interaction",
+                              "subcategory": "Click",
+                              "projectId": "project123",
+                              "environment": "development",
+                              "createdAt": "2024-04-05T12:00:00Z",
+                              "updatedAt": "2024-04-05T12:05:00Z"
+                            },
+                            {
+                              "eventProperties": {
+                                "objectId": "67890",
+                                "userId": "user456"
+                              },
+                              "category": "Interaction",
+                              "subcategory": "Click",
+                              "projectId": "project456",
+                              "environment": "development",
+                              "createdAt": "2024-04-05T13:00:00Z",
+                              "updatedAt": "2024-04-05T13:10:00Z"
+                            }
+                          ]
                         },
                         "afterId": {
                           "type": "string",
@@ -151,6 +174,1275 @@
                 }
               }
             }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a click event",
+        "description": "Creates a click event based on the provided parameters.",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "clienttoken",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Client token for authentication."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "objectId": {
+                    "type": "string",
+                    "description": "The ID of the object related to the click event"
+                  },
+                  "userId": {
+                    "type": "string",
+                    "description": "The ID of the user who triggered the click event"
+                  },
+                  "environment": {
+                    "type": "string",
+                    "enum": [
+                      "development",
+                      "staging",
+                      "production"
+                    ],
+                    "description": "The environment for which the event is created"
+                  }
+                },
+                "required": [
+                  "objectId",
+                  "userId",
+                  "environment"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClickEvent"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred while processing the request"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "You do not have permissions to access this API route"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/events/input-event": {
+      "get": {
+        "summary": "Retrieve input events",
+        "description": "Retrieves input events based on specified parameters.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "afterId",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the event after which to start retrieving events."
+          },
+          {
+            "in": "query",
+            "name": "projectName",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The name of the project for which to retrieve events."
+          },
+          {
+            "in": "query",
+            "name": "environment",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "development",
+                "staging",
+                "production"
+              ]
+            },
+            "description": "The environment for which to retrieve events."
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            },
+            "description": "The maximum number of events to retrieve. Defaults to 10."
+          },
+          {
+            "in": "query",
+            "name": "afterTime",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The timestamp after which to start retrieving events."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "events": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/InputEvent"
+                      },
+                      "example": [
+                        {
+                          "_id": "609cdd81c167df001c9548d6",
+                          "category": "Interaction",
+                          "subcategory": "Input",
+                          "projectId": "609cdd81c167df001c9548d5",
+                          "environment": "production",
+                          "createdAt": "2022-01-01T12:00:00Z",
+                          "updatedAt": "2022-01-01T12:05:00Z",
+                          "eventProperties": {
+                            "objectId": "609cdd81c167df001c9548d7",
+                            "userId": "user123",
+                            "textValue": "Example input text"
+                          }
+                        }
+                      ]
+                    },
+                    "afterId": {
+                      "type": "string",
+                      "nullable": true,
+                      "example": "609cdd81c167df001c9548d6"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "You must specify a project name!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "You do not have permissions to access this API route"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create an input event",
+        "description": "Creates an input event based on the provided parameters.",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "clienttoken",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Client token for authentication."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "objectId": {
+                    "type": "string",
+                    "description": "The ID of the object related to the input event"
+                  },
+                  "userId": {
+                    "type": "string",
+                    "description": "The ID of the user who triggered the input event"
+                  },
+                  "textValue": {
+                    "type": "string",
+                    "description": "The text value associated with the input event"
+                  },
+                  "environment": {
+                    "type": "string",
+                    "enum": [
+                      "development",
+                      "staging",
+                      "production"
+                    ],
+                    "description": "The environment for which the event is created"
+                  }
+                },
+                "required": [
+                  "objectId",
+                  "userId",
+                  "textValue",
+                  "environment"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InputEvent"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred while processing the request"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "You do not have permissions to access this API route"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/events/visit-event": {
+      "get": {
+        "summary": "Retrieve visit events",
+        "description": "Retrieves visit events based on specified parameters.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "afterId",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the event after which to start retrieving events."
+          },
+          {
+            "in": "query",
+            "name": "projectName",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The name of the project for which to retrieve events."
+          },
+          {
+            "in": "query",
+            "name": "environment",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "development",
+                "staging",
+                "production"
+              ]
+            },
+            "description": "The environment for which to retrieve events."
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            },
+            "description": "The maximum number of events to retrieve. Defaults to 10."
+          },
+          {
+            "in": "query",
+            "name": "afterTime",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The timestamp after which to start retrieving events."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "events": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/VisitEvent"
+                      },
+                      "example": [
+                        {
+                          "_id": "609cdd81c167df001c9548d6",
+                          "category": "Activity",
+                          "subcategory": "Visit",
+                          "projectId": "609cdd81c167df001c9548d5",
+                          "environment": "production",
+                          "createdAt": "2022-01-01T08:00:00Z",
+                          "updatedAt": "2022-01-01T08:05:00Z",
+                          "eventProperties": {
+                            "pageUrl": "https://example.com/page",
+                            "userId": "user123"
+                          }
+                        }
+                      ]
+                    },
+                    "afterId": {
+                      "type": "string",
+                      "nullable": true,
+                      "example": "609cdd81c167df001c9548d6"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "You must specify a project name!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "You do not have permissions to access this API route"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a visit event",
+        "description": "Creates a visit event based on the provided parameters.",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "clienttoken",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Client token for authentication."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pageUrl": {
+                    "type": "string",
+                    "description": "The URL of the page visited"
+                  },
+                  "userId": {
+                    "type": "string",
+                    "description": "The ID of the user who visited the page"
+                  },
+                  "environment": {
+                    "type": "string",
+                    "enum": [
+                      "development",
+                      "staging",
+                      "production"
+                    ],
+                    "description": "The environment for which the event is created"
+                  }
+                },
+                "required": [
+                  "pageUrl",
+                  "userId",
+                  "environment"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VisitEvent"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred while processing the request"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "You do not have permissions to access this API route"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/events/custom-event-type": {
+      "get": {
+        "summary": "Retrieve custom event types",
+        "description": "Retrieves custom event types for a specified project.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "projectName",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The name of the project for which to retrieve custom event types."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CustomEventType"
+                  },
+                  "example": [
+                    {
+                      "_id": "609cdd81c167df001c9548d6",
+                      "category": "Custom Interaction",
+                      "subcategory": "Hover",
+                      "properties": [
+                        "elementId",
+                        "duration",
+                        "userId"
+                      ],
+                      "projectId": "609cdd81c167df001c9548d5"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "You must specify a project name!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "You do not have permissions to access this API route"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a custom event type",
+        "description": "Creates a custom event type based on the provided parameters.",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "servertoken",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Server token for authentication."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "category": {
+                    "type": "string",
+                    "description": "The category of the custom event type"
+                  },
+                  "subcategory": {
+                    "type": "string",
+                    "description": "The subcategory of the custom event type"
+                  },
+                  "properties": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "The properties associated with the custom event type"
+                  }
+                },
+                "required": [
+                  "category",
+                  "subcategory"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomEventType"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred while processing the request"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "You do not have permissions to access this API route"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a custom event type",
+        "description": "Deletes a custom event type based on the provided parameters.",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "servertoken",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Server token for authentication."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "category": {
+                    "type": "string",
+                    "description": "The category of the custom event type"
+                  },
+                  "subcategory": {
+                    "type": "string",
+                    "description": "The subcategory of the custom event type"
+                  }
+                },
+                "required": [
+                  "category",
+                  "subcategory"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "No content.",
+            "content": {}
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred while processing the request"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "You do not have permissions to access this API route"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/events/custom-event": {
+      "get": {
+        "summary": "Retrieve custom events",
+        "description": "Retrieves custom events for a specified project and event type.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "projectName",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The name of the project for which to retrieve custom events."
+          },
+          {
+            "in": "query",
+            "name": "category",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The category of the custom event type."
+          },
+          {
+            "in": "query",
+            "name": "subcategory",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The subcategory of the custom event type."
+          },
+          {
+            "in": "query",
+            "name": "environment",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "development",
+                "staging",
+                "production"
+              ]
+            },
+            "description": "The environment for which to retrieve custom events."
+          },
+          {
+            "in": "query",
+            "name": "afterId",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the event after which to start retrieving events."
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            },
+            "description": "The maximum number of events to retrieve. Defaults to 10."
+          },
+          {
+            "in": "query",
+            "name": "afterTime",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The timestamp after which to start retrieving events."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "events": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/CustomEvent"
+                      },
+                      "example": [
+                        {
+                          "_id": "609cdd81c167df001c9548d6",
+                          "eventTypeId": "609cdd81c167df001c9548d5",
+                          "projectId": "609cdd81c167df001c9548d4",
+                          "properties": {
+                            "customProperty1": "value1",
+                            "customProperty2": "value2",
+                            "customProperty3": "value3"
+                          },
+                          "environment": "production",
+                          "createdAt": "2022-01-01T12:00:00Z",
+                          "updatedAt": "2022-01-01T12:05:00Z"
+                        }
+                      ]
+                    },
+                    "afterId": {
+                      "type": "string",
+                      "nullable": true,
+                      "example": "609cdd81c167df001c9548d6"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "You must specify a project name!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "You do not have permissions to access this API route"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a custom event",
+        "description": "Creates a custom event based on the provided parameters.",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "clienttoken",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Client token for authentication."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "eventTypeId": {
+                    "type": "string",
+                    "description": "The ID of the custom event type"
+                  },
+                  "properties": {
+                    "type": "object",
+                    "description": "The properties associated with the custom event"
+                  },
+                  "environment": {
+                    "$ref": "#/components/schemas/EventEnvironment"
+                  }
+                },
+                "required": [
+                  "eventTypeId",
+                  "properties"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomEvent"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred while processing the request"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "You do not have permissions to access this API route"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/graphs/custom-graph-type": {
+      "get": {
+        "summary": "Get custom graph types",
+        "description": "Retrieves custom graph types for a given project and event type.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "projectName",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Name of the project."
+          },
+          {
+            "in": "query",
+            "name": "eventTypeId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "ID of the event type."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CustomGraphType"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request."
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a custom graph type",
+        "description": "Creates a new custom graph type.",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "servertoken",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Server token for authentication."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "eventTypeId": {
+                    "type": "string",
+                    "description": "ID of the event type."
+                  },
+                  "xProperty": {
+                    "type": "string",
+                    "description": "X-axis property."
+                  },
+                  "yProperty": {
+                    "type": "string",
+                    "description": "Y-axis property."
+                  },
+                  "graphType": {
+                    "type": "string",
+                    "description": "Type of graph."
+                  },
+                  "graphTitle": {
+                    "type": "string",
+                    "description": "Title of the graph."
+                  },
+                  "caption": {
+                    "type": "string",
+                    "description": "Optional caption for the graph."
+                  }
+                },
+                "required": [
+                  "eventTypeId",
+                  "xProperty",
+                  "yProperty",
+                  "graphType",
+                  "graphTitle"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomGraphType"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request."
+          },
+          "403": {
+            "description": "Forbidden."
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a custom graph type",
+        "description": "Deletes a custom graph type by ID.",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "servertoken",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Server token for authentication."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "graphId": {
+                    "type": "string",
+                    "description": "ID of the graph to delete."
+                  }
+                },
+                "required": [
+                  "graphId"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomGraphType"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request."
           }
         }
       }
@@ -211,6 +1503,202 @@
           "staging",
           "production"
         ]
+      },
+      "InputEvent": {
+        "type": "object",
+        "properties": {
+          "eventProperties": {
+            "$ref": "#/components/schemas/InputEventProperties"
+          },
+          "category": {
+            "type": "string",
+            "description": "The category of the event"
+          },
+          "subcategory": {
+            "type": "string",
+            "description": "The subcategory of the event"
+          },
+          "projectId": {
+            "type": "string",
+            "description": "The ID of the project related to the event"
+          },
+          "environment": {
+            "$ref": "#/components/schemas/EventEnvironment"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time when the event was created"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time when the event was last updated"
+          }
+        }
+      },
+      "InputEventProperties": {
+        "type": "object",
+        "properties": {
+          "objectId": {
+            "type": "string",
+            "description": "The ID of the object related to the input event"
+          },
+          "userId": {
+            "type": "string",
+            "description": "The ID of the user who triggered the input event"
+          },
+          "textValue": {
+            "type": "string",
+            "description": "The text value associated with the input event"
+          }
+        }
+      },
+      "VisitEvent": {
+        "type": "object",
+        "properties": {
+          "eventProperties": {
+            "$ref": "#/components/schemas/VisitEventProperties"
+          },
+          "category": {
+            "type": "string",
+            "description": "The category of the event"
+          },
+          "subcategory": {
+            "type": "string",
+            "description": "The subcategory of the event"
+          },
+          "projectId": {
+            "type": "string",
+            "description": "The ID of the project related to the event"
+          },
+          "environment": {
+            "$ref": "#/components/schemas/EventEnvironment"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time when the event was created"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time when the event was last updated"
+          }
+        }
+      },
+      "VisitEventProperties": {
+        "type": "object",
+        "properties": {
+          "pageUrl": {
+            "type": "string",
+            "description": "The URL of the page visited"
+          },
+          "userId": {
+            "type": "string",
+            "description": "The ID of the user who visited the page"
+          }
+        }
+      },
+      "CustomEventType": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "The ID of the custom event type"
+          },
+          "category": {
+            "type": "string",
+            "description": "The category of the custom event type"
+          },
+          "subcategory": {
+            "type": "string",
+            "description": "The subcategory of the custom event type"
+          },
+          "properties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The properties associated with the custom event type"
+          },
+          "projectId": {
+            "type": "string",
+            "description": "The ID of the project related to the custom event type"
+          }
+        }
+      },
+      "CustomEvent": {
+        "type": "object",
+        "properties": {
+          "eventTypeId": {
+            "type": "string",
+            "description": "The ID of the custom event type"
+          },
+          "properties": {
+            "type": "object",
+            "description": "The properties associated with the custom event"
+          },
+          "projectId": {
+            "type": "string",
+            "description": "The ID of the project related to the custom event"
+          },
+          "environment": {
+            "$ref": "#/components/schemas/EventEnvironment"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time when the event was created"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time when the event was last updated"
+          }
+        }
+      },
+      "CustomGraphType": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "The ID of the custom graph type"
+          },
+          "eventTypeId": {
+            "type": "string",
+            "description": "The ID of the custom event type associated with the graph"
+          },
+          "projectId": {
+            "type": "string",
+            "description": "The ID of the project related to the custom graph type"
+          },
+          "graphTitle": {
+            "type": "string",
+            "description": "The title of the graph"
+          },
+          "xProperty": {
+            "type": "string",
+            "description": "The property to be used for the x-axis"
+          },
+          "yProperty": {
+            "type": "string",
+            "description": "The property to be used for the y-axis"
+          },
+          "graphType": {
+            "type": "string",
+            "enum": [
+              "bar",
+              "scatter",
+              "line"
+            ],
+            "description": "The type of graph (bar, scatter, line)"
+          },
+          "caption": {
+            "type": "string",
+            "description": "The caption of the graph"
+          }
+        }
       }
     }
   }
