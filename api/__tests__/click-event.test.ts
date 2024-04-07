@@ -178,31 +178,6 @@ describe("/api/events/click-event", () => {
             expect(afterId).toEqual(event._id);
             expect(events[0]).toEqual(event);
         });
-
-        test("Get pagination with one event", async () => {
-            let clickEventProperties = {
-                objectId: "id",
-                userId: "userId",
-                environment: "development"
-            }
-            const response = await agent
-                .post("/api/events/click-event")
-                .set("clienttoken", testProject?.clientApiKey as string)
-                .send(clickEventProperties);
-            expect(response.status).toBe(200);
-            const event = response.body.payload;
-
-
-            const getResponse = await agent
-                .get("/api/events/click-event")
-                .query({ projectName: testProject?.projectName })
-            expect(getResponse.status).toBe(200);
-            const events = getResponse.body.payload.events;
-            const afterId = getResponse.body.payload.afterId;
-            expect(events.length).toEqual(1);
-            expect(afterId).toEqual(event._id);
-            expect(events[0]).toEqual(event);
-        });
         test("Normal pagination with 15 event and 5 limit", async () => {
             //populate 15 events
             let batches: ClickEvent[] = [];

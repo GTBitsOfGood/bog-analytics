@@ -182,31 +182,6 @@ describe("/api/events/input-event", () => {
             expect(afterId).toBeNull();
 
         });
-        test("Get pagination with one event", async () => {
-            let inputEventProperties = {
-                objectId: "exampleObjectId",
-                userId: "exampleUserId",
-                environment: "development",
-                textValue: "exampleText"
-            }
-            const response = await agent
-                .post("/api/events/input-event")
-                .set("clienttoken", testProject?.clientApiKey as string)
-                .send(inputEventProperties);
-            expect(response.status).toBe(200);
-            const event = response.body.payload;
-
-
-            const getResponse = await agent
-                .get("/api/events/input-event")
-                .query({ projectName: testProject?.projectName })
-            expect(getResponse.status).toBe(200);
-            const events = getResponse.body.payload.events;
-            const afterId = getResponse.body.payload.afterId;
-            expect(events.length).toEqual(1);
-            expect(afterId).toEqual(event._id);
-            expect(events[0]).toEqual(event);
-        });
 
         test("Get pagination with one event", async () => {
             const inputEventProperties = {

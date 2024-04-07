@@ -72,7 +72,7 @@ const customEventTypeRoute = APIWrapper({
             if (!project) {
                 throw new Error("Project does not exist")
             }
-            await deleteCustomEventType(project._id.toString(), category, subcategory)
+            return await deleteCustomEventType(project._id.toString(), category, subcategory)
         },
     },
 

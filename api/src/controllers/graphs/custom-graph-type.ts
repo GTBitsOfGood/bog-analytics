@@ -47,8 +47,11 @@ const customGraphTypeRoute = APIWrapper({
             if (!graphId) {
                 throw new Error("You must specify a graph to delete!")
             }
-
-            let deletedGraph = await deleteCustomGraphType(graphId);
+            const project = await getProjectByServerKey(req.headers.servertoken as string);
+            if (project == null) {
+                return null;
+            }
+            let deletedGraph = await deleteCustomGraphType(graphId, project?._id as string);
             return deletedGraph;
         },
     },

@@ -1,13 +1,12 @@
 import { afterAll, beforeAll, describe, expect, test, afterEach } from '@jest/globals';
 import request, { Test } from "supertest";
 import { api } from "@/netlify/functions/api";
-import { Project } from '@/src/utils/types';
+import { CustomEvent, Project } from '@/src/utils/types';
 import { deleteProjectById } from '@/src/actions/project';
 import { Server, IncomingMessage, ServerResponse, get } from 'http';
 import TestAgent from 'supertest/lib/agent';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { deleteAllCustomEventTypes, getCustomEventType, getCustomEventTypeID, getCustomEventTypesForProject, } from '@/src/actions/custom-event-type';
-import exp from 'constants';
 import { getCustomEventsByProjectId, getCustomEventsByEventTypeId, deleteCustomEvents } from '@/src/actions/custom-event';
 import { CustomEventType } from '@/src/utils/types';
 
@@ -92,41 +91,28 @@ describe("/api/events/custom-event", () => {
         await deleteProjectById(unchangedProject?._id as string);
         await deleteAllCustomEventTypes();
     });
-
+    const eventDimProperties = {
+        properties: {
+            length: 10,
+            width: 20,
+            height: 30
+        }
+    }
+    const eventColorProperties = {
+        properties: {
+            color: 0,
+            pixels: 100,
+            opacity: 0.5
+        }
+    }
     describe("POST /api/events/custom-event", () => {
 
-        const eventDimProperties = {
-            properties: {
-                length: 10,
-                width: 20,
-                height: 30
-            }
-        }
-        const invalidDimProperties = {
-            properties: {
-                length: 10
-            }
-        }
-        const eventColorProperties = {
-            properties: {
-                color: 0,
-                pixels: 100,
-                opacity: 0.5
-            }
-        }
-        const invalidColorProperties = {
-            properties: {
-                color: "red",
-                pixels: 100
-            }
-
-        }
 
         afterEach(async () => {
             // Clean up custom event types events
             await deleteCustomEvents();
         })
-        test("Create new custom event2 with a valid client token", async () => {
+        test("Create new custom event with a valid client token", async () => {
             const response = await agent
                 .post("/api/events/custom-event")
                 .set("clienttoken", manyTypesProject?.clientApiKey as string)
@@ -288,6 +274,175 @@ describe("/api/events/custom-event", () => {
             expect(colorResponse.status).toBe(200);
             const colorEvents = await getCustomEventsByEventTypeId(manyColorType?._id as string);
             expect(colorEvents.length).toEqual(1);
+        });
+    });
+    describe("GET /api/events/custom-event", () => {
+        afterEach(async () => {
+            await deleteCustomEvents();
+        });
+
+        test("Get pagination with zero events", async () => {
+            const response = await agent
+                .get("/api/events/custom-event")
+                .query({ projectName: manyTypesProject?.projectName, category: "Image", subcategory: "Visuals" })
+            expect(response.status).toBe(200);
+            const events = response.body.payload.events;
+            const afterId = response.body.payload.afterId;
+            expect(events.length).toEqual(0);
+            expect(afterId).toBeNull();
+
+        });
+
+        test("Get pagination with one event", async () => {
+            const response = await agent
+                .post("/api/events/custom-event")
+                .set("clienttoken", manyTypesProject?.clientApiKey as string)
+                .send({
+                    eventTypeId: manyColorType?._id,
+                    properties: eventColorProperties.properties
+                });
+            expect(response.status).toBe(200);
+            const event = response.body.payload;
+
+            const getResponse = await agent
+                .get("/api/events/custom-event")
+                .query({ projectName: manyTypesProject?.projectName, category: "Image", subcategory: "Visuals" })
+            expect(getResponse.status).toBe(200);
+            const events = getResponse.body.payload.events;
+            const afterId = getResponse.body.payload.afterId;
+            expect(events.length).toEqual(1);
+            expect(afterId).toEqual(event._id);
+            expect(events[0]).toEqual(event);
+        });
+        test("Get pagination with mismatched categories", async () => {
+            const response = await agent
+                .post("/api/events/custom-event")
+                .set("clienttoken", manyTypesProject?.clientApiKey as string)
+                .send({
+                    eventTypeId: manyColorType?._id,
+                    properties: eventColorProperties.properties
+                });
+            expect(response.status).toBe(200);
+            const event = response.body.payload;
+
+            const getResponse = await agent
+                .get("/api/events/custom-event")
+                .query({ projectName: manyTypesProject?.projectName, category: "Interaction", subcategory: "Resize" })
+            expect(getResponse.status).toBe(200);
+            const events = getResponse.body.payload.events;
+            const afterId = getResponse.body.payload.afterId;
+            expect(events.length).toEqual(0);
+        });
+        test("Normal pagination with 15 event and 5 limit", async () => {
+            //populate 15 events
+            let batches: CustomEvent[] = [];
+            for (let i = 0; i < 15; i++) {
+                let eventColorProperties = {
+                    properties: {
+                        color: i,
+                        pixels: 100,
+                        opacity: 0.5
+                    }
+                }
+                const response = await agent
+                    .post("/api/events/custom-event")
+                    .set("clienttoken", manyTypesProject?.clientApiKey as string)
+                    .send({
+                        eventTypeId: manyColorType?._id,
+                        properties: eventColorProperties.properties
+                    });
+                expect(response.status).toBe(200);
+                const event = response.body.payload;
+                batches.push(event);
+            }
+
+            let afterId = null;
+            for (let i = 0; i < 3; i++) {
+                const getResponse = await agent
+                    .get("/api/events/custom-event")
+                    .query({ projectName: manyTypesProject?.projectName, category: "Image", subcategory: "Visuals", limit: 5, afterId })
+                expect(getResponse.status).toBe(200);
+                const events = getResponse.body.payload.events;
+                afterId = getResponse.body.payload.afterId;
+                expect(events.length).toEqual(5);
+                for (let j = 0; j < 5; j++) {
+                    expect(events[j]).toEqual(batches[i * 5 + j]);
+                }
+                expect(afterId).toEqual(batches[i * 5 + 4]._id);
+
+            }
+        });
+        test("Pagination with 15 event and 4 limit", async () => {
+            //populate 15 events
+            let batches: CustomEvent[] = [];
+            for (let i = 0; i < 15; i++) {
+                let eventColorProperties = {
+                    properties: {
+                        color: i,
+                        pixels: 100,
+                        opacity: 0.5
+                    },
+                    eventTypeId: manyColorType?._id
+                }
+                const response = await agent
+                    .post("/api/events/custom-event")
+                    .set("clienttoken", manyTypesProject?.clientApiKey as string)
+                    .send(eventColorProperties);
+                expect(response.status).toBe(200);
+                const event = response.body.payload;
+                batches.push(event);
+            }
+
+            let afterId = null;
+            let id = null;
+            for (let i = 0; i < 3; i++) {
+                afterId = id;
+                const resp = await agent
+                    .get("/api/events/custom-event")
+                    .query({ limit: 4, afterId, projectName: manyTypesProject?.projectName, category: "Image", subcategory: "Visuals", environment: "development" })
+                expect(resp.status).toBe(200);
+                const events = resp.body.payload.events;
+                id = resp.body.payload.afterId;
+                let length = Math.min(4, 15 - i * 4)
+                expect(events.length).toEqual(length);
+                expect(id).toEqual(batches[i * 4 + length - 1]._id);
+                for (let j = 0; j < length; j++) {
+                    expect(events[j]).toEqual(batches[i * 4 + j]);
+                }
+            }
+        });
+        test("Pagination with after time greater than all times", async () => {
+            //populate 15 events
+            let batches: CustomEvent[] = [];
+            for (let i = 0; i < 15; i++) {
+                let eventColorProperties = {
+                    properties: {
+                        color: i,
+                        pixels: 100,
+                        opacity: 0.5
+                    },
+                    eventTypeId: manyColorType?._id
+                }
+                const response = await agent
+                    .post("/api/events/custom-event")
+                    .set("clienttoken", manyTypesProject?.clientApiKey as string)
+                    .send(eventColorProperties);
+                expect(response.status).toBe(200);
+                const event = response.body.payload;
+                batches.push(event);
+            }
+
+            let afterId = null;
+            const getResponse = await agent
+                .get("/api/events/custom-event")
+                .query({
+                    limit: 4, afterId, projectName: manyTypesProject?.projectName, category: "Interaction", subcategory: "Resize",
+                })
+            expect(getResponse.status).toBe(200);
+            const events = getResponse.body.payload.events;
+            afterId = getResponse.body.payload.afterId;
+            expect(events.length).toEqual(0);
+            expect(afterId).toBeNull();
         });
     });
 });

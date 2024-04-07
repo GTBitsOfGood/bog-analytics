@@ -20,9 +20,9 @@ export const getCustomGraphTypes = async (eventTypeId: string, projectId: string
     const graphTypes = await CustomGraphTypeModel.find({ eventTypeId, projectId })
     return graphTypes
 }
-export const deleteCustomGraphType = async (_id: string) => {
+export const deleteCustomGraphType = async (_id: string, projectId: string) => {
     await dbConnect();
-    const deletedGraphType = await CustomGraphTypeModel.deleteOne({ _id })
+    const deletedGraphType = await CustomGraphTypeModel.deleteOne({ _id, projectId })
     return deletedGraphType
 }
 

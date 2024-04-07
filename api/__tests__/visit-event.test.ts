@@ -185,30 +185,6 @@ describe("/api/events/visit-event", () => {
             expect(afterId).toBeNull();
 
         });
-        test("Get pagination with one event", async () => {
-            let visitEventProperties = {
-                pageUrl: "url",
-                userId: "userId",
-                environment: "development"
-            }
-            const response = await agent
-                .post("/api/events/visit-event")
-                .set("clienttoken", testProject?.clientApiKey as string)
-                .send(visitEventProperties);
-            expect(response.status).toBe(200);
-            const event = response.body.payload;
-
-
-            const getResponse = await agent
-                .get("/api/events/visit-event")
-                .query({ projectName: testProject?.projectName })
-            expect(getResponse.status).toBe(200);
-            const events = getResponse.body.payload.events;
-            const afterId = getResponse.body.payload.afterId;
-            expect(events.length).toEqual(1);
-            expect(afterId).toEqual(event._id);
-            expect(events[0]).toEqual(event);
-        });
 
         test("Get pagination with one event", async () => {
             let visitEventProperties = {
