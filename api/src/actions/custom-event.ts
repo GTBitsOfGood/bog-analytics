@@ -1,12 +1,9 @@
 import { dbConnect } from "@/src/utils/db-connect";
 import CustomEventModel from "@/src/models/custom-event";
 import { CustomEvent, EventEnvironment } from "@/src/utils/types";
-import CustomEventTypeModel from "@/src/models/custom-event-type";
-import { ObjectId } from 'mongodb';
 
 export const createCustomEvent = async (event: Partial<CustomEvent>) => {
     await dbConnect();
-    let eventId = new ObjectId(event.eventTypeId);
     const createdEvent = await CustomEventModel.create(event);
     return createdEvent;
 }
