@@ -11,7 +11,7 @@ export async function externalRequest<T>({
     const requestInfo: RequestInit = {
         method,
         mode: "cors",
-        credentials: "include",
+        credentials: "omit",
         headers: {
             "Content-Type": "application/json",
             "clienttoken": clientApiKey ?? "",
