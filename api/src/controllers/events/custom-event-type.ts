@@ -1,4 +1,4 @@
-import { createCustomEventType, getCustomEventTypesForProject, deleteCustomEventType, findEventForProject } from "@/src/actions/custom-event-type";
+import { createCustomEventType, getCustomEventTypesForProject, deleteCustomEventType, findEventTypeForProject } from "@/src/actions/custom-event-type";
 import { getProjectIDByName } from "@/src/actions/project";
 import { getProjectByServerKey } from "@/src/actions/project";
 import { relogRequestHandler } from "@/src/middleware/request-middleware";
@@ -14,8 +14,8 @@ const customEventTypeRoute = APIWrapper({
         },
         handler: async (req: Request) => {
             const { category, subcategory, properties } = req.body;
-            if (!category || !subcategory) {
-                throw new Error("You must specify a category and subcategory to create a custom event type!")
+            if (!category || !subcategory || !properties) {
+                throw new Error("You must specify a category, subcategory, and properties to create a custom event type!")
             }
             const project = await getProjectByServerKey(req.headers.servertoken as string);
 
@@ -29,7 +29,7 @@ const customEventTypeRoute = APIWrapper({
                 projectId: project._id
             }
 
-            const preexistingEventType = await findEventForProject(project._id, category, subcategory)
+            const preexistingEventType = await findEventTypeForProject(project._id, category, subcategory)
             if (preexistingEventType != null) {
                 throw new Error("A custom event type with the same category and subcategory already exists")
             }
@@ -72,7 +72,7 @@ const customEventTypeRoute = APIWrapper({
             if (!project) {
                 throw new Error("Project does not exist")
             }
-            await deleteCustomEventType(project._id.toString(), category, subcategory)
+            return await deleteCustomEventType(project._id.toString(), category, subcategory)
         },
     },
 

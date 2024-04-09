@@ -16,7 +16,7 @@ export const getInputEvents = async (date?: Date) => {
     return events
 }
 
-export const paginatedGetInputEvents = async (afterDate: Date, afterID: String, limit: number, projectName: String, environment: EventEnvironment) => {
+export const paginatedGetInputEvents = async (afterDate: Date, afterID: string, limit: number, projectName: string, environment: EventEnvironment) => {
     await dbConnect();
     const project = await ProjectModel.findOne({ projectName: projectName })
     if (project && project._id) {
@@ -33,7 +33,7 @@ export const paginatedGetInputEvents = async (afterDate: Date, afterID: String, 
     return []
 }
 
-export const deleteClickEvents = async () => {
+export const deleteInputEvents = async () => {
     await dbConnect();
     return await InputEventModel.deleteMany();
 }

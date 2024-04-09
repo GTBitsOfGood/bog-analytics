@@ -31,7 +31,6 @@ const customGraphTypeRoute = APIWrapper({
                 ...(req.body.caption !== undefined && { caption: req.body.caption })
             };
             const createdGraphType = await createCustomGraphType(customGraphType);
-            console.log("HERE 4", createdGraphType);
             if (!createdGraphType) {
                 throw new Error("Failed to create a custom graph");
             }
@@ -48,8 +47,11 @@ const customGraphTypeRoute = APIWrapper({
             if (!graphId) {
                 throw new Error("You must specify a graph to delete!")
             }
-
-            let deletedGraph = await deleteCustomGraphType(graphId);
+            const project = await getProjectByServerKey(req.headers.servertoken as string);
+            if (project == null) {
+                return null;
+            }
+            let deletedGraph = await deleteCustomGraphType(graphId, project?._id as string);
             return deletedGraph;
         },
     },

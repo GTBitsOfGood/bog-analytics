@@ -27,7 +27,7 @@ const CustomEventSchema = new Schema<CustomEvent>({
     }
 }, { timestamps: true });
 
-const CustomEventModel =
+export const CustomEventModel =
     (mongoose.models.CustomEvent as mongoose.Model<CustomEvent>) ||
     mongoose.model<CustomEvent>("CustomEvent", CustomEventSchema);
 

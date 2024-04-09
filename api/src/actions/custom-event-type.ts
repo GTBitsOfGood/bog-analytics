@@ -1,15 +1,19 @@
 import { CustomEventType } from "@/src/utils/types";
 import { dbConnect } from "@/src/utils/db-connect";
 import CustomEventTypeModel from "@/src/models/custom-event-type";
-import CustomEvent from "@/src/models/custom-event";
-import CustomGraphType from "@/src/models/custom-graph-type";
+import CustomEventModel from "@/src/models/custom-event";
+import CustomGraphTypeModel from "@/src/models/custom-graph-type";
 import { Types } from "mongoose";
 
 
-export const findEventForProject = async (projectId: string | Types.ObjectId, category: string, subcategory: string) => {
+export const findEventTypeForProject = async (projectId: string | Types.ObjectId, category: string, subcategory: string) => {
     await dbConnect();
     return await CustomEventTypeModel.findOne({ projectId, category, subcategory })
 
+}
+export const findEventTypeForProjectByID = async (projectId: string | Types.ObjectId, eventTypeId: string | Types.ObjectId) => {
+    await dbConnect();
+    return await CustomEventTypeModel.findOne({ projectId, _id: eventTypeId })
 }
 export const createCustomEventType = async (eventType: Partial<CustomEventType>) => {
     await dbConnect();
@@ -39,7 +43,14 @@ export const deleteCustomEventType = async (projectId: string, category: string,
     }
     let eventTypeId = deletedEventType._id
 
-    await CustomEvent.deleteMany({ eventTypeId })
-    await CustomGraphType.deleteMany({ eventTypeId })
+    await CustomEventModel.deleteMany({ eventTypeId })
+    await CustomGraphTypeModel.deleteMany({ eventTypeId })
     await CustomEventTypeModel.deleteOne({ projectId, category, subcategory })
+}
+
+export const deleteAllCustomEventTypes = async () => {
+    await dbConnect();
+    await CustomEventTypeModel.deleteMany()
+    await CustomEventModel.deleteMany()
+    await CustomGraphTypeModel.deleteMany()
 }
