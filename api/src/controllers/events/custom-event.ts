@@ -16,7 +16,7 @@ const customEventRoute = APIWrapper({
         handler: async (req: Request) => {
             const { eventTypeId, properties, environment } = req.body;
             if (!eventTypeId || !properties) {
-                throw new Error("You must specify a category and subcategory to create a custom event!")
+                throw new Error("You must specify an event type id and properties to create a custom event!")
             }
             const project = await getProjectByClientKey(req.headers.clienttoken as string);
             if (!project) {

@@ -137,7 +137,7 @@ describe("/api/events/custom-event-type", () => {
                 .post("/api/events/custom-event-type")
                 .set("servertoken", testProject?.serverApiKey as string)
                 .send(properties2);
-            expect(response.status).toBe(200);
+            expect(response2.status).toBe(200);
 
             const events2 = await getCustomEventTypesForProject(testProject?._id as string);
             expect(events2.length).toEqual(2);
@@ -162,7 +162,7 @@ describe("/api/events/custom-event-type", () => {
                 .post("/api/events/custom-event-type")
                 .set("servertoken", testProject?.serverApiKey as string)
                 .send(validProperties);
-            expect(response.status).toBe(200);
+            expect(response2.status).toBe(400);
 
             const events2 = await getCustomEventTypesForProject(testProject?._id as string);
             expect(events2.length).toEqual(1);

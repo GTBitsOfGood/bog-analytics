@@ -104,7 +104,7 @@ describe("/api/events/click-event", () => {
                 .post("/api/events/click-event")
                 .set("clienttoken", testProject?.clientApiKey as string)
                 .send(properties2);
-            expect(response.status).toBe(200);
+            expect(response2.status).toBe(200);
 
             const events2 = await getClickEvents();
             console.log(events2)
@@ -128,7 +128,7 @@ describe("/api/events/click-event", () => {
                 .post("/api/events/click-event")
                 .set("clienttoken", testProject?.clientApiKey as string)
                 .send(clickEventProperties);
-            expect(response.status).toBe(200);
+            expect(response2.status).toBe(200);
 
             const events2 = await getClickEvents();
             console.log(events2)

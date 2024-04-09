@@ -113,7 +113,7 @@ describe("/api/events/visit-event", () => {
                 .post("/api/events/visit-event")
                 .set("clienttoken", testProject?.clientApiKey as string)
                 .send(properties2);
-            expect(response.status).toBe(200);
+            expect(response2.status).toBe(200);
 
             const events2 = await getVisitEvents();
             console.log(events2)
@@ -137,7 +137,7 @@ describe("/api/events/visit-event", () => {
                 .post("/api/events/visit-event")
                 .set("clienttoken", testProject?.clientApiKey as string)
                 .send(visitEventProperties);
-            expect(response.status).toBe(200);
+            expect(response2.status).toBe(200);
 
             const events2 = await getVisitEvents();
             console.log(events2)

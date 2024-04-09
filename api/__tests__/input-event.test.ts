@@ -110,7 +110,7 @@ describe("/api/events/input-event", () => {
                 .post("/api/events/input-event")
                 .set("clienttoken", testProject?.clientApiKey as string)
                 .send(properties2);
-            expect(response.status).toBe(200);
+            expect(response2.status).toBe(200);
 
             const events2 = await getInputEvents();
             console.log(events2)
@@ -134,7 +134,7 @@ describe("/api/events/input-event", () => {
                 .post("/api/events/input-event")
                 .set("clienttoken", testProject?.clientApiKey as string)
                 .send(inputEventProperties);
-            expect(response.status).toBe(200);
+            expect(response2.status).toBe(200);
 
             const events2 = await getInputEvents();
             console.log(events2)
