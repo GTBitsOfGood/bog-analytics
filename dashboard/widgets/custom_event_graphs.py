@@ -14,15 +14,21 @@ def init_plot_custom_graphs(custom_events, custom_graphs):
         st.write(f"**{graph['graphTitle']}**")
         graph_type = graph["graphType"]
 
-        # For bar, we will get all the different x's and calculate their frequency
+        # For bar, we will get all the different x's and y's and calculate their frequency
         if graph_type == "bar":
             freq = defaultdict(int)
             for event in custom_events:
                 x = event["properties"][graph["xProperty"]]
-                freq[x] += 1
+                y = event["properties"][graph["yProperty"]]
+                freq[f"x: {x}"] += 1
+                freq[f"y: {y}"] += 1
 
             df_freq = pd.DataFrame(
-                list(freq.items()), columns=[graph["xProperty"], "Frequency"]
+                sorted(list(freq.items())),
+                columns=[
+                    f"{graph['xProperty']} (x) {graph['yProperty']} (y)",
+                    "Frequency",
+                ],
             )
 
             chart = (
@@ -30,7 +36,10 @@ def init_plot_custom_graphs(custom_events, custom_graphs):
                 .mark_bar(color="#FF8A54")
                 .encode(
                     x=alt.X(
-                        graph["xProperty"], axis=alt.Axis(title=graph["xProperty"])
+                        f"{graph['xProperty']} (x) {graph['yProperty']} (y)",
+                        axis=alt.Axis(
+                            title=f"x: {graph['xProperty']} and y: {graph['yProperty']}"
+                        ),
                     ),
                     y=alt.Y("Frequency", axis=alt.Axis(title="Frequency")),
                 )
@@ -67,19 +76,40 @@ def init_plot_custom_graphs(custom_events, custom_graphs):
                 filtered_data = filtered_data.sort_values("Time (Seconds)")
 
                 if graph_type == "line":
-                    st.line_chart(
-                        data=filtered_data,
-                        x="Time (Seconds)",
-                        y=graph_y,
-                        color=graph_x,
-                        use_container_width=True,
-                    )
+
+                    if x.isnumeric() and y.isnumeric():
+                        st.line_chart(
+                            data=filtered_data,
+                            x=graph_x,
+                            y=graph_y,
+                            color="#FF8A54",
+                            use_container_width=True,
+                        )
+
+                    else:
+                        st.line_chart(
+                            data=filtered_data,
+                            x="Time (Seconds)",
+                            y=graph_y,
+                            color=graph_x,
+                            use_container_width=True,
+                        )
                 elif graph_type == "scatter":
-                    st.scatter_chart(
-                        data=filtered_data,
-                        x="Time (Seconds)",
-                        y=graph_y,
-                        color=graph_x,
-                        use_container_width=True,
-                    )
+                    if x.isnumeric() and y.isnumeric():
+                        st.scatter_chart(
+                            data=filtered_data,
+                            x=graph_x,
+                            y=graph_y,
+                            color=graph_x,
+                            use_container_width=True,
+                        )
+
+                    else:
+                        st.scatter_chart(
+                            data=filtered_data,
+                            x="Time (Seconds)",
+                            y=graph_y,
+                            color=graph_x,
+                            use_container_width=True,
+                        )
     return charts
