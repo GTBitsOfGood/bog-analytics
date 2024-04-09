@@ -17,7 +17,7 @@ let mongoMemoryInstance: MongoMemoryServer;
 beforeAll(async () => {
     mongoMemoryInstance = await MongoMemoryServer.create();
     process.env.DATABASE_URL = mongoMemoryInstance.getUri();
-    server = api.listen(943)
+    server = api.listen(3005)
     agent = request.agent(server)
 })
 afterAll(async () => {
