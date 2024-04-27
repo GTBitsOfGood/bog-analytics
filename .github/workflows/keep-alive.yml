@@ -1,7 +1,15 @@
 name: Trigger Probe of Deployed App on a CRON Schedule
+# on:
+#   schedule:
+#     - cron: '0 0 * * *'
+
 on:
-  schedule:
-    - cron: '0 0 * * *'
+  push:
+    branches:
+      - main 
+  pull_request:
+    branches:
+      - main  
 
 jobs:
   probe_deployed_app:
