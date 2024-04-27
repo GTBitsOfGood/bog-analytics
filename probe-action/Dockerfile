@@ -5,13 +5,13 @@ FROM node:latest
 WORKDIR /app
 
 # Copy package.json and package-lock.json to the working directory
-COPY package*.json ./
+COPY ./package*.json ./
 
 # Install dependencies
 RUN npm install
 
 # Copy the Selenium script files to the working directory
-COPY probe.js .
+COPY ./probe.js ./
 
 # Install dependencies required for downloading Chrome 114 and chromedriver
 RUN apt-get update && \
