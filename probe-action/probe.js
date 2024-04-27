@@ -1,32 +1,36 @@
-const puppeteer = require('puppeteer');
-const TARGET_URL = "https://bog-analytics.streamlit.app/";
-const WAKE_UP_BUTTON_TEXT = "app back up";
-const PAGE_LOAD_GRACE_PERIOD_MS = 8000;
+import { Builder, By, Key, until } from 'selenium-webdriver';
+import { Options } from 'selenium-webdriver/chrome.js';
 
-(async () => {
-    const browser = await puppeteer.launch(
-        { args: ["--no-sandbox"] }
-    );
+// Define the URL of the webpage you want to visit
+const url = 'https://bog-analytics.streamlit.app/';
 
-    const page = await browser.newPage();
-    await page.goto(TARGET_URL);
-    // Wait a grace period for the application to load
-    await page.waitForTimeout(PAGE_LOAD_GRACE_PERIOD_MS);
+// Define the text of the button you want to click
+const buttonText = 'app back up';
 
-    const checkForHibernation = async (target) => {
-        // Look for any buttons containing the target text of the reboot button
-        const [button] = await target.$x(`//button[contains(., '${WAKE_UP_BUTTON_TEXT}')]`);
-        if (button) {
-            console.log("App hibernating. Attempting to wake up!");
-            await button.click();
-        }
+async function main() {
+    // Create Chrome options with headless mode
+    let chromeOptions = new Options();
+    chromeOptions.addArguments('--headless');
+    chromeOptions.addArguments('--disable-infobars')
+    chromeOptions.addArguments('--disable-dev-shm-usage')
+    chromeOptions.addArguments('--no-sandbox')
+    chromeOptions.addArguments('--remote-debugging-port=9222')
+    
+    let driver = await new Builder().forBrowser('chrome').setChromeOptions(chromeOptions).build();
+    
+    try {
+        await driver.get(url);
+        await driver.wait(until.elementLocated(By.xpath(`//button[contains(text(), '${buttonText}')]`)), 10000);
+        let button = await driver.findElement(By.xpath(`//button[contains(text(), '${buttonText}')]`));
+        await button.click();
+        console.log('Button clicked successfully.');
+    } catch (error) {
+        console.error('An error occurred:', error);
+    } finally {
+        // Close the WebDriver instance
+        await driver.quit();
     }
+}
 
-    await checkForHibernation(page);
-    const frames = (await page.frames());
-    for (const frame of frames) {
-        await checkForHibernation(frame);
-    }
-
-    await browser.close();
-})();
+// Call the main function to run the script
+main();
