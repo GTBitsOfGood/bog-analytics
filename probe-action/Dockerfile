@@ -36,4 +36,4 @@ ENV CHROME_BIN=/usr/bin/google-chrome
 ENV CHROME_PATH=/usr/bin/google-chrome
 
 # Run the Node.js script
-CMD ["node", "probe.js"]
+CMD ["node", "/app/probe.js"]
