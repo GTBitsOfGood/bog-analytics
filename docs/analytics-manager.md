@@ -1,51 +1,62 @@
+## AnalyticsManager
+
+The `AnalyticsManager` class is a server-side class used for managing custom event types and custom graph types for an analytics service. It provides methods for defining custom events and custom graphs.
+
 ### Constructor
 
-Initializes a new instance of the AnalyticsManager class <br>
-**Parameter:** apiBaseUrl (optional): The base URL for the analytics service. Defaults to "https://analytics.bitsofgood.org". <br>
-**Throws:** An error if attempted to be instantiated in a client-side environment.
+```javascript
+constructor({ apiBaseUrl }: { apiBaseUrl?: string })
+```
 
-```typescript
-const analyticsManager = new AnalyticsManager({
-    apiBaseUrl: "https://analytics.bitsofgood.org",
+- `apiBaseUrl` (optional): The base URL of the analytics service. If not provided, it defaults to `"https://analytics.bitsofgood.org"`.
+
+The constructor throws an error if it's used on the client-side (in the browser) since this class is intended for server-side usage.
+
+### Methods
+
+#### `authenticate(serverApiKey: string): Promise<void>`
+
+Authenticates the `AnalyticsManager` instance with the provided server API key.
+
+##### Example
+
+```javascript
+const analyticsManager = new AnalyticsManager();
+await analyticsManager.authenticate('your-server-api-key');
+```
+
+#### `defineCustomEvent(customEventType: Partial<CustomEventType>): Promise<CustomEventType | null>`
+
+Defines a custom event type in the analytics service.
+
+- `customEventType`: An object containing the properties of the custom event type, including `category`, `subcategory`, and `properties` (an array of property names).
+
+##### Example
+
+```javascript
+const customEventType = await analyticsManager.defineCustomEvent({
+  category: 'user',
+  subcategory: 'signup',
+  properties: ['email', 'plan'],
 });
 ```
 
-### authenticate
+#### `defineCustomGraph(customGraphType: Partial<CustomGraphType>): Promise<CustomGraphType | null>`
 
-Authenticates the server with the analytics service using an API key<br>
-**Parameter:** serverApiKey: A string <br>
-**Returns:** A promise that resolves once the authentication is complete.
+Defines a custom graph type in the analytics service.
 
-```typescript
-analyticsManager.authenticate('your-server-api-key');
-```
+- `customGraphType`: An object containing the properties of the custom graph type, including `eventTypeId`, `xProperty`, `yProperty`, `graphType`, and `graphTitle`.
 
-### defineCustomEvent
+##### Example
 
-Defines a new custom event type in the analytics system<br>
-**Parameter:** customEventType: An object of type CustomEventType that includes category, subcategory, and properties. <br>
-**Returns:** A promise that resolves with the created custom event type or null if an error occurs.
-
-```typescript
-await analyticsManager.defineCustomEvent({
-    category: 'User Interaction',
-    subcategory: 'Button Click',
-    properties: ['buttonId', 'clickTime'],
+```javascript
+const customGraphType = await analyticsManager.defineCustomGraph({
+  eventTypeId: 'event123',
+  xProperty: 'email',
+  yProperty: 'plan',
+  graphType: 'bar',
+  graphTitle: 'User Signups',
 });
 ```
 
-### defineCustomGraph
-
-Creates a new custom graph type in the analytics system <br>
-**Parameter:** customGraphType: An object of type CustomGraphType that includes eventTypeId, xProperty, yProperty, graphType, and graphTitle. <br>
-**Returns:** A promise that resolves with the created custom graph type or null if an error occurs
-
-```typescript
-await analyticsManager.defineCustomGraph({
-    eventTypeId: '12345',
-    xProperty: 'clickTime',
-    yProperty: 'buttonId',
-    graphType: 'scatter',
-    graphTitle: 'Button Clicks Over Time'
-});
-```
+In case of any errors during the process of defining custom event types or custom graph types, the methods return `null` and log an error message using the `logMessage` function provided.
