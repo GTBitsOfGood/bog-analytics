@@ -28,7 +28,7 @@ export const getCustomEventTypesForProject = async (projectId: string) => {
 }
 export const getCustomEventType = async (projectId: string, category: string, subcategory: string) => {
     await dbConnect();
-    const eventType = await CustomEventTypeModel.find({ projectId, category, subcategory })
+    const eventType = await CustomEventTypeModel.findOne({ projectId, category, subcategory })
     return eventType;
 }
 export const getCustomEventTypeID = async (projectId: string, category: string, subcategory: string) => {

@@ -1,5 +1,5 @@
 import { externalRequest } from "@/utils/requests"
-import { ClickEvent, EventEnvironment, HttpMethod } from "@/utils/types";
+import { ClickEvent, EventEnvironment, GetEventsQueryParams, HttpMethod } from "@/utils/types";
 import { urls } from "@/utils/urls"
 
 export const createClickEvent = async (apiBaseUrl: string, apiKey: string, objectId: string, userId: string, environment: EventEnvironment): Promise<ClickEvent> => {
@@ -11,6 +11,16 @@ export const createClickEvent = async (apiBaseUrl: string, apiKey: string, objec
             objectId,
             userId,
             environment
+        }
+    })
+}
+
+export const getPaginatedClickEvents = async (apiBaseUrl: string, getEventParams: GetEventsQueryParams) => {
+    return externalRequest<{ events: ClickEvent[], afterId: string }>({
+        url: apiBaseUrl + urls.events.clickEvent,
+        method: HttpMethod.GET,
+        queryParams: {
+            ...getEventParams
         }
     })
 }

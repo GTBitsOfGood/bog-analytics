@@ -103,3 +103,17 @@ export interface Project {
     createdAt?: Date;
     updatedAt?: Date;
 }
+
+export interface GetEventsQueryParams {
+    projectName: string;
+    afterId: string | undefined;
+    environment: EventEnvironment;
+    limit?: number;
+    afterTime?: string;
+}
+
+export interface GetCustomEventsQueryParams extends GetEventsQueryParams {
+    category: string;
+    subcategory: string;
+}
+
