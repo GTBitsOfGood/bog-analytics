@@ -117,7 +117,8 @@ describe("/api/events/custom-event", () => {
                 .post("/api/events/custom-event")
                 .set("clienttoken", manyTypesProject?.clientApiKey as string)
                 .send({
-                    eventTypeId: manyColorType?._id,
+                    category: manyColorType?.category,
+                    subcategory: manyColorType?.subcategory,
                     properties: eventColorProperties.properties
                 });
             expect(response.status).toBe(200);
@@ -138,7 +139,8 @@ describe("/api/events/custom-event", () => {
                 .post("/api/events/custom-event")
                 .set("clienttoken", manyTypesProject?.clientApiKey as string)
                 .send({
-                    eventTypeId: manyColorType?._id,
+                    category: manyColorType?.category,
+                    subcategory: manyColorType?.subcategory,
                     properties: eventColorProperties.properties
                 });
             expect(response.status).toBe(200);
@@ -159,7 +161,8 @@ describe("/api/events/custom-event", () => {
                 .post("/api/events/custom-event")
                 .set("clienttoken", "invalid client token")
                 .send({
-                    eventTypeId: manyColorType?._id,
+                    category: manyColorType?.category,
+                    subcategory: manyColorType?.subcategory,
                     properties: eventColorProperties.properties
                 });
             expect(response.status).toBe(403);
@@ -172,7 +175,8 @@ describe("/api/events/custom-event", () => {
                 .post("/api/events/custom-event")
                 .set("servertoken", manyTypesProject?.serverApiKey as string)
                 .send({
-                    eventTypeId: manyColorType?._id,
+                    category: manyColorType?.category,
+                    subcategory: manyColorType?.subcategory,
                     properties: eventColorProperties.properties
                 });
             expect(response.status).toBe(403);
@@ -185,7 +189,8 @@ describe("/api/events/custom-event", () => {
                 .post("/api/events/custom-event")
                 .set("clienttoken", manyTypesProject?.clientApiKey as string)
                 .send({
-                    eventTypeId: manyColorType?._id,
+                    category: manyColorType?.category,
+                    subcategory: manyColorType?.subcategory,
                     properties: eventDimProperties.properties
                 });
             expect(response.status).toBe(400);
@@ -198,7 +203,8 @@ describe("/api/events/custom-event", () => {
                 .post("/api/events/custom-event")
                 .set("clienttoken", manyTypesProject?.clientApiKey as string)
                 .send({
-                    eventTypeId: manyColorType?._id,
+                    category: manyColorType?.category,
+                    subcategory: manyColorType?.subcategory,
                 });
             expect(response.status).toBe(400);
 
@@ -210,22 +216,24 @@ describe("/api/events/custom-event", () => {
                 .post("/api/events/custom-event")
                 .set("clienttoken", manyTypesProject?.clientApiKey as string)
                 .send({
-                    eventTypeId: oneColorType?._id,
+                    category: oneColorType?.category,
+                    subcategory: oneColorType?.subcategory,
                     properties: eventColorProperties.properties
                 });
-            expect(response.status).toBe(400);
+            expect(response.status).toBe(200);
 
             const events = await getCustomEventsByEventTypeId(oneColorType?._id as string);
             expect(events.length).toEqual(0);
             const events2 = await getCustomEventsByEventTypeId(manyColorType?._id as string);
-            expect(events2.length).toEqual(0);
+            expect(events2.length).toEqual(1);
         });
         test("Create multiple custom events for one project", async () => {
             const response = await agent
                 .post("/api/events/custom-event")
                 .set("clienttoken", manyTypesProject?.clientApiKey as string)
                 .send({
-                    eventTypeId: manyDimType?._id,
+                    category: manyDimType?.category,
+                    subcategory: manyDimType?.subcategory,
                     properties: eventDimProperties.properties
                 });
             expect(response.status).toBe(200);
@@ -237,7 +245,8 @@ describe("/api/events/custom-event", () => {
                 .post("/api/events/custom-event")
                 .set("clienttoken", manyTypesProject?.clientApiKey as string)
                 .send({
-                    eventTypeId: manyColorType?._id,
+                    category: manyColorType?.category,
+                    subcategory: manyColorType?.subcategory,
                     properties: eventColorProperties.properties
                 });
             expect(dimResponse.status).toBe(200)
@@ -256,7 +265,8 @@ describe("/api/events/custom-event", () => {
                 .post("/api/events/custom-event")
                 .set("clienttoken", manyTypesProject?.clientApiKey as string)
                 .send({
-                    eventTypeId: manyColorType?._id,
+                    category: manyColorType?.category,
+                    subcategory: manyColorType?.subcategory,
                     properties: eventDimProperties.properties
                 });
             expect(response.status).toBe(400);
@@ -268,7 +278,8 @@ describe("/api/events/custom-event", () => {
                 .post("/api/events/custom-event")
                 .set("clienttoken", manyTypesProject?.clientApiKey as string)
                 .send({
-                    eventTypeId: manyColorType?._id,
+                    category: manyColorType?.category,
+                    subcategory: manyColorType?.subcategory,
                     properties: eventColorProperties.properties
                 });
             expect(colorResponse.status).toBe(200);
@@ -298,7 +309,8 @@ describe("/api/events/custom-event", () => {
                 .post("/api/events/custom-event")
                 .set("clienttoken", manyTypesProject?.clientApiKey as string)
                 .send({
-                    eventTypeId: manyColorType?._id,
+                    category: manyColorType?.category,
+                    subcategory: manyColorType?.subcategory,
                     properties: eventColorProperties.properties
                 });
             expect(response.status).toBe(200);
@@ -319,7 +331,8 @@ describe("/api/events/custom-event", () => {
                 .post("/api/events/custom-event")
                 .set("clienttoken", manyTypesProject?.clientApiKey as string)
                 .send({
-                    eventTypeId: manyColorType?._id,
+                    category: manyColorType?.category,
+                    subcategory: manyColorType?.subcategory,
                     properties: eventColorProperties.properties
                 });
             expect(response.status).toBe(200);
@@ -348,7 +361,8 @@ describe("/api/events/custom-event", () => {
                     .post("/api/events/custom-event")
                     .set("clienttoken", manyTypesProject?.clientApiKey as string)
                     .send({
-                        eventTypeId: manyColorType?._id,
+                        category: manyColorType?.category,
+                        subcategory: manyColorType?.subcategory,
                         properties: eventColorProperties.properties
                     });
                 expect(response.status).toBe(200);
@@ -382,7 +396,8 @@ describe("/api/events/custom-event", () => {
                         pixels: 100,
                         opacity: 0.5
                     },
-                    eventTypeId: manyColorType?._id
+                    category: manyColorType?.category,
+                    subcategory: manyColorType?.subcategory,
                 }
                 const response = await agent
                     .post("/api/events/custom-event")
@@ -421,7 +436,8 @@ describe("/api/events/custom-event", () => {
                         pixels: 100,
                         opacity: 0.5
                     },
-                    eventTypeId: manyColorType?._id
+                    category: manyColorType?.category,
+                    subcategory: manyColorType?.subcategory,
                 }
                 const response = await agent
                     .post("/api/events/custom-event")

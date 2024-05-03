@@ -108,27 +108,28 @@ export default class AnalyticsLogger {
         }
     }
 
-    public async logCustomEvent(customEvent: Partial<CustomEvent>): Promise<CustomEvent | null> {
-        const { eventTypeId, properties } = customEvent;
+    public async logCustomEvent(category: string, subcategory: string, customEvent: Partial<CustomEvent>): Promise<CustomEvent | null> {
+        const { properties } = customEvent;
 
         try {
             if (!this.clientApiKey) {
                 throw new Error('Please authenticate first with your client api key using the authenticate method');
             }
 
-            if (!eventTypeId || !properties) {
-                throw new Error('Please specify an eventTypeId and properties')
+            if (!properties) {
+                throw new Error('Please specify properties')
             }
 
             // Client side API Key
-            const event = await createCustomEvent(this.apiBaseUrl as string, this.clientApiKey, eventTypeId as string, properties as object, this.environment as EventEnvironment);
+            const event = await createCustomEvent(this.apiBaseUrl as string, this.clientApiKey, category as string, subcategory as string, properties as object, this.environment as EventEnvironment);
             return event;
         } catch {
             await logMessage(formatErrorMessage(
                 "an error occurred when registering this custom event",
                 {
                     clientApiKey: this.clientApiKey as string,
-                    eventTypeId: eventTypeId as string,
+                    category,
+                    subcategory,
                     ...properties
                 }
             ))

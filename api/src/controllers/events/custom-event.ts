@@ -1,5 +1,5 @@
 import { createCustomEvent, paginatedGetCustomEvents } from "@/src/actions/custom-event";
-import { getCustomEventTypeID, findEventTypeForProjectByID } from "@/src/actions/custom-event-type";
+import { getCustomEventTypeID, findEventTypeForProjectByID, getCustomEventType } from "@/src/actions/custom-event-type";
 import { getProjectIDByName } from "@/src/actions/project";
 import { getProjectByClientKey } from "@/src/actions/project";
 import { relogRequestHandler } from "@/src/middleware/request-middleware";
@@ -14,23 +14,24 @@ const customEventRoute = APIWrapper({
             requireServerToken: false
         },
         handler: async (req: Request) => {
-            const { eventTypeId, properties, environment } = req.body;
-            if (!eventTypeId || !properties) {
-                throw new Error("You must specify an event type id and properties to create a custom event!")
+            const { category, subcategory, properties, environment } = req.body;
+            if (!category || !subcategory || !properties) {
+                throw new Error("You must specify a category, subcategory, and properties to create a custom event!")
             }
             const project = await getProjectByClientKey(req.headers.clienttoken as string);
             if (!project) {
                 throw new Error("Project does not exist for client token")
             }
+
+            const eventType = await getCustomEventType(project._id.toString(), category, subcategory);
+            if (!eventType) {
+                throw new Error("Event type does not exist");
+            }
             const event: Partial<CustomEvent> = {
                 projectId: project._id,
                 properties,
-                eventTypeId,
+                eventTypeId: eventType._id,
                 environment
-            }
-            const eventType = await findEventTypeForProjectByID(project._id.toString(), eventTypeId);
-            if (!eventType) {
-                throw new Error("Event type does not exist");
             }
 
             const typeProperties = eventType.properties;
@@ -46,7 +47,7 @@ const customEventRoute = APIWrapper({
                         break;
                     }
                 }
-                if (has == false) {
+                if (!has) {
                     throw new Error("Event properties do not match event type properties")
                 }
             }

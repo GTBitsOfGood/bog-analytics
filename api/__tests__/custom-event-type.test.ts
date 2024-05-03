@@ -344,7 +344,8 @@ describe("/api/events/custom-event-type", () => {
                 .post("/api/events/custom-event")
                 .set("clienttoken", testProject?.clientApiKey as string)
                 .send({
-                    eventTypeId: type?._id,
+                    category: type.category,
+                    subcategory: type.subcategory,
                     properties: {
                         length: 10, width: 20, height: 30
                     }
