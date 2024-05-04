@@ -72,5 +72,5 @@ export const getClickEventById = async (eventId: string) => {
 
 export const updateClickEventById = async (eventId: string, objectId: string) => {
     await dbConnect();
-    return await ClickEventModel.updateOne({ _id: eventId, "eventProperties.objectId": objectId });
+    return await ClickEventModel.updateOne({ _id: eventId }, { "eventProperties.objectId": objectId });
 }

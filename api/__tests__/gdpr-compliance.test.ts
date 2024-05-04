@@ -1,12 +1,14 @@
 import { afterAll, beforeAll, describe, expect, test, beforeEach, afterEach } from '@jest/globals';
 import request, { Test } from "supertest";
 import { api } from "@/netlify/functions/api";
-import { ClickEvent, Project } from '@/src/utils/types';
+import { ClickEvent, Project, VisitEvent, InputEvent } from '@/src/utils/types';
 import { deleteProjectById } from '@/src/actions/project';
 import { Server, IncomingMessage, ServerResponse } from 'http';
 import TestAgent from 'supertest/lib/agent';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { deleteClickEvents, getClickEventsByUser } from '@/src/actions/click-event';
+import { deleteVisitEvents, getVisitEventsByUser } from '@/src/actions/visit-event';
+import { deleteInputEvents, getInputEventsByUser } from '@/src/actions/input-event';
 
 let testProject: Project | null = null;
 let server: Server<typeof IncomingMessage, typeof ServerResponse>;
@@ -36,6 +38,13 @@ describe("/api/gdpr", () => {
         await deleteProjectById(testProject?._id as string);
     });
     describe("/api/gdpr/click-event", () => {
+        const clickEventProperties = {
+            userId: "user 1",
+            objectId: "object 1"
+        }
+        const EVENT_COUNT = 100;
+        const newObjectId = "object 2"
+
         beforeEach(async () => {
             for (let i = 0; i < EVENT_COUNT; i++) {
                 const response = await agent.post("/api/events/click-event")
@@ -43,17 +52,11 @@ describe("/api/gdpr", () => {
                     .send(clickEventProperties)
                 expect(response.status).toBe(200)
             }
-        })
+        }, 100000)
 
         afterEach(async () => {
             await deleteClickEvents()
         })
-        const clickEventProperties = {
-            userId: "user 1",
-            objectId: "object 1"
-        }
-        const EVENT_COUNT = 100;
-        const newObjectId = "object 2"
         test("DELETE /api/gdpr/click-event", async () => {
             const events = await getClickEventsByUser((testProject as Project)._id.toString(), clickEventProperties.userId);
             expect(events.length).toEqual(EVENT_COUNT)
@@ -109,29 +112,151 @@ describe("/api/gdpr", () => {
     })
     describe("/api/gdpr/input-event", () => {
 
+        const inputEventProperties = {
+            userId: "user 1",
+            objectId: "object 1",
+            textValue: "text 1"
+        }
+        const EVENT_COUNT = 100;
+        const newObjectId = "object 2"
+        const newTextValue = "text 2"
+
+        beforeEach(async () => {
+            for (let i = 0; i < EVENT_COUNT; i++) {
+                const response = await agent.post("/api/events/input-event")
+                    .set("clienttoken", testProject?.clientApiKey as string)
+                    .send(inputEventProperties)
+                expect(response.status).toBe(200)
+            }
+        }, 100000)
+
+        afterEach(async () => {
+            await deleteInputEvents()
+        })
         test("DELETE /api/gdpr/input-event", async () => {
+            const events = await getInputEventsByUser((testProject as Project)._id.toString(), inputEventProperties.userId);
+            expect(events.length).toEqual(EVENT_COUNT)
+            const response = await agent.delete("/api/gdpr/input-event")
+                .set("servertoken", testProject?.serverApiKey as string)
+                .send({ userId: inputEventProperties.userId })
+            expect(response.status).toBe(200);
+            const eventsDeleted = await getInputEventsByUser((testProject as Project)._id.toString(), inputEventProperties.userId);
+            expect(eventsDeleted.length).toEqual(0)
 
         })
 
         test("GET /api/gdpr/input-event", async () => {
+            let userEvents: InputEvent[] = []
+            let afterId = null;
+            while (true) {
+                const response = await agent.get("/api/gdpr/input-event")
+                    .set("servertoken", testProject?.serverApiKey as string)
+                    .query({ afterId, userId: inputEventProperties.userId, limit: 50 })
 
+                expect(response.status).toBe(200);
+                userEvents = [...(userEvents as InputEvent[]), ...(response.body.payload.events as InputEvent[])]
+                if (!response.body.payload.afterId) {
+                    break;
+                }
+                afterId = response.body.payload.afterId;
+            }
+
+            expect(userEvents.length).toEqual(EVENT_COUNT);
         })
 
         test("PATCH /api/gdpr/input-event", async () => {
+            let events = await getInputEventsByUser((testProject as Project)._id.toString(), inputEventProperties.userId);
+            expect(events.length).toEqual(EVENT_COUNT)
+
+            const eventId = events[0]._id;
+            const response = await agent.patch("/api/gdpr/input-event")
+                .set("servertoken", testProject?.serverApiKey as string)
+                .send({ eventId, userId: inputEventProperties.userId, objectId: newObjectId, textValue: newTextValue })
+            expect(response.status).toBe(200)
+            events = await getInputEventsByUser((testProject as Project)._id.toString(), inputEventProperties.userId);
+
+            let selectedEvent: InputEvent | null = null;
+            for (let i = 0; i < events.length; i++) {
+                if (events[i]._id.toString() === eventId.toString()) {
+                    selectedEvent = events[i];
+                }
+            }
+            expect(selectedEvent).not.toBe(null);
+            expect(selectedEvent?.eventProperties.objectId).toEqual(newObjectId);
+            expect(selectedEvent?.eventProperties.textValue).toEqual(newTextValue);
 
         })
     })
     describe("/api/gdpr/visit-event", () => {
+        const visitEventProperties = {
+            userId: "user 1",
+            pageUrl: "/page"
+        }
+        const EVENT_COUNT = 100;
+        const newPageUrl = "/new-page"
 
+        beforeEach(async () => {
+            for (let i = 0; i < EVENT_COUNT; i++) {
+                const response = await agent.post("/api/events/visit-event")
+                    .set("clienttoken", testProject?.clientApiKey as string)
+                    .send(visitEventProperties)
+                expect(response.status).toBe(200)
+            }
+        }, 100000)
+
+        afterEach(async () => {
+            await deleteVisitEvents()
+        })
         test("DELETE /api/gdpr/visit-event", async () => {
+            const events = await getVisitEventsByUser((testProject as Project)._id.toString(), visitEventProperties.userId);
+            expect(events.length).toEqual(EVENT_COUNT)
+            const response = await agent.delete("/api/gdpr/visit-event")
+                .set("servertoken", testProject?.serverApiKey as string)
+                .send({ userId: visitEventProperties.userId })
+            expect(response.status).toBe(200);
+            const eventsDeleted = await getVisitEventsByUser((testProject as Project)._id.toString(), visitEventProperties.userId);
+            expect(eventsDeleted.length).toEqual(0)
 
         })
 
         test("GET /api/gdpr/visit-event", async () => {
+            let userEvents: VisitEvent[] = []
+            let afterId = null;
+            while (true) {
+                const response = await agent.get("/api/gdpr/visit-event")
+                    .set("servertoken", testProject?.serverApiKey as string)
+                    .query({ afterId, userId: visitEventProperties.userId, limit: 50 })
 
+                expect(response.status).toBe(200);
+                userEvents = [...(userEvents as VisitEvent[]), ...(response.body.payload.events as VisitEvent[])]
+                if (!response.body.payload.afterId) {
+                    break;
+                }
+                afterId = response.body.payload.afterId;
+            }
+
+            expect(userEvents.length).toEqual(EVENT_COUNT);
         })
 
         test("PATCH /api/gdpr/visit-event", async () => {
+            let events = await getVisitEventsByUser((testProject as Project)._id.toString(), visitEventProperties.userId);
+            expect(events.length).toEqual(EVENT_COUNT)
+
+            const eventId = events[0]._id;
+            const response = await agent.patch("/api/gdpr/visit-event")
+                .set("servertoken", testProject?.serverApiKey as string)
+                .send({ eventId, userId: visitEventProperties.userId, pageUrl: newPageUrl })
+            expect(response.status).toBe(200)
+            events = await getVisitEventsByUser((testProject as Project)._id.toString(), visitEventProperties.userId);
+
+            let selectedEvent: VisitEvent | null = null;
+            for (let i = 0; i < events.length; i++) {
+                if (events[i]._id.toString() === eventId.toString()) {
+                    selectedEvent = events[i];
+                }
+            }
+            expect(selectedEvent).not.toBe(null);
+            expect(selectedEvent?.eventProperties.pageUrl).toEqual(newPageUrl);
 
         })
     })

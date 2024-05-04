@@ -1,6 +1,7 @@
 import AnalyticsLogger from "@/lib/analytics-logger";
 import AnalyticsManager from "@/lib/analytics-manager";
 import AnalyticsViewer from "@/lib/analytics-viewer";
+import GDPRManager from "@/lib/gdpr-manager";
 import {
     EventEnvironment,
     ClickEvent,
@@ -18,6 +19,7 @@ export {
     AnalyticsLogger,
     AnalyticsManager,
     AnalyticsViewer,
+    GDPRManager,
     EventEnvironment,
     VisitEvent,
     VisitEventProperties,
