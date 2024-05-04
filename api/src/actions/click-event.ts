@@ -38,4 +38,39 @@ export const deleteClickEvents = async () => {
     return await ClickEventModel.deleteMany();
 }
 
+export const deleteClickEventsByUserId = async (projectId: string, userId: string) => {
+    await dbConnect();
+    return await ClickEventModel.deleteMany({ projectId, "eventProperties.userId": userId })
+}
 
+export const getClickEventsByUser = async (projectId: string, userId: string) => {
+    await dbConnect();
+    const events = await ClickEventModel.find(
+        {
+            projectId,
+            "eventProperties.userId": userId
+        })
+    return events
+}
+
+export const paginatedGetClickEventsByUser = async (afterID: string, limit: number, projectId: string, userId: string) => {
+    await dbConnect();
+    const events = await ClickEventModel.find(
+        {
+            ...(afterID && { _id: { $gt: afterID } }),
+            projectId,
+            "eventProperties.userId": userId
+        })
+        .limit(limit);
+    return events
+}
+
+export const getClickEventById = async (eventId: string) => {
+    await dbConnect();
+    return await ClickEventModel.findOne({ _id: eventId })
+}
+
+export const updateClickEventById = async (eventId: string, objectId: string) => {
+    await dbConnect();
+    return await ClickEventModel.updateOne({ _id: eventId, "eventProperties.objectId": objectId });
+}

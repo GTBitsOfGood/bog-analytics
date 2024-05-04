@@ -1,0 +1,1 @@
+export { gdprClickEvent } from '@/src/controllers/gdpr/click-event';
