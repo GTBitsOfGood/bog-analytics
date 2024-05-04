@@ -67,13 +67,6 @@ describe("/api/gdpr", () => {
         })
 
         test("GET /api/gdpr/click-event", async () => {
-            // for (let i = 0; i < EVENT_COUNT; i++) {
-            //     const response = await agent.post("/api/events/click-event")
-            //         .set("clienttoken", testProject?.clientApiKey as string)
-            //         .send(clickEventProperties)
-            //     expect(response.status).toBe(200)
-            // }
-
             let userEvents: ClickEvent[] = []
             let afterId = null;
             while (true) {
@@ -93,12 +86,6 @@ describe("/api/gdpr", () => {
         })
 
         test("PATCH /api/gdpr/click-event", async () => {
-            // for (let i = 0; i < EVENT_COUNT; i++) {
-            //     const response = await agent.post("/api/events/click-event")
-            //         .set("clienttoken", testProject?.clientApiKey as string)
-            //         .send(clickEventProperties)
-            //     expect(response.status).toBe(200)
-            // }
             let events = await getClickEventsByUser((testProject as Project)._id.toString(), clickEventProperties.userId);
             expect(events.length).toEqual(EVENT_COUNT)
 
