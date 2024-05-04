@@ -38,7 +38,7 @@ export default class AnalyticsLogger {
 
         } catch {
             await logMessage(formatErrorMessage(
-                "an error occurred when registering an input event",
+                "an error occurred when registering an click event",
                 {
                     clientApiKey: this.clientApiKey as string,
                     objectId: objectId as string,
@@ -67,7 +67,7 @@ export default class AnalyticsLogger {
 
         } catch {
             await logMessage(formatErrorMessage(
-                "an error occurred when registering an input event",
+                "an error occurred when registering an visit event",
                 {
                     clientApiKey: this.clientApiKey as string,
                     pageUrl: pageUrl as string,
