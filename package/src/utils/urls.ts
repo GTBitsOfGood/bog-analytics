@@ -15,5 +15,11 @@ export const urls = {
         customEvent: "/api/events/custom-event",
         customEventType: "/api/events/custom-event-type",
         customGraphType: "/api/graphs/custom-graph-type"
+    },
+    gdpr: {
+        clickEvent: "/api/gdpr/click-event",
+        visitEvent: "/api/gdpr/visit-event",
+        inputEvent: "/api/gdpr/input-event",
+        customEvent: "/api/gdpr/custom-event",
     }
 }

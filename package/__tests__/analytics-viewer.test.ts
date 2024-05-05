@@ -133,10 +133,8 @@ describe('Analytics Logger Module', () => {
 
         for (let i = 0; i < EVENT_COUNT; i++) {
             await developmentLogger.logCustomEvent(eventType.category, eventType.subcategory, {
-                eventTypeId: eventType._id, properties: {
-                    "prop1": "val1",
-                    "prop2": "val2"
-                }
+                "prop1": "val1",
+                "prop2": "val2"
             })
         }
 
@@ -152,10 +150,8 @@ describe('Analytics Logger Module', () => {
         const eventType = await analyticsManager.defineCustomEvent(customEventType) as CustomEventType;
         for (let i = 0; i < EVENT_COUNT; i++) {
             await developmentLogger.logCustomEvent(eventType.category, eventType.subcategory, {
-                properties: {
-                    "prop1": "val1",
-                    "prop2": "val2"
-                }
+                "prop1": "val1",
+                "prop2": "val2"
             })
         }
 

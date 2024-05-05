@@ -55,7 +55,7 @@ const gdprClickEventRoute = APIWrapper({
             // specify a new objectId because that is the only property that can be set for click events
             // Make sure userId is immutable to prevent impersonation
             const { eventId, objectId, userId } = req.body;
-            if (!eventId || !objectId || !userId) {
+            if (!eventId || objectId === null || objectId === undefined || !userId) {
                 throw new Error("You must specify a user id, object id, and event id to update an event.")
             }
             const event: ClickEvent | null = await getClickEventById(eventId as string);
