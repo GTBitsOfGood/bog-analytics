@@ -26,7 +26,23 @@ services:
       - ./dashboard/venv:/app/venv
     networks:
       - bog-analytics-net      
-      
+  
+  portal:
+    build:
+      context: .
+      dockerfile: portal/Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./portal:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      DATABASE_URL: mongodb://mongo:27017
+      DATABASE_NAME: bog-analytics-portal
+    networks:
+      - bog-analytics-net
+
   mongo:
     image: mongo
     ports:
@@ -35,6 +51,7 @@ services:
       - bog-analytics-net
     volumes:
       - mongodb-data:/data/db
+
 networks:
   bog-analytics-net:
     driver: bridge

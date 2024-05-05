@@ -1,0 +1,22 @@
+# Use an official Node.js runtime as the base image
+FROM node:18.17.0
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy package.json and yarn.lock to the working directory
+COPY portal/package.json portal/yarn.lock ./
+
+# Install dependencies
+RUN yarn install
+
+# Copy the rest of the application code to the container
+COPY portal ./
+
+# Expose the port on which your Next.js app will run
+EXPOSE 3000
+
+RUN chmod -R 777 node_modules/
+
+# Start the web app using yarn dev with hot reloading
+ENTRYPOINT ["yarn", "dev"]
