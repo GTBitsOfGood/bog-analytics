@@ -1,6 +1,6 @@
 import { beforeAll, beforeEach, describe, expect, test } from '@jest/globals';
 import { AnalyticsLogger, AnalyticsManager, GDPRManager } from '@/index';
-import { ClickEvent, ClickEventProperties, CustomEventType, EventEnvironment, HttpMethod, InputEventProperties, Project, VisitEvent, VisitEventProperties, InputEvent } from '@/utils/types';
+import { ClickEvent, CustomEvent, ClickEventProperties, CustomEventType, EventEnvironment, HttpMethod, InputEventProperties, Project, VisitEvent, VisitEventProperties, InputEvent } from '@/utils/types';
 import { externalRequest } from '@/utils/requests';
 import { randomUUID } from "crypto";
 import { urls } from '@/utils/urls';
@@ -18,6 +18,7 @@ describe('GDPR Manager Module', () => {
     const NEW_PAGE = "/new-page"
     const OLD_TEXT_VALUE = "old text"
     const NEW_TEXT_VALUE = "new text"
+    const USER_ATTRIBUTE = "userId"
 
     let clickEventProperties: ClickEventProperties = {
         objectId: OLD_OBJECT,
@@ -61,15 +62,22 @@ describe('GDPR Manager Module', () => {
             properties: [
                 "prop1",
                 "prop2",
-                "userId"
+                USER_ATTRIBUTE
             ],
             projectId: project._id
         }
+
+        await analyticsManager.defineCustomEvent(customEventType);
 
         for (let i = 0; i < EVENT_COUNT; i++) {
             await developmentLogger.logClickEvent(clickEventProperties);
             await developmentLogger.logVisitEvent(visitEventProperties);
             await developmentLogger.logInputEvent(inputEventProperties);
+            await developmentLogger.logCustomEvent(customEventType.category, customEventType.subcategory, {
+                "prop1": OLD_TEXT_VALUE,
+                "prop2": OLD_TEXT_VALUE,
+                "userId": USER_ID
+            })
         }
     }, 100000)
 
@@ -161,6 +169,37 @@ describe('GDPR Manager Module', () => {
         expect(selectedEvent?.eventProperties.textValue).toEqual(NEW_TEXT_VALUE);
     })
 
+    test("getAllUserCustomEvents and deleteCustomEventsForUser", async () => {
+        let events = await gdprManager.getAllUserCustomEvents(USER_ID, USER_ATTRIBUTE, customEventType.category, customEventType.subcategory);
+        expect(events?.length).toEqual(EVENT_COUNT);
 
+        await gdprManager.deleteCustomEventsForUser(USER_ID, USER_ATTRIBUTE, customEventType.category, customEventType.subcategory);
+        events = await gdprManager.getAllUserCustomEvents(USER_ID, USER_ATTRIBUTE, customEventType.category, customEventType.subcategory);
+        expect(events?.length).toEqual(0);
+    }, 100000)
+
+
+    test("gdprUpdateCustomEvent", async () => {
+        let events: CustomEvent[] = await gdprManager.getAllUserCustomEvents(USER_ID, USER_ATTRIBUTE, customEventType.category, customEventType.subcategory) as unknown as CustomEvent[];
+        expect(events?.length).toEqual(EVENT_COUNT);
+        const eventId = events[0]._id;
+        await gdprManager.updateUserCustomEvent(eventId, USER_ID, USER_ATTRIBUTE, {
+            prop1: NEW_TEXT_VALUE
+        })
+
+        events = await gdprManager.getAllUserCustomEvents(USER_ID, USER_ATTRIBUTE, customEventType.category, customEventType.subcategory) as unknown as CustomEvent[];
+        expect(events?.length).toEqual(EVENT_COUNT);
+
+
+        let selectedEvent: CustomEvent | null = null;
+        for (let i = 0; i < events.length; i++) {
+            if (events[i]._id == eventId) {
+                selectedEvent = events[i]
+            }
+        }
+        expect(selectedEvent).not.toBe(null);
+        expect((selectedEvent?.properties as { [key: string]: string })['prop1']).toEqual(NEW_TEXT_VALUE);
+        expect((selectedEvent?.properties as { [key: string]: string })['prop2']).toEqual(OLD_TEXT_VALUE);
+    })
 
 })

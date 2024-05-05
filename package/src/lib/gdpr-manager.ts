@@ -1,4 +1,4 @@
-import { gdprDeleteClickEvents, gdprDeleteInputEvents, gdprDeleteVisitEvents, gdprPaginatedUserClickEvents, gdprPaginatedUserInputEvents, gdprPaginatedUserVisitEvents, gdprUpdateClickEvent, gdprUpdateInputEvent, gdprUpdateVisitEvent } from "@/actions/gdpr";
+import { gdprDeleteClickEvents, gdprDeleteCustomEvents, gdprDeleteInputEvents, gdprDeleteVisitEvents, gdprPaginatedUserClickEvents, gdprPaginatedUserCustomEvents, gdprPaginatedUserInputEvents, gdprPaginatedUserVisitEvents, gdprUpdateClickEvent, gdprUpdateCustomEvent, gdprUpdateInputEvent, gdprUpdateVisitEvent } from "@/actions/gdpr";
 import { logMessage } from "@/actions/logs";
 import { isBrowser } from "@/utils/env";
 import { formatErrorMessage } from "@/utils/error";
@@ -62,6 +62,21 @@ export default class GDPRManager {
             await logMessage(formatErrorMessage("an error occurred when deleting click events for a user (GDPR)", { userId }))
             return null
         }
+    }
+
+    public async deleteCustomEventsForUser(userId: string, userAttribute: string, eventCategory: string, eventSubcategory: string) {
+        try {
+            if (!this.serverApiKey) {
+                throw new Error('Please authenticate with your server api key first using the authenticate method');
+            }
+            const events = await gdprDeleteCustomEvents(this.apiBaseUrl as string, this.serverApiKey, userId, userAttribute, eventCategory, eventSubcategory);
+            return events;
+
+        } catch {
+            await logMessage(formatErrorMessage("an error occurred when deleting custom events for a user (GDPR)", { userId }))
+            return null
+        }
+
     }
 
     public async getUserClickEventsPaginated(queryParams: GetUserEventsQueryParams) {
@@ -238,6 +253,61 @@ export default class GDPRManager {
         }
     }
 
+    public async getUserCustomEventsPaginated(afterId: string, userId: string, userAttribute: string, eventCategory: string, eventSubcategory: string) {
+        try {
+            if (!this.serverApiKey) {
+                throw new Error('Please authenticate with your server api key first using the authenticate method');
+            }
+            return await gdprPaginatedUserCustomEvents(this.apiBaseUrl as string, this.serverApiKey, afterId, userId, userAttribute, eventCategory, eventSubcategory);
+        } catch {
+            await logMessage(formatErrorMessage(
+                "an error occurred when retrieving user custom events (paginated) (GDPR)",
+                {
+                    afterId,
+                    userId,
+                    userAttribute,
+                    eventCategory,
+                    eventSubcategory
+                }
+            ))
+            return null;
+        }
+    }
+
+    public async getAllUserCustomEvents(userId: string, userAttribute: string, eventCategory: string, eventSubcategory: string) {
+        let afterId = undefined;
+        const customEvents = []
+
+        try {
+            if (!this.serverApiKey) {
+                throw new Error('Please authenticate with your server api key first using the authenticate method');
+            }
+
+            let page = await gdprPaginatedUserCustomEvents(this.apiBaseUrl as string, this.serverApiKey, afterId, userId, userAttribute, eventCategory, eventSubcategory)
+            while (true) {
+                customEvents.push(...page['events']);
+                afterId = page['afterId']
+                if (page['afterId']) {
+                    page = await gdprPaginatedUserCustomEvents(this.apiBaseUrl as string, this.serverApiKey, afterId, userId, userAttribute, eventCategory, eventSubcategory)
+                    continue;
+                }
+                break;
+            }
+
+            return customEvents;
+        }
+        catch {
+            await logMessage(formatErrorMessage(
+                "an error occurred when retrieving user custom events (GDPR)",
+                {
+                    userId, userAttribute, eventCategory, eventSubcategory
+                }
+            ))
+            return null;
+        }
+    }
+
+
     public async updateUserClickEvent(eventId: string, userId: string, objectId: string) {
         try {
             if (!this.serverApiKey) {
@@ -279,6 +349,21 @@ export default class GDPRManager {
 
         } catch {
             await logMessage(formatErrorMessage("an error occurred when updating input events for a user (GDPR)", { userId, eventId, textValue: textValue as string, objectId: objectId as string }))
+            return null
+        }
+
+    }
+
+    public async updateUserCustomEvent(eventId: string, userId: string, userAttribute: string, updatedAttributes: object) {
+        try {
+            if (!this.serverApiKey) {
+                throw new Error('Please authenticate with your server api key first using the authenticate method');
+            }
+            const events = await gdprUpdateCustomEvent(this.apiBaseUrl as string, this.serverApiKey, eventId, userId, userAttribute, updatedAttributes);
+            return events;
+
+        } catch {
+            await logMessage(formatErrorMessage("an error occurred when updating input events for a user (GDPR)", { eventId, userId, userAttribute, updatedAttributes }))
             return null
         }
 

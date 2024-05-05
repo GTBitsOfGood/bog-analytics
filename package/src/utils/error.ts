@@ -1,4 +1,4 @@
-export function formatErrorMessage(errorMessage: string, properties: Record<string, string>): string {
+export function formatErrorMessage(errorMessage: string, properties: Record<string, string | object>): string {
     let propString = "\n```";
     let currentKeyIndex = 1;
     for (let key in properties) {
