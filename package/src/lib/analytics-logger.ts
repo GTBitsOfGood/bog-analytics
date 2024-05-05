@@ -108,9 +108,7 @@ export default class AnalyticsLogger {
         }
     }
 
-    public async logCustomEvent(category: string, subcategory: string, customEvent: Partial<CustomEvent>): Promise<CustomEvent | null> {
-        const { properties } = customEvent;
-
+    public async logCustomEvent(category: string, subcategory: string, properties: object): Promise<CustomEvent | null> {
         try {
             if (!this.clientApiKey) {
                 throw new Error('Please authenticate first with your client api key using the authenticate method');

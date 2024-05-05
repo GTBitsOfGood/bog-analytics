@@ -20,6 +20,7 @@ router.all('/graphs/custom-graph-type', GraphController.customGraphType);
 router.all('/gdpr/click-event', GDPRController.gdprClickEvent);
 router.all('/gdpr/visit-event', GDPRController.gdprVisitEvent);
 router.all('/gdpr/input-event', GDPRController.gdprInputEvent);
+router.all('/gdpr/custom-event', GDPRController.gdprCustomEvent);
 
 
 router.all('/project', ProjectController.project);

@@ -42,3 +42,41 @@ export const deleteCustomEvents = async () => {
     const events = await CustomEventModel.deleteMany()
     return events;
 }
+
+export const deleteCustomEventsByUserId = async (projectId: string, userId: string, eventTypeId: string, userAttribute: string) => {
+    await dbConnect();
+    return await CustomEventModel.deleteMany({ [`properties.${userAttribute}`]: userId, eventTypeId, projectId })
+}
+
+export const getCustomEventsByUser = async (userAttribute: string, userId: string) => {
+    await dbConnect();
+    return await CustomEventModel.find(
+        {
+            [`properties.${userAttribute}`]: userId
+        })
+}
+
+export const paginatedGetCustomEventsByUser = async (afterID: string, limit: number, projectId: string, eventTypeId: string, userAttribute: string, userId: string) => {
+    await dbConnect();
+    const events = await CustomEventModel.find(
+        {
+            ...(afterID && { _id: { $gt: afterID } }),
+            projectId,
+            eventTypeId,
+            [`properties.${userAttribute}`]: userId
+        })
+        .limit(limit);
+    return events
+}
+export const getCustomEventById = async (eventId: string) => {
+    await dbConnect();
+    return await CustomEventModel.findOne({ _id: eventId });
+}
+
+export const updateCustomEventById = async (eventId: string, updatedAttributes: object) => {
+    await dbConnect();
+    return await CustomEventModel.findOneAndUpdate({ _id: eventId },
+        { $set: { properties: { ...updatedAttributes } } }, { new: true }
+    );
+
+}

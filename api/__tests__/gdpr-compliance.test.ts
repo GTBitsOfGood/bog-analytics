@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, describe, expect, test, beforeEach, afterEach } from '@jest/globals';
 import request, { Test } from "supertest";
 import { api } from "@/netlify/functions/api";
-import { ClickEvent, Project, VisitEvent, InputEvent } from '@/src/utils/types';
+import { ClickEvent, Project, VisitEvent, InputEvent, CustomEvent } from '@/src/utils/types';
 import { deleteProjectById } from '@/src/actions/project';
 import { Server, IncomingMessage, ServerResponse } from 'http';
 import TestAgent from 'supertest/lib/agent';
@@ -9,6 +9,7 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 import { deleteClickEvents, getClickEventsByUser } from '@/src/actions/click-event';
 import { deleteVisitEvents, getVisitEventsByUser } from '@/src/actions/visit-event';
 import { deleteInputEvents, getInputEventsByUser } from '@/src/actions/input-event';
+import { deleteCustomEvents, getCustomEventsByUser } from '@/src/actions/custom-event';
 
 let testProject: Project | null = null;
 let server: Server<typeof IncomingMessage, typeof ServerResponse>;
@@ -260,5 +261,110 @@ describe("/api/gdpr", () => {
 
         })
     })
+
+    describe("/api/gdpr/custom-event", () => {
+        const EVENT_COUNT = 100;
+        const USER_ID = "user 1"
+        const USER_ATTRIBUTE = "user prop"
+        const customEventType = {
+            properties: ['prop1', USER_ATTRIBUTE, 'prop2'],
+            category: 'category 1',
+            subcategory: 'category 2'
+        }
+        const oldProps = {
+            prop1: 'hello 1',
+            [USER_ATTRIBUTE]: USER_ID,
+            prop2: 'hello 1'
+        }
+
+        const updatedProps = {
+            prop1: 'hello 2',
+
+        }
+        beforeEach(async () => {
+            const response = await agent.post("/api/events/custom-event-type")
+                .set("servertoken", testProject?.serverApiKey as string)
+                .send(customEventType)
+
+            for (let i = 0; i < EVENT_COUNT; i++) {
+                const response = await agent.post("/api/events/custom-event")
+                    .set("clienttoken", testProject?.clientApiKey as string)
+                    .send({
+                        category: customEventType.category, subcategory: customEventType.subcategory, properties: oldProps
+                    })
+                expect(response.status).toBe(200)
+            }
+        }, 100000)
+
+        afterEach(async () => {
+            await deleteCustomEvents();
+        })
+
+        test("DELETE /api/gdpr/custom-event", async () => {
+            let events = await getCustomEventsByUser(USER_ATTRIBUTE, USER_ID);
+            expect(events.length).toEqual(EVENT_COUNT);
+            const response = await agent.delete("/api/gdpr/custom-event")
+                .set("servertoken", testProject?.serverApiKey as string)
+                .send({
+                    userId: USER_ID,
+                    userAttribute: USER_ATTRIBUTE,
+                    eventCategory: customEventType.category,
+                    eventSubcategory: customEventType.subcategory
+                })
+            expect(response.status).toBe(200)
+
+            events = await getCustomEventsByUser(USER_ATTRIBUTE, USER_ID);
+            expect(events.length).toEqual(0);
+
+        })
+
+        test("GET /api/gdpr/custom-event", async () => {
+            let userEvents: CustomEvent[] = []
+            let afterId = null;
+            while (true) {
+                const response = await agent.get("/api/gdpr/custom-event")
+                    .set("servertoken", testProject?.serverApiKey as string)
+                    .query({ afterId, userId: USER_ID, userAttribute: USER_ATTRIBUTE, eventCategory: customEventType.category, eventSubcategory: customEventType.subcategory, limit: 50 })
+
+                expect(response.status).toBe(200);
+                userEvents = [...(userEvents as CustomEvent[]), ...(response.body.payload.events as CustomEvent[])]
+                if (!response.body.payload.afterId) {
+                    break;
+                }
+                afterId = response.body.payload.afterId;
+            }
+
+            expect(userEvents.length).toEqual(EVENT_COUNT);
+
+        })
+
+        test("PATCH /api/gdpr/custom-event", async () => {
+            let events = await getCustomEventsByUser(USER_ATTRIBUTE, USER_ID);
+            expect(events.length).toEqual(EVENT_COUNT);
+
+            const eventId = events[0]._id;
+            const response = await agent.patch("/api/gdpr/custom-event")
+                .set("servertoken", testProject?.serverApiKey as string)
+                .send({ eventId, userId: USER_ID, userAttribute: USER_ATTRIBUTE, updatedAttributes: updatedProps })
+            expect(response.status).toBe(200)
+
+            events = await getCustomEventsByUser(USER_ATTRIBUTE, USER_ID);
+            expect(events.length).toEqual(EVENT_COUNT);
+
+            let selectedEvent: CustomEvent | null = null;
+            for (let i = 0; i < events.length; i++) {
+                console.log(events[i]._id.toString(), eventId.toString())
+                if (events[i]._id.toString() === eventId.toString()) {
+                    selectedEvent = events[i];
+                }
+            }
+            expect(selectedEvent).not.toBe(null);
+            expect(selectedEvent?.properties).not.toBe(null);
+            expect((selectedEvent?.properties as { [key: string]: string })['prop1']).toEqual(updatedProps.prop1);
+            expect((selectedEvent?.properties as { [key: string]: string })['prop2']).toEqual(oldProps.prop2);
+        })
+    })
+
+
 })
 
