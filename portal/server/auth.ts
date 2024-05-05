@@ -3,11 +3,10 @@ import { MongodbAdapter } from "@lucia-auth/adapter-mongodb";
 import { cookies } from "next/headers";
 import { cache } from "react";
 import { InternalUser } from "@/utils/types";
-import { UserModel } from "server/mongodb/models/User";
-import { SessionModel } from "server/mongodb/models/Session";
 import dbConnect from "server/utils/dbConnect";
 
 import { webcrypto } from "crypto";
+import mongoose from "mongoose";
 globalThis.crypto = webcrypto as Crypto;
 
 
@@ -15,10 +14,9 @@ globalThis.crypto = webcrypto as Crypto;
     await dbConnect();
 })();
 
-// I don't know why intellisense flags this as an error (lol) but it works so I'm not touching it
 const adapter = new MongodbAdapter(
-    SessionModel.collection,
-    UserModel.collection
+    mongoose.connection.collection("sessions"),
+    mongoose.connection.collection("users")
 );
 export const auth = new Lucia(adapter, {
     sessionCookie: {
