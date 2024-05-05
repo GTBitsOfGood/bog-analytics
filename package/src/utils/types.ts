@@ -112,6 +112,12 @@ export interface GetEventsQueryParams {
     afterTime?: string;
 }
 
+export interface GetUserEventsQueryParams {
+    userId: string;
+    afterId: string | undefined;
+    limit?: number;
+}
+
 export interface GetCustomEventsQueryParams extends GetEventsQueryParams {
     category: string;
     subcategory: string;

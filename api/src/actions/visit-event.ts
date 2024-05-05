@@ -38,3 +38,41 @@ export const deleteVisitEvents = async () => {
     await dbConnect();
     return await VisitEventModel.deleteMany();
 }
+
+export const getVisitEventsByUser = async (projectId: string, userId: string) => {
+    await dbConnect();
+    const events = await VisitEventModel.find(
+        {
+            projectId,
+            "eventProperties.userId": userId
+        })
+    return events
+}
+
+export const paginatedGetVisitEventsByUser = async (afterID: string, limit: number, projectId: string, userId: string) => {
+    await dbConnect();
+    const events = await VisitEventModel.find(
+        {
+            ...(afterID && { _id: { $gt: afterID } }),
+            projectId,
+            "eventProperties.userId": userId
+        })
+        .limit(limit);
+    return events
+}
+
+export const getVisitEventById = async (eventId: string) => {
+    await dbConnect();
+    return await VisitEventModel.findOne({ _id: eventId })
+}
+
+
+export const deleteVisitEventsByUserId = async (projectId: string, userId: string) => {
+    await dbConnect();
+    return await VisitEventModel.deleteMany({ projectId, "eventProperties.userId": userId })
+}
+
+export const updateVisitEventById = async (eventId: string, pageUrl: string) => {
+    await dbConnect();
+    return await VisitEventModel.updateOne({ _id: eventId }, { "eventProperties.pageUrl": pageUrl });
+}

@@ -37,3 +37,45 @@ export const deleteInputEvents = async () => {
     await dbConnect();
     return await InputEventModel.deleteMany();
 }
+
+export const deleteInputEventsByUserId = async (projectId: string, userId: string) => {
+    await dbConnect();
+    return await InputEventModel.deleteMany({ projectId, "eventProperties.userId": userId })
+}
+
+export const getInputEventsByUser = async (projectId: string, userId: string) => {
+    await dbConnect();
+    const events = await InputEventModel.find(
+        {
+            projectId,
+            "eventProperties.userId": userId
+        })
+    return events
+}
+
+export const paginatedGetInputEventsByUser = async (afterID: string, limit: number, projectId: string, userId: string) => {
+    await dbConnect();
+    const events = await InputEventModel.find(
+        {
+            ...(afterID && { _id: { $gt: afterID } }),
+            projectId,
+            "eventProperties.userId": userId
+        })
+        .limit(limit);
+    return events
+}
+
+export const getInputEventById = async (eventId: string) => {
+    await dbConnect();
+    return await InputEventModel.findOne({ _id: eventId })
+}
+
+export const updateInputEventById = async (eventId: string, objectId?: string, textValue?: string) => {
+    await dbConnect();
+    return await InputEventModel.updateOne({ _id: eventId },
+        {
+            ...(objectId && { "eventProperties.objectId": objectId }),
+            ...(textValue && { "eventProperties.textValue": textValue })
+
+        });
+}

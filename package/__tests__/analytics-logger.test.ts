@@ -77,12 +77,10 @@ describe('Analytics Logger Module', () => {
     test('Basic Custom Event Test', async () => {
         const eventType = await analyticsManager.defineCustomEvent(customEventType) as CustomEventType;
         const customEvent = await developmentLogger.logCustomEvent(eventType.category, eventType.subcategory, {
-            properties: {
-                "prop1": "val1",
-                "prop2": "val2"
-            }
-        });
-        console.log(customEvent)
+            "prop1": "val1",
+            "prop2": "val2"
+        }
+        );
         expect(customEvent?.eventTypeId).toEqual(eventType._id);
 
     })
