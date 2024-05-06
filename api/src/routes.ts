@@ -4,6 +4,7 @@ import * as EventController from "@/src/controllers/events"
 import * as ProjectController from "@/src/controllers/project"
 import * as GraphController from "@/src/controllers/graphs"
 import * as GDPRController from "@/src/controllers/gdpr";
+import * as PortalController from "@/src/controllers/portal";
 
 export const router = Router();
 
@@ -21,6 +22,8 @@ router.all('/gdpr/click-event', GDPRController.gdprClickEvent);
 router.all('/gdpr/visit-event', GDPRController.gdprVisitEvent);
 router.all('/gdpr/input-event', GDPRController.gdprInputEvent);
 router.all('/gdpr/custom-event', GDPRController.gdprCustomEvent);
+
+router.all('/portal/project', PortalController.portalProject);
 
 
 router.all('/project', ProjectController.project);

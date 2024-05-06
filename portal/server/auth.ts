@@ -21,13 +21,16 @@ const adapter = new MongodbAdapter(
 export const auth = new Lucia(adapter, {
     sessionCookie: {
         attributes: {
-            secure: process.env.NODE_ENV === "production"
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
         }
     },
-    getUserAttributes: (attributes: Omit<InternalUser, "_id">) => {
+    getUserAttributes: (attributes: InternalUser) => {
         return {
+            _id: attributes._id,
             email: attributes.email,
-            roles: attributes.roles
+            roles: attributes.roles,
+            verified: attributes.verified
         };
     }
 });
@@ -58,34 +61,10 @@ export const validateRequest = cache(
     }
 );
 
-
-export const getUser = cache(async () => {
-    const sessionId = cookies().get(auth.sessionCookieName)?.value ?? null;
-    if (!sessionId) {
-        return null;
-    }
-
-    const { user, session } = await auth.validateSession(sessionId);
-    try {
-        if (session && session.fresh) {
-            const sessionCookie = auth.createSessionCookie(session.id);
-            cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
-        }
-        if (!session) {
-            const sessionCookie = auth.createBlankSessionCookie();
-            cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
-        }
-    } catch {
-        // Next.js throws error when attempting to set cookies when rendering page
-        return null;
-    }
-    return user;
-});
-
 declare module "lucia" {
     interface Register {
         Lucia: typeof auth;
-        DatabaseUserAttributes: Omit<InternalUser, "_id">;
+        DatabaseUserAttributes: InternalUser;
     }
 }
 

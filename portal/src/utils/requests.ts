@@ -1,4 +1,5 @@
 import { InternalRequestData, InternalResponseData, ExternalRequestData, ExternalResponseData } from "src/utils/types";
+import { cookies } from "next/headers";
 
 export async function internalRequest<T>({
     url,
@@ -50,6 +51,7 @@ export async function externalRequest<T>({
     queryParams,
     method,
     body,
+    portalToken
 }: ExternalRequestData): Promise<T> {
     const requestInfo: RequestInit = {
         method,
@@ -57,6 +59,7 @@ export async function externalRequest<T>({
         credentials: "omit",
         headers: {
             "Content-Type": "application/json",
+            "portaltoken": portalToken ?? ""
         },
     };
     if (body) {

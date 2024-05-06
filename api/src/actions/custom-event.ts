@@ -43,6 +43,12 @@ export const deleteCustomEvents = async () => {
     return events;
 }
 
+export const deleteCustomEventsByProject = async (projectId: string) => {
+    await dbConnect();
+    const events = await CustomEventModel.deleteMany({ projectId })
+    return events;
+}
+
 export const deleteCustomEventsByUserId = async (projectId: string, userId: string, eventTypeId: string, userAttribute: string) => {
     await dbConnect();
     return await CustomEventModel.deleteMany({ [`properties.${userAttribute}`]: userId, eventTypeId, projectId })

@@ -3,10 +3,12 @@ import {
     HttpMethod,
 } from "@/src/utils/types";
 import { Request, RequestHandler, Response } from "express"; import { getProjectByClientKey, getProjectByServerKey } from "@/src/actions/project";
+import { validatePortalToken } from "@/src/actions/portal";
 
 interface RouteConfig {
-    requireClientToken?: boolean;
-    requireServerToken?: boolean;
+    requireClientToken?: boolean; // Client side event logging endpoints
+    requireServerToken?: boolean; // Server side event configuration endpoints
+    requirePortalToken?: boolean; // Developer portal endpoints
     handleResponse?: boolean; // handleResponse if the route handles setting status code and body
     developmentRoute?: boolean // for routes we want for development purposes only 
 }
@@ -60,6 +62,16 @@ function APIWrapper(
             if (config?.requireServerToken) {
                 const project = await getProjectByServerKey(req.headers.servertoken as string)
                 if (!project) {
+                    return res.status(403).json({
+                        success: false,
+                        message: "You do not have permissions to access this API route",
+                    });
+                }
+            }
+
+            if (config?.requirePortalToken) {
+                const validation = await validatePortalToken(req.headers.portaltoken as string);
+                if (!validation) {
                     return res.status(403).json({
                         success: false,
                         message: "You do not have permissions to access this API route",

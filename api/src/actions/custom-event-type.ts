@@ -37,6 +37,7 @@ export const getCustomEventTypeID = async (projectId: string, category: string, 
     return eventType?._id;
 }
 export const deleteCustomEventType = async (projectId: string, category: string, subcategory: string) => {
+    await dbConnect();
     const deletedEventType = await CustomEventTypeModel.findOne({ projectId, category, subcategory });
     if (!deletedEventType) {
         return;
@@ -47,6 +48,12 @@ export const deleteCustomEventType = async (projectId: string, category: string,
     await CustomGraphTypeModel.deleteMany({ eventTypeId })
     await CustomEventTypeModel.deleteOne({ projectId, category, subcategory })
 }
+
+export const deleteCustomEventTypesByProject = async (projectId: string) => {
+    await dbConnect();
+    await CustomEventModel.deleteMany({ projectId })
+}
+
 
 export const deleteAllCustomEventTypes = async () => {
     await dbConnect();

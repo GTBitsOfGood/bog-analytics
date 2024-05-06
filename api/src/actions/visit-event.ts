@@ -39,6 +39,11 @@ export const deleteVisitEvents = async () => {
     return await VisitEventModel.deleteMany();
 }
 
+export const deleteVisitEventsByProject = async (projectId: string) => {
+    await dbConnect();
+    return await VisitEventModel.deleteMany({ projectId });
+}
+
 export const getVisitEventsByUser = async (projectId: string, userId: string) => {
     await dbConnect();
     const events = await VisitEventModel.find(

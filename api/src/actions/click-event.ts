@@ -38,6 +38,12 @@ export const deleteClickEvents = async () => {
     return await ClickEventModel.deleteMany();
 }
 
+export const deleteClickEventsByProject = async (projectId: string) => {
+    await dbConnect();
+    return await ClickEventModel.deleteMany({ projectId });
+}
+
+
 export const deleteClickEventsByUserId = async (projectId: string, userId: string) => {
     await dbConnect();
     return await ClickEventModel.deleteMany({ projectId, "eventProperties.userId": userId })
