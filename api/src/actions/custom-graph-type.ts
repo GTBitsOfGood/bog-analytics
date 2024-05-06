@@ -30,3 +30,9 @@ export const deleteAllCustomGraphTypes = async () => {
     await dbConnect();
     await CustomGraphTypeModel.deleteMany();
 }
+
+
+export const deleteCustomGraphTypesByProject = async (projectId: string) => {
+    await dbConnect();
+    await CustomGraphTypeModel.deleteMany({ projectId });
+}

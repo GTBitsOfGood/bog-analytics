@@ -46,11 +46,10 @@ function APIWrapper(
             // Handle user access token + roles restrictions
             if (config?.requireToken) {
                 const { user } = await validateRequest();
-
                 if (!user) {
                     return NextResponse.json({
                         success: false,
-                        message: "You do not have permissions to access this API route",
+                        message: "You must be logged in to access this API route",
                     }, { status: 400 });
                 }
 
@@ -61,7 +60,7 @@ function APIWrapper(
                     ) {
                         return NextResponse.json({
                             success: false,
-                            message: "You do not have permissions to access this API route",
+                            message: "You do not have the necessary roles to access this API route",
                         }, { status: 400 });
                     }
                 }
@@ -70,7 +69,7 @@ function APIWrapper(
                     if (!user.verified) {
                         return NextResponse.json({
                             success: false,
-                            message: "You do not have permissions to access this API route",
+                            message: "You must be verified to access this API route",
                         }, { status: 400 });
                     }
                 }

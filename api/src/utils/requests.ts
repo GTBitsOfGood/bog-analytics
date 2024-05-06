@@ -1,4 +1,5 @@
 import { ExternalRequestData, ExternalResponseData } from "@/src/utils/types";
+import fetch, { RequestInit } from 'node-fetch';
 
 export async function externalRequest<T>({
     url,
@@ -8,8 +9,8 @@ export async function externalRequest<T>({
 }: ExternalRequestData): Promise<T> {
     const requestInfo: RequestInit = {
         method,
-        mode: "cors",
-        credentials: "omit",
+        // mode: "cors",
+        // credentials: "omit",
         headers: {
             "Content-Type": "application/json",
         },

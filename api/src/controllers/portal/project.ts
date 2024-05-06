@@ -1,4 +1,10 @@
-import { createProject, getProjectIDByName, getProjectsWithSensitiveInfo } from "@/src/actions/project";
+import { deleteClickEventsByProject } from "@/src/actions/click-event";
+import { deleteCustomEventsByProject } from "@/src/actions/custom-event";
+import { deleteCustomEventTypesByProject } from "@/src/actions/custom-event-type";
+import { deleteCustomGraphTypesByProject } from "@/src/actions/custom-graph-type";
+import { deleteInputEventsByProject } from "@/src/actions/input-event";
+import { createProject, deleteProjectByName, getProjectIDByName, getProjectsWithSensitiveInfo } from "@/src/actions/project";
+import { deleteVisitEventsByProject } from "@/src/actions/visit-event";
 import { relogRequestHandler } from "@/src/middleware/request-middleware";
 import APIWrapper from "@/src/utils/api-wrapper";
 import { Project } from "@/src/utils/types";
@@ -34,11 +40,30 @@ const projectRoute = APIWrapper({
         },
     },
     GET: {
-        config: {},
+        config: {
+            requirePortalToken: true
+        },
         handler: async (req: Request) => {
-            return getProjectsWithSensitiveInfo();
+            return await getProjectsWithSensitiveInfo();
         }
-    }
+    },
+    DELETE: {
+        config: { requirePortalToken: true },
+        handler: async (req: Request) => {
+            const projectName: string = req.body.projectName;
+            const projectId = await getProjectIDByName(projectName) as string;
+
+            await deleteClickEventsByProject(projectId);
+            await deleteInputEventsByProject(projectId);
+            await deleteVisitEventsByProject(projectId);
+
+            await deleteCustomEventsByProject(projectId);
+            await deleteCustomEventTypesByProject(projectId);
+            await deleteCustomGraphTypesByProject(projectId);
+
+            return await deleteProjectByName(projectName);
+        }
+    },
 
 });
 

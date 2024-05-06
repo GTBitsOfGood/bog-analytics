@@ -1,7 +1,5 @@
-import Projects from "@/components/Projects"
-import UserManagement from "@/components/UserManagement"
 import { TabConfiguration } from "@/utils/types"
-import { IconLayoutDashboard, IconUser } from '@tabler/icons-react';
+import { IconLayoutDashboard, IconUser, IconPencil } from '@tabler/icons-react';
 
 export const PASSWORD_SETTINGS = {
     memoryCost: 19456,
@@ -9,5 +7,7 @@ export const PASSWORD_SETTINGS = {
     outputLen: 32,
     parallelism: 1
 }
-export const MEMBER_DASHBOARD_TABS: TabConfiguration[] = [{ name: "Project List", component: Projects, id: "project-list", icon: IconLayoutDashboard }]
-export const ADMIN_DASHBOARD_TABS: TabConfiguration[] = [...MEMBER_DASHBOARD_TABS, { name: "User Management", component: UserManagement, id: "user-management", icon: IconUser }]
+export const MEMBER_DASHBOARD_TABS: TabConfiguration[] = [{ name: "Project List", id: "project-list", icon: IconLayoutDashboard },
+{ name: "Create Project", id: "create-project", icon: IconPencil }
+]
+export const ADMIN_DASHBOARD_TABS: TabConfiguration[] = [...MEMBER_DASHBOARD_TABS, { name: "User Management", id: "user-management", icon: IconUser }]

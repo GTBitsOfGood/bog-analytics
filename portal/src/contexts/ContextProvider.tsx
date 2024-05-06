@@ -3,8 +3,10 @@ import React, { useEffect, useState } from "react";
 import { getRoles, getSession, getUserId } from '@/actions/Auth'
 
 import { AuthContext } from "@/contexts/AuthContext";
-import { Role, ScreenURLs } from "@/utils/types";
+import { DashboardContext } from "@/contexts/DashboardContext";
+import { Role, ScreenURLs, TabConfiguration } from "@/utils/types";
 import { ScreenContext } from "@/contexts/ScreenContext";
+import { MEMBER_DASHBOARD_TABS } from "@/utils/constants";
 
 export default function ContextProvider({
     children
@@ -16,6 +18,7 @@ export default function ContextProvider({
     const [isMobile, setIsMobile] = useState<boolean>(false);
     const [userId, setUserId] = useState<string | null>(null);
     const [currentScreen, setCurrentScreen] = useState<ScreenURLs>(ScreenURLs.HOME)
+    const [currentTab, setCurrentTab] = useState<TabConfiguration>(MEMBER_DASHBOARD_TABS[0])
 
     useEffect(() => {
         const sessionSetter = async () => {
@@ -70,7 +73,13 @@ export default function ContextProvider({
                     setUserId(id)
                 }
             }}>
-                {children}
+                <DashboardContext.Provider value={{
+                    currentTab, setCurrentTab: (tab: TabConfiguration) => {
+                        setCurrentTab(tab)
+                    }
+                }}>
+                    {children}
+                </DashboardContext.Provider>
             </AuthContext.Provider>
         </ScreenContext.Provider>)
 }

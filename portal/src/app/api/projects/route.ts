@@ -1,16 +1,18 @@
 import APIWrapper from "server/utils/APIWrapper";
 import { APIWrapperType, Role } from "@/utils/types"
-import { getProjects } from "server/mongodb/actions/Project";
+import { createProject, deleteProject, getProjects } from "server/mongodb/actions/Project";
+import { NextRequest } from "next/server";
 
 const route: APIWrapperType = APIWrapper({
     POST: {
         config: {
             requireToken: true,
             requiredVerifiedUser: true,
-            roles: [Role.ADMIN]
+            roles: [Role.MEMBER, Role.ADMIN]
         },
-        handler: async () => {
-
+        handler: async (req: NextRequest) => {
+            const { projectName } = await req.json();
+            return await createProject(projectName);
         },
     },
     GET: {
@@ -22,6 +24,17 @@ const route: APIWrapperType = APIWrapper({
         handler: async () => {
             const projects = await getProjects();
             return projects;
+        },
+    },
+    DELETE: {
+        config: {
+            requireToken: true,
+            requiredVerifiedUser: true,
+            roles: [Role.ADMIN]
+        },
+        handler: async (req: NextRequest) => {
+            const { projectName } = await req.json();
+            return await deleteProject(projectName);
         },
     }
 });

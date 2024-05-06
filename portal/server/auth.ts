@@ -21,7 +21,8 @@ const adapter = new MongodbAdapter(
 export const auth = new Lucia(adapter, {
     sessionCookie: {
         attributes: {
-            secure: process.env.NODE_ENV === "production"
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
         }
     },
     getUserAttributes: (attributes: InternalUser) => {

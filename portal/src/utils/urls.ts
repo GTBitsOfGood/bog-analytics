@@ -23,8 +23,16 @@ export const urls = {
             session: "/api/auth/session",
             roles: "/api/auth/roles",
             userId: "/api/auth/user-id",
+            users: {
+                verify: "/api/auth/verification/verify",
+                unverify: "/api/auth/verification/unverify",
+                promote: "/api/auth/roles/promote",
+                demote: "/api/auth/roles/demote",
+                delete: "/api/auth/account"
+            }
         },
-        project: "/api/projects"
+        project: "/api/projects",
+        users: "/api/users"
     },
     client: {
         home: "/",

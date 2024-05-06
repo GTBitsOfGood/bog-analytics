@@ -4,3 +4,7 @@ export function validateEmail(email: string): boolean {
     // Test the provided email against the regular expression
     return emailRegex.test(email);
 }
+
+export const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text)
+}

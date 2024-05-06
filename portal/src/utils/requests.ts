@@ -1,4 +1,5 @@
 import { InternalRequestData, InternalResponseData, ExternalRequestData, ExternalResponseData } from "src/utils/types";
+import { cookies } from "next/headers";
 
 export async function internalRequest<T>({
     url,

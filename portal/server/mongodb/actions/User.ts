@@ -23,6 +23,40 @@ export const getUserByEmail = async (email: string) => {
     return await UserModel.findOne({ email });
 }
 
+export const getAllUsers = async () => {
+    await dbConnect();
+    return await UserModel.find({});
+}
+
 export const validatePassword = async (userPassword: string, inputPassword: string) => {
     return await verify(userPassword, inputPassword, PASSWORD_SETTINGS);
+}
+
+export const promoteUser = async (email: string) => {
+    await dbConnect();
+    const user = await UserModel.findOneAndUpdate({ email }, { roles: [Role.ADMIN, Role.MEMBER] })
+    return user
+}
+
+export const demoteUser = async (email: string) => {
+    await dbConnect();
+    const user = await UserModel.findOneAndUpdate({ email }, { roles: [Role.MEMBER] })
+    return user
+}
+
+export const deleteUser = async (email: string) => {
+    await dbConnect();
+    const user = await UserModel.findOneAndDelete({ email })
+    return user
+}
+export const verifyUser = async (email: string) => {
+    await dbConnect();
+    const user = await UserModel.findOneAndUpdate({ email }, { verified: true })
+    return user
+}
+
+export const unverifyUser = async (email: string) => {
+    await dbConnect();
+    const user = await UserModel.findOneAndUpdate({ email }, { verified: false })
+    return user
 }
