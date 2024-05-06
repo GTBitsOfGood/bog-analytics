@@ -1,0 +1,1 @@
+export { portalProject } from '@/src/controllers/portal/project';

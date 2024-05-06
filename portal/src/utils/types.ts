@@ -1,5 +1,8 @@
+import { Icon, IconProps } from "@tabler/icons-react";
+import { Types } from "mongoose";
 import { NextApiRequest } from "next";
 import { NextRequest, NextResponse } from "next/server";
+import react, { ReactElement } from "react";
 
 export type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
 
@@ -34,6 +37,7 @@ export interface ExternalRequestData {
     method: HttpMethod;
     body?: { [key: string]: unknown };
     queryParams?: { [key: string]: string | number | boolean | undefined };
+    portalToken?: string
 }
 
 export interface ExternalResponseData<T> {
@@ -67,6 +71,7 @@ export interface InternalUser {
     _id: string;
     email: string;
     roles: Role[];
+    verified: boolean;
     createdAt?: Date;
     updatedAt?: Date;
 }
@@ -82,4 +87,27 @@ export interface Session {
 export enum Role {
     MEMBER = "Member",
     ADMIN = "Admin"
+}
+
+export enum ScreenURLs {
+    HOME = "",
+    DASHBOARD = "dashboard",
+    SIGN_IN = "sign-in",
+    SIGN_UP = "sign-up"
+}
+
+export interface TabConfiguration {
+    name: string;
+    id: string;
+    icon: react.ForwardRefExoticComponent<Omit<IconProps, "ref"> & react.RefAttributes<Icon>>;
+    component: () => JSX.Element;
+}
+
+export interface Project {
+    _id: string | Types.ObjectId;
+    clientApiKey: string;
+    serverApiKey: string;
+    projectName: string;
+    createdAt?: Date;
+    updatedAt?: Date;
 }

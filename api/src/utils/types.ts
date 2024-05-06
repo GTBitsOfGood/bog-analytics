@@ -98,6 +98,19 @@ export interface InternalResponseData<T> {
     payload?: T;
 }
 
+export interface ExternalRequestData {
+    url: string;
+    method: HttpMethod;
+    body?: { [key: string]: unknown };
+    queryParams?: { [key: string]: string | number | boolean | undefined };
+}
+
+export interface ExternalResponseData<T> {
+    success: boolean;
+    message?: string;
+    payload?: T;
+}
+
 export enum EventCategories {
     INTERACTION = "Interaction",
     ACTIVITY = "Activity",

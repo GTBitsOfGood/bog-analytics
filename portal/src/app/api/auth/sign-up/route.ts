@@ -14,7 +14,7 @@ const route = APIWrapper({
         config: {},
         handler: async (req) => {
             const body: SignUpRequestData = await req.json();
-            const user = await createUser(body.email as string, body.password as string)
+            const user = await createUser(body.email.toLowerCase() as string, body.password as string)
             const session = await auth.createSession(user._id, {});
             const sessionCookie = auth.createSessionCookie(session.id);
             cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);

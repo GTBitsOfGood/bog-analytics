@@ -20,6 +20,11 @@ const UserSchema = new Schema<InternalUser>(
             required: true,
 
         },
+        verified: {
+            type: Boolean,
+            required: true,
+            default: false,
+        },
         roles: {
             type: [String],
             required: true,

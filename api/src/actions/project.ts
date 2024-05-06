@@ -33,3 +33,8 @@ export const getAllProjects = async () => {
     return await ProjectModel.find({}).select("projectName _id");
 
 }
+
+export const getProjectsWithSensitiveInfo = async () => {
+    await dbConnect();
+    return await ProjectModel.find({});
+}

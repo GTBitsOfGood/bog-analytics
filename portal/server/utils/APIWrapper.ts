@@ -5,14 +5,13 @@ import {
     Role,
 } from "src/utils/types";
 import { APIWrapperType } from "@/utils/types"
-import { getUser } from "server/auth";
-import { User } from "lucia";
+import { validateRequest } from "server/auth";
 
 interface RouteConfig {
     requireToken?: boolean;
     roles?: Array<Role>;
     handleResponse?: boolean; // handleResponse if the route handles setting status code and body
-    requireEmailVerified?: boolean;
+    requiredVerifiedUser?: boolean;
 }
 
 interface Route<T> {
@@ -46,7 +45,7 @@ function APIWrapper(
         try {
             // Handle user access token + roles restrictions
             if (config?.requireToken) {
-                const user: User | null = await getUser();
+                const { user } = await validateRequest();
 
                 if (!user) {
                     return NextResponse.json({
@@ -60,6 +59,15 @@ function APIWrapper(
                         config.roles.length !== 0 &&
                         !config.roles.some((role) => user?.roles?.includes(role))
                     ) {
+                        return NextResponse.json({
+                            success: false,
+                            message: "You do not have permissions to access this API route",
+                        }, { status: 400 });
+                    }
+                }
+
+                if (config.requiredVerifiedUser) {
+                    if (!user.verified) {
                         return NextResponse.json({
                             success: false,
                             message: "You do not have permissions to access this API route",
