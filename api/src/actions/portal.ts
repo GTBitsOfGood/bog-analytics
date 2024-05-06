@@ -1,6 +1,6 @@
 import { externalRequest } from "@/src/utils/requests"
 import { urls } from "@/src/utils/urls"
-import { HttpMethod } from "../utils/types"
+import { HttpMethod } from "@/src/utils/types"
 
 export const validatePortalToken = async (portalToken: string) => {
     return externalRequest<boolean>({
