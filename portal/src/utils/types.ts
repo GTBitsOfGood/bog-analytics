@@ -65,6 +65,7 @@ export interface InternalUser {
     email: string;
     roles: Role[];
     verified: boolean;
+    passwordHash: string;
     createdAt?: Date;
     updatedAt?: Date;
 }
