@@ -76,7 +76,7 @@ export default function SignIn() {
                     </div>
                     <div className="flex flex-col gap-y-2">
                         <button className={`p-2 hover:bg-[#FFC55A] bg-[#FF7574] rounded-lg text-white hover:duration-500 w-full ${isLoggingIn ? "opacity-50" : ""}`} onClick={signInToAccount} disabled={isLoggingIn}>Sign In</button>
-                        <p className="text-sm text-gray-500">Don't have an account? <Link className="text-blue-800 underline" href={urls.client.signUp}>Sign Up</Link></p>
+                        <p className="text-sm text-gray-500">Don&apos;t have an account? <Link className="text-blue-800 underline" href={urls.client.signUp}>Sign Up</Link></p>
                         {error && <div className="text-sm text-red-500">
                             {error}
                         </div>}

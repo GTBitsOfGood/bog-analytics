@@ -52,8 +52,8 @@ export default function Dashboard() {
             {!isMobile && <div className={`px-10 py-6 text-black flex flex-col items-start md:min-w-[220px] ${isMobile ? "w-full" : ""} border-r-2`}>
                 <img src={Logo.src} className="h-24"></img>
                 <div className="flex flex-col gap-y-4 items-start">
-                    {tabs.map((tab) =>
-                        <button className={`text-lg ${selectedTab.id !== tab.id ? "hover:outline hover:outline-2" : ""} hover:outline-orange-500 from-[#FFC55A] to-[#FF7574] py-1 px-2 w-full text-left rounded-lg 
+                    {tabs.map((tab, index) =>
+                        <button key={index} className={`text-lg ${selectedTab.id !== tab.id ? "hover:outline hover:outline-2" : ""} hover:outline-orange-500 from-[#FFC55A] to-[#FF7574] py-1 px-2 w-full text-left rounded-lg 
                             ${selectedTab.id === tab.id ? "bg-gradient-to-r text-white" : ""}
                             flex flex-row gap-x-2 items-center`}
                             onClick={() => changeTab(tab)}
