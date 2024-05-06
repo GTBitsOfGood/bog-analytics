@@ -1,5 +1,5 @@
 function getPortalUrl() {
-    return process.env.NODE_ENV === "production" ? "https://portal.analytics.bitsofgood.org" : "http://localhost:3000"
+    return process.env.DEPLOY_CONTEXT === "production" ? "https://portal.analytics.bitsofgood.org" : "http://localhost:3000"
 }
 
 export const urls = {
