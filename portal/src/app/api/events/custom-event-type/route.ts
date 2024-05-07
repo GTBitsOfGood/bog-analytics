@@ -2,7 +2,7 @@ import APIWrapper from "server/utils/APIWrapper";
 import { APIWrapperType, Role } from "@/utils/types"
 import { getProject } from "server/mongodb/actions/Project";
 import { NextRequest } from "next/server";
-import { AnalyticsViewer, EventEnvironment } from "bog-analytics";
+import { AnalyticsManager, AnalyticsViewer, EventEnvironment } from "bog-analytics";
 import { urls } from "@/utils/urls";
 
 const route: APIWrapperType = APIWrapper({
@@ -22,6 +22,27 @@ const route: APIWrapperType = APIWrapper({
             return eventTypes
         },
     },
+    POST: {
+        config: {
+            requiredVerifiedUser: true,
+            roles: [Role.MEMBER]
+        },
+        handler: async (req: NextRequest) => {
+            const { properties, projectId, category, subcategory } = await req.json()
+            if (!projectId || !category || !subcategory) {
+                throw new Error("You must specify a project id, category, and subcategory");
+            }
+
+            const project = await getProject(projectId as string);
+            const analyticsManager = new AnalyticsManager({ apiBaseUrl: urls.analyticsUrl })
+            await analyticsManager.authenticate(project.serverApiKey);
+            const event = await analyticsManager.defineCustomEvent({
+                category, subcategory, properties, projectId
+            })
+            return event;
+
+        }
+    }
 });
 
 export let GET: APIWrapperType, POST: APIWrapperType, PATCH: APIWrapperType, DELETE: APIWrapperType, PUT: APIWrapperType;

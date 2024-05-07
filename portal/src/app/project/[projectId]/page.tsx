@@ -4,6 +4,7 @@ import { ScreenContext } from "@/contexts/ScreenContext";
 import { ScreenURLs } from "@/utils/types";
 import Navigator from "@/components/Navigator";
 import CustomEventTypesTable from "@/components/CustomEventTypesTable";
+import CreateCustomEventTypeWidget from "@/components/CreateCustomEventTypeWidget";
 
 
 function ProjectPage({ params }: { params: { projectId: string } }) {
@@ -15,7 +16,8 @@ function ProjectPage({ params }: { params: { projectId: string } }) {
 
     return (<main className="flex min-h-screen flex-row bg-[#fffcf4] max-w-screen max-h-screen text-black">
         <Navigator />
-        <div className="p-12 grow min-w-0">
+        <div className="p-12 grow min-w-0 flex flex-col gap-y-4 max-h-full flex-between">
+            <CreateCustomEventTypeWidget projectId={params.projectId} />
             <CustomEventTypesTable projectId={params.projectId} />
         </div>
     </main>

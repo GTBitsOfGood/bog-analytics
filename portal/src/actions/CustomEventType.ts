@@ -12,3 +12,15 @@ export const getCustomEventTypesByProject = (projectId: string) => {
     })
 
 }
+
+export const createCustomEventType = (projectId: string, category: string, subcategory: string, properties: string[]) => {
+    return internalRequest<CustomEventType[]>({
+        url: urls.baseUrl + urls.api.customEventTypes,
+        method: HttpMethod.POST,
+        body: {
+            projectId,
+            category, subcategory, properties
+        }
+    })
+
+}
