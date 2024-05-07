@@ -14,12 +14,16 @@ export default function Home() {
 
   useEffect(() => {
     setCurrentScreen(ScreenURLs.HOME)
+    if (sessionExists === null){
+      return;
+    }
+    
     if (sessionExists) {
       router.push(urls.client.dashboard)
     } else {
       router.push(urls.client.signIn)
     }
-  }, [])
+  }, [sessionExists])
 
   return (
     <main className="flex min-h-screen flex-row bg-[#fffcf4] items-center justify-center">
