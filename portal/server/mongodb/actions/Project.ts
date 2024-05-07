@@ -22,6 +22,17 @@ export const getProjects = async () => {
     })
 }
 
+export const getProject = async (projectId: string) => {
+    return externalRequest<Project>({
+        url: urls.analyticsUrl + urls.analyticsApi.project,
+        method: HttpMethod.GET,
+        portalToken: generatePortalToken(),
+        queryParams: {
+            projectId
+        }
+    })
+}
+
 export const deleteProject = async (projectName: string) => {
     return externalRequest<Project>({
         url: urls.analyticsUrl + urls.analyticsApi.project,

@@ -3,14 +3,13 @@ import { deleteCustomEventsByProject } from "@/src/actions/custom-event";
 import { deleteCustomEventTypesByProject } from "@/src/actions/custom-event-type";
 import { deleteCustomGraphTypesByProject } from "@/src/actions/custom-graph-type";
 import { deleteInputEventsByProject } from "@/src/actions/input-event";
-import { createProject, deleteProjectByName, getProjectIDByName, getProjectsWithSensitiveInfo } from "@/src/actions/project";
+import { createProject, deleteProjectByName, getProjectIDByName, getProjectsWithSensitiveInfo, getProjectByIdWithSensitiveInfo } from "@/src/actions/project";
 import { deleteVisitEventsByProject } from "@/src/actions/visit-event";
 import { relogRequestHandler } from "@/src/middleware/request-middleware";
 import APIWrapper from "@/src/utils/api-wrapper";
 import { Project } from "@/src/utils/types";
 import { randomUUID } from "crypto";
 import { Request } from "express";
-
 
 const projectRoute = APIWrapper({
     POST: {
@@ -44,7 +43,12 @@ const projectRoute = APIWrapper({
             requirePortalToken: true
         },
         handler: async (req: Request) => {
-            return await getProjectsWithSensitiveInfo();
+            const projectId = req.query.projectId;
+            if (!projectId) {
+                return await getProjectsWithSensitiveInfo();
+            } else {
+                return await getProjectByIdWithSensitiveInfo(projectId as string);
+            }
         }
     },
     DELETE: {

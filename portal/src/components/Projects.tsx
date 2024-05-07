@@ -6,7 +6,9 @@ import { DashboardContext } from "@/contexts/DashboardContext";
 import { MEMBER_DASHBOARD_TABS } from "@/utils/constants";
 import { copyToClipboard } from "@/utils/string";
 import { Project, TabConfiguration } from "@/utils/types";
+import { urls } from "@/utils/urls";
 import { IconCopy } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 
 export default function Projects() {
@@ -16,7 +18,7 @@ export default function Projects() {
     const [projectInDeletion, setProjectInDeletion] = useState<boolean>(false);
     const { sessionExists, isAdmin } = useContext(AuthContext);
     const { setCurrentTab } = useContext(DashboardContext);
-
+    const router = useRouter();
     useEffect(() => {
         const projectSetter = async () => {
             const retrievedProjects = await getProjects();
@@ -81,7 +83,7 @@ export default function Projects() {
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 flex flex-row gap-x-2">
-                                            {/* <button className="font-medium text-blue-600 hover:underline">Edit</button> */}
+                                            <button className="font-medium text-blue-600 hover:underline" onClick={() => router.push(`${urls.client.project}/${project._id}`)}>Manage</button>
                                             <button className={`font-medium text-red-600 hover:underline ${(projectInDeletion || !isAdmin) ? "opacity-50" : ""}`} onClick={async () => await projectDeletionHandler(project.projectName)} disabled={projectInDeletion || !isAdmin}>Delete</button>
                                         </td>
                                     </tr>

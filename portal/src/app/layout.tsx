@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import ContextProvider from "@/contexts/ContextProvider";
+import Navigator from "@/components/Navigator";
 
 const inter = Outfit({ subsets: ["latin"] });
 
