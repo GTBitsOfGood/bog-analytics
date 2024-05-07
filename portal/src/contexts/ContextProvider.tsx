@@ -23,7 +23,7 @@ export default function ContextProvider({
     useEffect(() => {
         const sessionSetter = async () => {
             const session = await getSession();
-            setSessionExists(session);
+            setSessionExists(session ?? false);
         }
 
         const adminSetter = async () => {
