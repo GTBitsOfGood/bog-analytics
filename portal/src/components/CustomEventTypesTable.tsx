@@ -1,14 +1,24 @@
 "use client"
 import { useContext, useEffect, useState } from "react";
-import { CustomEventType } from "@/utils/types";
-import { getCustomEventTypesByProject } from "@/actions/CustomEventType";
+import { CustomEventType } from "bog-analytics";
+import { deleteCustomEventType, getCustomEventTypesByProject } from "@/actions/CustomEventType";
 import { DashboardContext } from "@/contexts/DashboardContext";
 
 
 function CustomEventTypesTable({ projectId }: { projectId: string }) {
     const [customEventTypes, setCustomEventTypes] = useState<CustomEventType[]>([])
-    const { customEventTypeRefreshKey } = useContext(DashboardContext);
+    const { customEventTypeRefreshKey, setCustomEventTypeRefreshKey } = useContext(DashboardContext);
     const [loaded, setLoaded] = useState<boolean>(false);
+    const [deletingEventType, setDeletingEventType] = useState(false);
+
+    const deleteEventTypeHandler = async (category: string, subcategory: string) => {
+        setDeletingEventType(true);
+
+        await deleteCustomEventType(projectId, category, subcategory);
+
+        setCustomEventTypeRefreshKey(!customEventTypeRefreshKey)
+        setDeletingEventType(false);
+    }
     useEffect(() => {
         const customEventTypeGetter = async () => {
             const retrievedEventTypes = await getCustomEventTypesByProject(projectId);
@@ -42,6 +52,9 @@ function CustomEventTypesTable({ projectId }: { projectId: string }) {
                                                 return (<div className="rounded-lg p-1 text-white odd:bg-[#FF7574] even:bg-[#FFC55A] " key={index}>{property}</div>)
                                             })}
                                         </div>
+                                        <button className={`w-fit rounded-lg bg-red-500 p-1 text-white hover:opacity-75 ${deletingEventType ? "opacity-50" : ""}`}
+                                            disabled={deletingEventType}
+                                            onClick={async () => { await deleteEventTypeHandler(eventType.category, eventType.subcategory) }}>Delete Event Type</button>
                                     </div>
                                 </th>
                             </tr>

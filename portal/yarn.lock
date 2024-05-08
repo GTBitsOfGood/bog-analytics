@@ -764,10 +764,10 @@ binary-extensions@^2.0.0:
   resolved "https://registry.yarnpkg.com/binary-extensions/-/binary-extensions-2.3.0.tgz#f6e14a97858d327252200242d4ccfe522c445522"
   integrity sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==
 
-bog-analytics@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/bog-analytics/-/bog-analytics-1.0.0.tgz#6c3dc117d45d0caf77f987d88038883257535d56"
-  integrity sha512-SLASKcDt/WQm3k6a8au4NDxwxXbvL+VoBXLUoMlfnJCYSPuCRfRlD1CLhAfMXHARJTbNH1f8DbUS2vMmbNa28Q==
+bog-analytics@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/bog-analytics/-/bog-analytics-1.0.1.tgz#2da6256a9dba75cb69faa379756af86894089868"
+  integrity sha512-cpvJW1vGpWPwazKwbFcLb7TmTSe4b711b/RnI08KxugXkXMhWiYG2pIfFkqgQJf8CgS3e5rKbsjmlS/DWWK82g==
 
 brace-expansion@^1.1.7:
   version "1.1.11"

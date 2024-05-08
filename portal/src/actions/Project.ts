@@ -1,5 +1,6 @@
 import { internalRequest } from "@/utils/requests"
-import { HttpMethod, Project } from "@/utils/types"
+import { HttpMethod } from "@/utils/types"
+import { Project } from "bog-analytics"
 import { urls } from "@/utils/urls"
 
 export const getProjects = () => {

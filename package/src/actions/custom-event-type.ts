@@ -15,6 +15,19 @@ export const createCustomEventType = async (apiBaseUrl: string, apiKey: string, 
     })
 }
 
+export const deleteCustomEventType = async (apiBaseUrl: string, apiKey: string, category: string, subcategory: string): Promise<CustomEventType> => {
+    return externalRequest<CustomEventType>({
+        url: apiBaseUrl + urls.events.customEventType,
+        method: HttpMethod.DELETE,
+        serverApiKey: apiKey,
+        body: {
+            category,
+            subcategory,
+        }
+    })
+}
+
+
 export const getCustomEventTypes = async (apiBaseUrl: string, projectName: string): Promise<CustomEventType[]> => {
     return externalRequest<CustomEventType[]>({
         url: apiBaseUrl + urls.events.customEventType,

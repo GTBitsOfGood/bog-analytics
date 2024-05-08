@@ -12,7 +12,8 @@ import {
     InputEventProperties,
     CustomEvent,
     CustomEventType,
-    CustomGraphType
+    CustomGraphType,
+    Project
 } from "@/utils/types";
 
 export {
@@ -29,5 +30,6 @@ export {
     InputEventProperties,
     CustomEvent,
     CustomEventType,
-    CustomGraphType
+    CustomGraphType,
+    Project
 };

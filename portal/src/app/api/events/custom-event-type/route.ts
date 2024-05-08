@@ -40,9 +40,26 @@ const route: APIWrapperType = APIWrapper({
                 category, subcategory, properties, projectId
             })
             return event;
-
         }
-    }
+    },
+    DELETE: {
+        config: {
+            requiredVerifiedUser: true,
+            roles: [Role.MEMBER]
+        },
+        handler: async (req: NextRequest) => {
+            const { projectId, category, subcategory } = await req.json()
+            if (!projectId || !category || !subcategory) {
+                throw new Error("You must specify a project id, category, and subcategory");
+            }
+
+            const project = await getProject(projectId as string);
+            const analyticsManager = new AnalyticsManager({ apiBaseUrl: urls.analyticsUrl })
+            await analyticsManager.authenticate(project.serverApiKey);
+            const event = analyticsManager.deleteCustomEventType(category, subcategory);
+            return event;
+        }
+    },
 });
 
 export let GET: APIWrapperType, POST: APIWrapperType, PATCH: APIWrapperType, DELETE: APIWrapperType, PUT: APIWrapperType;

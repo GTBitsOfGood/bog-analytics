@@ -96,20 +96,3 @@ export interface TabConfiguration {
     id: string;
     icon: react.ForwardRefExoticComponent<Omit<IconProps, "ref"> & react.RefAttributes<Icon>>;
 }
-
-export interface Project {
-    _id: string | Types.ObjectId;
-    clientApiKey: string;
-    serverApiKey: string;
-    projectName: string;
-    createdAt?: Date;
-    updatedAt?: Date;
-}
-
-export interface CustomEventType {
-    _id: string | Types.ObjectId;
-    category: string;
-    subcategory: string;
-    properties: string[]
-    projectId: string | Types.ObjectId;
-}

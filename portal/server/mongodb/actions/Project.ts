@@ -1,5 +1,6 @@
 import { externalRequest } from "@/utils/requests"
-import { HttpMethod, Project } from "@/utils/types"
+import { HttpMethod } from "@/utils/types"
+import { Project } from "bog-analytics"
 import { urls } from "@/utils/urls"
 import { generatePortalToken } from "server/mongodb/actions/Auth"
 

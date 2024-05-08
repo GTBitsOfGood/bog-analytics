@@ -5,9 +5,10 @@ import { AuthContext } from "@/contexts/AuthContext";
 import { DashboardContext } from "@/contexts/DashboardContext";
 import { MEMBER_DASHBOARD_TABS } from "@/utils/constants";
 import { copyToClipboard } from "@/utils/string";
-import { Project, TabConfiguration } from "@/utils/types";
+import { TabConfiguration } from "@/utils/types";
 import { urls } from "@/utils/urls";
 import { IconCopy } from "@tabler/icons-react";
+import { Project } from "bog-analytics";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 
