@@ -32,13 +32,15 @@ export const urls = {
             }
         },
         project: "/api/projects",
+        customEventTypes: "/api/events/custom-event-type",
         users: "/api/users"
     },
     client: {
         home: "/",
         dashboard: "/dashboard",
         signIn: "/sign-in",
-        signUp: "/sign-up"
+        signUp: "/sign-up",
+        project: "/project"
     },
     analyticsApi: {
         project: "/api/portal/project"

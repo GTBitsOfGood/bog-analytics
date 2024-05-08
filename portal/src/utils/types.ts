@@ -87,7 +87,8 @@ export enum ScreenURLs {
     HOME = "",
     DASHBOARD = "dashboard",
     SIGN_IN = "sign-in",
-    SIGN_UP = "sign-up"
+    SIGN_UP = "sign-up",
+    PROJECT = "project"
 }
 
 export interface TabConfiguration {
@@ -103,4 +104,12 @@ export interface Project {
     projectName: string;
     createdAt?: Date;
     updatedAt?: Date;
+}
+
+export interface CustomEventType {
+    _id: string | Types.ObjectId;
+    category: string;
+    subcategory: string;
+    properties: string[]
+    projectId: string | Types.ObjectId;
 }

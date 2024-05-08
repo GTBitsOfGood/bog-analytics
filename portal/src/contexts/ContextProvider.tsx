@@ -19,6 +19,7 @@ export default function ContextProvider({
     const [userId, setUserId] = useState<string | null>(null);
     const [currentScreen, setCurrentScreen] = useState<ScreenURLs>(ScreenURLs.HOME)
     const [currentTab, setCurrentTab] = useState<TabConfiguration>(MEMBER_DASHBOARD_TABS[0])
+    const [customEventTypeRefreshKey, setCustomEventTypeRefreshKey] = useState<boolean>(false);
 
     useEffect(() => {
         const sessionSetter = async () => {
@@ -76,6 +77,9 @@ export default function ContextProvider({
                 <DashboardContext.Provider value={{
                     currentTab, setCurrentTab: (tab: TabConfiguration) => {
                         setCurrentTab(tab)
+                    },
+                    customEventTypeRefreshKey, setCustomEventTypeRefreshKey: (refreshKey) => {
+                        setCustomEventTypeRefreshKey(refreshKey)
                     }
                 }}>
                     {children}

@@ -39,6 +39,10 @@ export const getProjectsWithSensitiveInfo = async () => {
     return await ProjectModel.find({});
 }
 
+export const getProjectByIdWithSensitiveInfo = async (projectId: string) => {
+    await dbConnect();
+    return await ProjectModel.findOne({ _id: projectId });
+}
 
 export const deleteProjectByName = async (projectName: string) => {
     await dbConnect();
