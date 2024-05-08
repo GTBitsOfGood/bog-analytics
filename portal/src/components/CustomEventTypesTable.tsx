@@ -17,7 +17,7 @@ function CustomEventTypesTable({ projectId }: { projectId: string }) {
         }
 
         customEventTypeGetter().then().catch();
-    }, [customEventTypeRefreshKey])
+    }, [customEventTypeRefreshKey, projectId])
 
     return (<main className="text-black overflow-y-scroll">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full overflow-x-scroll overflow-y-scroll">
@@ -38,8 +38,8 @@ function CustomEventTypesTable({ projectId }: { projectId: string }) {
                                         <p className="font-light"><span className="underline font-bold">Category:</span> {eventType.category}</p>
                                         <p className="font-light"><span className="underline font-bold">Subcategory:</span> {eventType.subcategory}</p>
                                         <div className="flex flex-row gap-x-2 items-center flex-wrap gap-y-2">
-                                            <span className="underline font-bold">Properties:</span> {eventType.properties.map((property: string, propIndex: number) => {
-                                                return (<div className="rounded-lg p-1 text-white odd:bg-[#FF7574] even:bg-[#FFC55A] ">{property}</div>)
+                                            <span className="underline font-bold">Properties:</span> {eventType.properties.map((property: string, index: number) => {
+                                                return (<div className="rounded-lg p-1 text-white odd:bg-[#FF7574] even:bg-[#FFC55A] " key={index}>{property}</div>)
                                             })}
                                         </div>
                                     </div>

@@ -2,7 +2,7 @@
 
 import { createCustomEventType } from "@/actions/CustomEventType";
 import { DashboardContext } from "@/contexts/DashboardContext";
-import { IconTablePlus } from "@tabler/icons-react";
+import { IconTablePlus, IconTrash } from "@tabler/icons-react";
 import { useContext, useState } from "react";
 
 
@@ -82,7 +82,7 @@ function CreateCustomEventTypeWidget({ projectId }: { projectId: string }) {
                                                 onChange={({ target }) => setCurrentProperty(target.value)}></input>
                                             <button className="p-2 hover:from-[#FFC55A] hover:to-[#FF7574] hover:bg-gradient-to-r bg-[#FF7574] hover:duration-500 w-fit rounded-lg text-white"
                                                 onClick={() => {
-                                                    if (!currentProperty) {
+                                                    if (!currentProperty || customProperties.includes(currentProperty)) {
                                                         return;
                                                     }
                                                     setCustomProperties([...customProperties, currentProperty])
@@ -90,7 +90,13 @@ function CreateCustomEventTypeWidget({ projectId }: { projectId: string }) {
                                                 }}>Add Property</button>
                                             {customProperties.map((property: string, index: number) => {
                                                 return (
-                                                    <div className="rounded-lg p-2 text-white odd:bg-[#FFC55A] even:bg-[#FF7574] text-center">{property}</div>
+                                                    <div className="rounded-lg p-2 text-white odd:bg-[#FFC55A] even:bg-[#FF7574] text-center flex flex-row gap-x-2 items-center" key={index}>
+                                                        <p>{property}</p>
+                                                        <IconTrash className="h-4 w-4 cursor-pointer" onClick={() => {
+                                                            const filteredList = customProperties.filter((prop: string) => prop !== property);
+                                                            setCustomProperties([...filteredList])
+                                                        }} />
+                                                    </div>
                                                 )
                                             })}
                                         </div>
