@@ -11,10 +11,10 @@ import AnalyticsLogin from "assets/img/analytics-login.svg";
 import AnalyticsLogin2 from "assets/img/analytics-login-2.svg";
 import Link from "next/link";
 import { validateEmail } from "@/utils/string";
-import { createAccount, getRoles, getSession } from "@/actions/Auth";
+import { createAccount, getRoles, getSession, getVerificationStatus } from "@/actions/Auth";
 
 export default function SignUp() {
-    const { sessionExists, setUserId, setSessionExists, setIsAdmin } = useContext(AuthContext);
+    const { sessionExists, setUserId, setSessionExists, setIsAdmin, setIsVerified } = useContext(AuthContext);
     const { setCurrentScreen, isMobile } = useContext(ScreenContext);
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
@@ -60,7 +60,8 @@ export default function SignUp() {
             return;
         }
         setSessionExists(await getSession());
-        setIsAdmin((await getRoles()).includes(Role.ADMIN))
+        setIsAdmin((await getRoles()).includes(Role.ADMIN));
+        setIsVerified(await getVerificationStatus());
         setIsSigningUp(false);
         router.push(urls.client.dashboard)
     }

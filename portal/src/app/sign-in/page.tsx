@@ -10,11 +10,11 @@ import Logo from "assets/img/logo.png";
 import AnalyticsLogin from "assets/img/analytics-login.svg";
 import AnalyticsLogin2 from "assets/img/analytics-login-2.svg";
 import Link from "next/link";
-import { getRoles, getSession, loginToAccount } from "@/actions/Auth";
+import { getRoles, getSession, getVerificationStatus, loginToAccount } from "@/actions/Auth";
 import { validateEmail } from "@/utils/string";
 
 export default function SignIn() {
-    const { sessionExists, setIsAdmin, setSessionExists, setUserId } = useContext(AuthContext);
+    const { sessionExists, setIsAdmin, setSessionExists, setUserId, setIsVerified } = useContext(AuthContext);
     const { setCurrentScreen, isMobile } = useContext(ScreenContext);
     const router = useRouter();
     const [email, setEmail] = useState<string>("");
@@ -54,6 +54,7 @@ export default function SignIn() {
         setSessionExists(await getSession());
         setIsAdmin((await getRoles()).includes(Role.ADMIN))
         setIsLoggingIn(false);
+        setIsVerified(await getVerificationStatus());
         router.push(urls.client.dashboard)
     }
 

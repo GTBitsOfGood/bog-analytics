@@ -14,7 +14,7 @@ import { urls } from "@/utils/urls";
 export default function Navigator() {
 
     const { isMobile } = useContext(ScreenContext);
-    const { setIsAdmin, setUserId, isAdmin, sessionExists, setSessionExists } = useContext(AuthContext);
+    const { setIsAdmin, setUserId, isAdmin, sessionExists, setSessionExists, setIsVerified } = useContext(AuthContext);
     const { currentTab, setCurrentTab } = useContext(DashboardContext);
     const [isLoggingOut, setIsLoggingOut] = useState<boolean>(false);
     const router = useRouter();
@@ -26,6 +26,7 @@ export default function Navigator() {
         setIsAdmin(false);
         setUserId(null);
         setIsLoggingOut(false);
+        setIsVerified(null);
         router.push(urls.client.signIn);
     }
 

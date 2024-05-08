@@ -17,7 +17,7 @@ export default function Projects() {
     const [projects, setProjects] = useState<Project[]>([]);
     const [refreshKey, setRefreshKey] = useState<boolean>(false);
     const [projectInDeletion, setProjectInDeletion] = useState<boolean>(false);
-    const { sessionExists, isAdmin } = useContext(AuthContext);
+    const { sessionExists, isAdmin, isVerified } = useContext(AuthContext);
     const { setCurrentTab } = useContext(DashboardContext);
     const router = useRouter();
     useEffect(() => {
@@ -26,10 +26,10 @@ export default function Projects() {
             setProjects([...retrievedProjects]);
         }
 
-        if (sessionExists) {
+        if (sessionExists && isVerified) {
             projectSetter().then().catch();
         }
-    }, [sessionExists, refreshKey])
+    }, [sessionExists, refreshKey, isVerified])
 
     const projectDeletionHandler = async (projectName: string) => {
         setProjectInDeletion(true);
@@ -45,6 +45,9 @@ export default function Projects() {
                 const createProjectTab = MEMBER_DASHBOARD_TABS.filter((tab: TabConfiguration) => tab.id === "create-project")
                 setCurrentTab(createProjectTab[0]);
             }}>Create Project</button>
+            {
+                isVerified !== null && !isVerified && <div className="text-xs text-red-500 uppercase py-2 rounded-lg font-bold">You must be verified to view projects</div>
+            }
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg max-h-full w-full overflow-x-scroll overflow-y-scroll">
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 h-full">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50">
@@ -65,7 +68,7 @@ export default function Projects() {
                     </thead>
                     <tbody>
                         {
-                            projects.map((project: Project, index: number) => {
+                            isVerified && projects.map((project: Project, index: number) => {
                                 return (
                                     <tr className="odd:bg-white even:bg-gray-50 border-b" key={index}>
                                         <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">

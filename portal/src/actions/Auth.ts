@@ -8,6 +8,7 @@ const signOutUrl = urls.baseUrl + urls.api.auth.signout;
 const sessionUrl = urls.baseUrl + urls.api.auth.session;
 const userIdUrl = urls.baseUrl + urls.api.auth.userId;
 const rolesUrl = urls.baseUrl + urls.api.auth.roles;
+const verifiedUrl = urls.baseUrl + urls.api.auth.verified;
 
 export const createAccount = async (
     email: string,
@@ -58,6 +59,15 @@ export const getUserId = async () => {
     });
 
 }
+
+export const getVerificationStatus = async () => {
+    return internalRequest<boolean | null>({
+        url: verifiedUrl,
+        method: HttpMethod.GET,
+    });
+
+}
+
 
 
 export const getRoles = async () => {

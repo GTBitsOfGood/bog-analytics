@@ -16,13 +16,17 @@ export default function CreateProject() {
 
     const [creatingProject, setCreatingProject] = useState<boolean>(false);
 
-    const { sessionExists } = useContext(AuthContext);
+    const { sessionExists, isVerified } = useContext(AuthContext);
 
     useEffect(() => {
     }, [])
 
     const createProjectHandler = async () => {
         setError("")
+        if (!isVerified) {
+            setError("You must be verified to create projects")
+            return;
+        }
         setCreatingProject(true);
         if (!projectName) {
             setCreatingProject(false);

@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { getRoles, getSession, getUserId } from '@/actions/Auth'
+import { getRoles, getSession, getUserId, getVerificationStatus } from '@/actions/Auth'
 
 import { AuthContext } from "@/contexts/AuthContext";
 import { DashboardContext } from "@/contexts/DashboardContext";
@@ -15,6 +15,7 @@ export default function ContextProvider({
 }) {
     const [sessionExists, setSessionExists] = useState<boolean | null>(null);
     const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+    const [isVerified, setIsVerified] = useState<boolean | null>(null);
     const [isMobile, setIsMobile] = useState<boolean>(false);
     const [userId, setUserId] = useState<string | null>(null);
     const [currentScreen, setCurrentScreen] = useState<ScreenURLs>(ScreenURLs.HOME)
@@ -38,6 +39,12 @@ export default function ContextProvider({
                 setUserId(id);
             }
         }
+
+        const verifiedSetter = async () => {
+            const verified = await getVerificationStatus();
+            setIsVerified(verified);
+        }
+
         const handleResize = () => {
             const mobileWidthThreshold = 768;
             setIsMobile(window.innerWidth < mobileWidthThreshold);
@@ -47,6 +54,7 @@ export default function ContextProvider({
         sessionSetter().then().catch();
         adminSetter().then().catch();
         userIdSetter().then().catch()
+        verifiedSetter().then().catch()
         handleResize();
         window.addEventListener('resize', handleResize);
 
@@ -72,6 +80,9 @@ export default function ContextProvider({
                     setIsAdmin(isAdmin)
                 }, userId, setUserId: (id: string | null) => {
                     setUserId(id)
+                },
+                isVerified, setIsVerified: (verificationStatus: boolean | null) => {
+                    setIsVerified(verificationStatus)
                 }
             }}>
                 <DashboardContext.Provider value={{

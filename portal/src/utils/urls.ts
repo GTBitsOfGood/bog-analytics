@@ -23,6 +23,7 @@ export const urls = {
             session: "/api/auth/session",
             roles: "/api/auth/roles",
             userId: "/api/auth/user-id",
+            verified: "/api/auth/verified",
             users: {
                 verify: "/api/auth/verification/verify",
                 unverify: "/api/auth/verification/unverify",
