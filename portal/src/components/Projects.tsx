@@ -48,7 +48,7 @@ export default function Projects() {
             {
                 isVerified !== null && !isVerified && <div className="text-xs text-red-500 uppercase py-2 rounded-lg font-bold">You must be verified to view projects</div>
             }
-            <div className="relative overflow-x-auto shadow-md sm:rounded-lg max-h-full w-full overflow-x-scroll overflow-y-scroll">
+            <div className="relative overflow-x-auto shadow-md sm:rounded-lg max-h-full w-full overflow-x-scroll">
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 h-full">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                         <tr>

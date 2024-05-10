@@ -38,7 +38,7 @@ function CreateCustomEventTypeWidget({ projectId }: { projectId: string }) {
     }
 
     return (<main className="text-black">
-        <div className="relative overflow-x-auto shadow-md sm:rounded-lg max-h-full w-full overflow-x-scroll overflow-y-scroll bg-white ">
+        <div className="relative overflow-x-auto shadow-sm sm:rounded-lg max-h-full w-full overflow-x-scroll overflow-y-scroll bg-white ">
 
             {!inCreation && <div className="flex flex-row justify-center gap-x-2 items-center text-gray-600 cursor-pointer p-4" onClick={() => setInCreation(true)}>
                 <p>Create Custom Event Type</p>

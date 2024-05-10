@@ -13,7 +13,7 @@ import { DashboardContext } from "@/contexts/DashboardContext";
 import Navigator from "@/components/Navigator";
 
 export default function Dashboard() {
-    const { setCurrentScreen } = useContext(ScreenContext);
+    const { setCurrentScreen, isMobile } = useContext(ScreenContext);
     const { sessionExists } = useContext(AuthContext);
     const { currentTab } = useContext(DashboardContext);
     const router = useRouter();
@@ -28,9 +28,9 @@ export default function Dashboard() {
     }, [sessionExists])
 
     return (
-        <main className="flex min-h-screen flex-row bg-[#fffcf4] max-w-screen max-h-screen">
+        <main className={`flex min-h-screen ${isMobile ? "flex-col" : "flex-row"} bg-[#fffcf4] max-w-screen max-h-screen`}>
             <Navigator></Navigator>
-            <div className="p-12 grow min-w-0">
+            <div className={`p-12 grow min-w-0 min-h-0 ${isMobile ? "min-h-0 overflow-y-scroll max-h-full" : ""}`}>
                 {currentTab.id === "project-list" && <Projects />}
                 {currentTab.id === "create-project" && <CreateProject />}
                 {currentTab.id === "user-management" && <UserManagement />}
