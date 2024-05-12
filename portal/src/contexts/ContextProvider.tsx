@@ -21,6 +21,8 @@ export default function ContextProvider({
     const [currentScreen, setCurrentScreen] = useState<ScreenURLs>(ScreenURLs.HOME)
     const [currentTab, setCurrentTab] = useState<TabConfiguration>(MEMBER_DASHBOARD_TABS[0])
     const [customEventTypeRefreshKey, setCustomEventTypeRefreshKey] = useState<boolean>(false);
+    const [projectRefreshKey, setProjectRefreshKey] = useState<boolean>(false);
+    const [openProjectDeletionModal, setOpenProjectDeletionModal] = useState<boolean>(false);
 
     useEffect(() => {
         const sessionSetter = async () => {
@@ -91,7 +93,15 @@ export default function ContextProvider({
                     },
                     customEventTypeRefreshKey, setCustomEventTypeRefreshKey: (refreshKey) => {
                         setCustomEventTypeRefreshKey(refreshKey)
+                    },
+                    projectRefreshKey, setProjectRefreshKey: (refreshKey) => {
+                        setProjectRefreshKey(refreshKey)
+                    },
+                    openProjectDeletionModal, setOpenProjectDeletionModal: (open) => {
+                        setOpenProjectDeletionModal(open)
                     }
+
+
                 }}>
                     {children}
                 </DashboardContext.Provider>

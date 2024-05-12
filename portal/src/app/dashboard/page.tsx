@@ -11,6 +11,7 @@ import UserManagement from "@/components/UserManagement";
 import CreateProject from "@/components/CreateProject";
 import { DashboardContext } from "@/contexts/DashboardContext";
 import Navigator from "@/components/Navigator";
+import DeleteProjectModal from "@/components/DeleteProjectModal";
 
 export default function Dashboard() {
     const { setCurrentScreen, isMobile } = useContext(ScreenContext);
@@ -34,6 +35,7 @@ export default function Dashboard() {
                 {currentTab.id === "project-list" && <Projects />}
                 {currentTab.id === "create-project" && <CreateProject />}
                 {currentTab.id === "user-management" && <UserManagement />}
+
             </div>
         </main>
     );

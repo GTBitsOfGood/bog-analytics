@@ -11,14 +11,15 @@ import { IconCopy } from "@tabler/icons-react";
 import { Project } from "bog-analytics";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
+import DeleteProjectModal from "./DeleteProjectModal";
 
 export default function Projects() {
 
     const [projects, setProjects] = useState<Project[]>([]);
-    const [refreshKey, setRefreshKey] = useState<boolean>(false);
-    const [projectInDeletion, setProjectInDeletion] = useState<boolean>(false);
+    const [selectedDeletionProject, setSelectedDeletionProject] = useState<string>("");
+
     const { sessionExists, isAdmin, isVerified } = useContext(AuthContext);
-    const { setCurrentTab } = useContext(DashboardContext);
+    const { setCurrentTab, projectRefreshKey, setOpenProjectDeletionModal } = useContext(DashboardContext);
     const router = useRouter();
     useEffect(() => {
         const projectSetter = async () => {
@@ -29,15 +30,12 @@ export default function Projects() {
         if (sessionExists && isVerified) {
             projectSetter().then().catch();
         }
-    }, [sessionExists, refreshKey, isVerified])
+    }, [sessionExists, projectRefreshKey, isVerified])
 
-    const projectDeletionHandler = async (projectName: string) => {
-        setProjectInDeletion(true);
-        await deleteProject(projectName)
-        setRefreshKey(!refreshKey)
-        setProjectInDeletion(false);
+    const deletionModalHandler = (projectName: string) => {
+        setSelectedDeletionProject(projectName)
+        setOpenProjectDeletionModal(true)
     }
-
 
     return (
         <main className="h-full w-full flex flex-col gap-y-2">
@@ -88,7 +86,9 @@ export default function Projects() {
                                         </td>
                                         <td className="px-6 py-4 flex flex-row gap-x-2">
                                             <button className="font-medium text-blue-600 hover:underline" onClick={() => router.push(`${urls.client.project}/${project._id}`)}>Manage</button>
-                                            <button className={`font-medium text-red-600 hover:underline ${(projectInDeletion || !isAdmin) ? "opacity-50" : ""}`} onClick={async () => await projectDeletionHandler(project.projectName)} disabled={projectInDeletion || !isAdmin}>Delete</button>
+                                            {isAdmin && <button className={`font-medium text-red-600 hover:underline`} onClick={() => deletionModalHandler(project.projectName)}
+                                                data-modal-target="deletion-modal"
+                                                data-modal-toggle="deletion-modal" >Delete</button>}
                                         </td>
                                     </tr>
                                 )
@@ -97,6 +97,7 @@ export default function Projects() {
                     </tbody>
                 </table>
             </div>
+            <DeleteProjectModal projectName={selectedDeletionProject}></DeleteProjectModal>
         </main>
     );
 }
