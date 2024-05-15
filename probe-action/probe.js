@@ -1,5 +1,5 @@
 import { Builder, By, Key, until } from 'selenium-webdriver';
-import { Options } from 'selenium-webdriver/chrome.js';
+import { Options } from 'selenium-webdriver/firefox.js';
 
 // Define the URL of the webpage you want to visit
 const url = 'https://bog-analytics.streamlit.app/';
@@ -8,15 +8,14 @@ const url = 'https://bog-analytics.streamlit.app/';
 const buttonText = 'app back up';
 
 async function main() {
-    // Create Chrome options with headless mode
-    let chromeOptions = new Options();
-    chromeOptions.addArguments('--headless');
-    chromeOptions.addArguments('--disable-infobars')
-    chromeOptions.addArguments('--disable-dev-shm-usage')
-    chromeOptions.addArguments('--no-sandbox')
-    chromeOptions.addArguments('--remote-debugging-port=9222')
+    let firefoxOptions = new Options();
+    firefoxOptions.addArguments('--headless');
+    firefoxOptions.addArguments('--disable-infobars')
+    firefoxOptions.addArguments('--disable-dev-shm-usage')
+    firefoxOptions.addArguments('--no-sandbox')
+    // firefoxOptions.addArguments('--remote-debugging-port=9222')
     
-    let driver = await new Builder().forBrowser('chrome').setChromeOptions(chromeOptions).build();
+    let driver = await new Builder().forBrowser('firefox').setFirefoxOptions(firefoxOptions).build();
     
     try {
         await driver.get(url);
