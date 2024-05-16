@@ -10,10 +10,6 @@ const buttonText = 'app back up';
 async function main() {
     let firefoxOptions = new Options();
     firefoxOptions.addArguments('--headless');
-    firefoxOptions.addArguments('--disable-infobars')
-    firefoxOptions.addArguments('--disable-dev-shm-usage')
-    firefoxOptions.addArguments('--no-sandbox')
-    // firefoxOptions.addArguments('--remote-debugging-port=9222')
     
     let driver = await new Builder().forBrowser('firefox').setFirefoxOptions(firefoxOptions).build();
     

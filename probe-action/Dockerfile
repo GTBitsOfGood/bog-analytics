@@ -36,6 +36,7 @@ RUN FIREFOX_SETUP=firefox-setup.tar.bz2 && \
     tar xjf $FIREFOX_SETUP -C /opt/ && \
     ln -s /opt/firefox/firefox /usr/bin/firefox && \
     rm $FIREFOX_SETUP
-    
+
+ENV MOZ_HEADLESS=1
 # Run the Node.js script
 CMD ["node", "/app/probe.js"]
