@@ -13,30 +13,25 @@ RUN npm install
 # Copy the Selenium script files to the working directory
 COPY ./probe.js ./
 
-RUN apt-get update -y \
-&& apt-get install --no-install-recommends --no-install-suggests -y tzdata ca-certificates bzip2 curl wget libc-dev libxt6 \
-&& apt-get install --no-install-recommends --no-install-suggests -y `apt-cache depends firefox-esr | awk '/Depends:/{print$2}'` \
-&& update-ca-certificates \
-# Cleanup unnecessary stuff
-&& apt-get purge -y --auto-remove \
-              -o APT::AutoRemove::RecommendsImportant=false \
-&& rm -rf /var/lib/apt/lists/* /tmp/*
+RUN apt-get update -qq -y && \
+    apt-get install -y \
+        libasound2 \
+        libatk-bridge2.0-0 \
+        libgtk-4-1 \
+        libnss3 \
+        xdg-utils \
+        wget && \
+    wget -q -O chrome-linux64.zip https://storage.googleapis.com/chrome-for-testing-public/121.0.6167.85/linux64/chrome-linux64.zip && \
+    unzip chrome-linux64.zip && \
+    rm chrome-linux64.zip && \
+    mv chrome-linux64 /opt/chrome/ && \
+    ln -s /opt/chrome/chrome /usr/local/bin/ && \
+    wget -q -O chromedriver-linux64.zip https://storage.googleapis.com/chrome-for-testing-public/121.0.6167.85/linux64/chromedriver-linux64.zip && \
+    unzip -j chromedriver-linux64.zip chromedriver-linux64/chromedriver && \
+    rm chromedriver-linux64.zip && \
+    mv chromedriver /usr/local/bin/
 
-# install geckodriver
+ENV CHROMEDRIVER_SKIP_DOWNLOAD=true
 
-RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.31.0/geckodriver-v0.31.0-linux64.tar.gz && \
-    tar -zxf geckodriver-v0.31.0-linux64.tar.gz -C /usr/local/bin && \
-    chmod +x /usr/local/bin/geckodriver && \
-    rm geckodriver-v0.31.0-linux64.tar.gz
-
-# install firefox
-
-RUN FIREFOX_SETUP=firefox-setup.tar.bz2 && \
-    wget -O $FIREFOX_SETUP "https://download.mozilla.org/?product=firefox-95.0.1&os=linux64" && \
-    tar xjf $FIREFOX_SETUP -C /opt/ && \
-    ln -s /opt/firefox/firefox /usr/bin/firefox && \
-    rm $FIREFOX_SETUP
-
-ENV MOZ_HEADLESS=1
 # Run the Node.js script
 CMD ["node", "/app/probe.js"]
