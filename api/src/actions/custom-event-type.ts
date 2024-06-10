@@ -51,7 +51,7 @@ export const deleteCustomEventType = async (projectId: string, category: string,
 
 export const deleteCustomEventTypesByProject = async (projectId: string) => {
     await dbConnect();
-    await CustomEventModel.deleteMany({ projectId })
+    await CustomEventTypeModel.deleteMany({ projectId })
 }
 
 
