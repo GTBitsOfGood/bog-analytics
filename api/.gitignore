@@ -131,4 +131,4 @@ dist
 
 .env
 
-output/*.html
+output/docs.html

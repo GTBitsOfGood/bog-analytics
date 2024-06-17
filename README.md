@@ -1,12 +1,39 @@
-# Bits of Good Analytics
 
-This is the unified Bits of Good analytics platform. It is designed with interoperability and plug-in-play in mind to be able to work with any Bits of Good project. There are three primary components to this analytics platform:
+<center><h1>Bits of Good Analytics</h1></center>
 
-- **Dashboard Application:** This is the core of the analytics dashboard and is where all of the data visualizations are located. This is written and built complately using Streamlit and Python - it is deployed using Streamlit's cloud service.
+<div align="center"> 
 
-- **Analytics Processing API:** This is the data API that ingests data from our websites and reprocesses it into a unified interface (defined by the events in the event interfaces section) which enables this dashboard to be interoperable throughout Bits of Good projects.
+[Dashboard](https://analytics.bitsofgood.org) | [Portal](https://portal.analytics.bitsofgood.org) | [API Docs](https://analytics.bitsofgood.org/docs) | [Package](https://www.npmjs.com/package/bog-analytics) | [Package Docs](https://github.com/GTBitsOfGood/bog-analytics/tree/main/docs)
+
+</div>
+
+This is the unified Bits of Good analytics platform. It is designed with interoperability and plug-in-play in mind to be able to work with any Bits of Good project. There are four primary components to this analytics platform:
+
+- **Dashboard:** This is the core of the analytics dashboard and is where all of the data visualizations are located. This is written and built complately using Streamlit and Python - it is deployed using Streamlit's cloud service.
+
+- **Analytics Processing API:** This is the data API that ingests data from our websites and stores it into one universal location for all our projects. This allows Bits of Good to gather and act on the data we collect.
 
 - **Package:** A publically accessible NPM package to interface with the Analytics Processing API.
+
+- **Bits of Good Analytics Portal:** A portal to create and manage projects and event types.
+
+## Install Bits of Good Analytics
+To install Bits of Good Analytics, you can install it via yarn or npm. 
+
+Using yarn:
+
+```
+yarn add bog-analytics
+```
+Using npm:
+```
+npm i bog-analytics
+```
+
+Create an account at our [analytics portal](https://portal.analytics.bitsofgood) and then create a project to get your API keys. Head over to our [package docs](https://github.com/GTBitsOfGood/bog-analytics/tree/main/docs) to start interfacing with bog analytics.
+
+**Note:** You'll need to get your account verified by a Bits of Good admin.
+
 ## Event Interfaces
 
 We define a couple of different event types that are unified across Bits of Good projects - this list is non-exhaustive and can definitely be extended in the future:
@@ -48,23 +75,33 @@ We define a couple of different event types that are unified across Bits of Good
 }
 ```
 
-We provide mock data to work with that follow these interface definitions in `dashboard/data.py`.
-
-## Setup with Docker (Reccommended)
+- Custom Events: Custom events are managed through our custom event type interface 
+```
+{
+    "Category": "specified by you",
+    "Subcategory": "specified by you",
+    "Event Properties": {
+        "property 1": "properties and values specified by you",
+        "property 2": "you can create an infinte amount of custom event types with as many properties as you would like",
+     },
+     "Created At": "Date the event was created at"
+}
+```
+## Setup Repository with Docker (Reccommended)
 Because this repository acts as a monorepository for all things analytics, we provide a `docker-compose` for easy setup. To run the application via docker compose:
 1. Install [Docker](https://docs.docker.com/engine/install/)
 2. Start the application with Docker Compose: `docker compose up`
 3. Navigate to the API, Next.js App, or Streamlit App
    1. Streamlit App: `http://localhost:8501/`
    2. API: `http://localhost:3001/`
-   3. Next.js App: `http://localhost:3000/`
+   3. Portal: `http://localhost:3000/`
 
 
 If you make any changes to the packages, you may need to rebuild the images. To do this, append `--build` to the above docker compose up command. The first build and subsequent rebuilds will take longer than rerunning the container.
 
 The Dockerized application will have live-reloading of changes made on the host machine.
 
-## Setup Locally
+## Setup Repository Locally
 **Step 1:** Install [Node v18.17.0 or newer](https://nodejs.org/en/download/current). If you do not have at least node version 18.17.0 or newer then you will NOT be able to setup this repository. You can use [node version manager](https://github.com/nvm-sh/nvm) to setup the proper node version. If you are using node version manager:
 ```
 nvm install 18.17.0
