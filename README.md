@@ -1,5 +1,6 @@
 
-<center><h1>Bits of Good Analytics</h1></center>
+<div align="center"> 
+<h1>Bits of Good Analytics</h1></div>
 
 <div align="center"> 
 
