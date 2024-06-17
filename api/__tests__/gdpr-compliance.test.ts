@@ -353,7 +353,6 @@ describe("/api/gdpr", () => {
 
             let selectedEvent: CustomEvent | null = null;
             for (let i = 0; i < events.length; i++) {
-                console.log(events[i]._id.toString(), eventId.toString())
                 if (events[i]._id.toString() === eventId.toString()) {
                     selectedEvent = events[i];
                 }
