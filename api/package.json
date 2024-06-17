@@ -8,7 +8,7 @@
     "build": "npx tsc",
     "dev": "nodemon --exec npx tsx src/server.ts",
     "start": "node dist/api.js",
-    "generate-docs": "redocly build-docs swagger.json --output=output/docs.html"
+    "generate-docs": "node generate-swagger-json.js && redocly build-docs swagger.json --output=output/docs.html"
   },
   "author": "",
   "license": "ISC",

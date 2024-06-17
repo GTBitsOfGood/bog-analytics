@@ -5,6 +5,81 @@ import APIWrapper from "@/src/utils/api-wrapper";
 import { ClickEvent, EventEnvironment } from "@/src/utils/types";
 import { Request } from "express";
 
+/**
+ * @swagger
+ * /api/events/click-event:
+ *   post:
+ *     tags: 
+ *       - Events API
+ *     summary: Create a new click event.
+ *     description: Creates a new click event based on specified parameters.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               objectId:
+ *                 type: string
+ *                 description: The ID of the object related to the click event.
+ *               userId:
+ *                 type: string
+ *                 description: The ID of the user who triggered the click event.
+ *               environment:
+ *                 type: string
+ *                 enum: [development, staging, production]
+ *                 description: The environment for which to create the event.
+ *             required:
+ *               - objectId
+ *               - userId
+ *     parameters:
+ *       - in: header
+ *         name: clienttoken
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Client token for authentication.
+ *     responses:
+ *       '200':
+ *         description: Successful response.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 payload:
+ *                   $ref: '#/components/schemas/ClickEvent'
+ *       '400':
+ *         description: Bad request.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "You must specify an object id and user id to create a click event!"
+ *       '403':
+ *         description: Forbidden.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "Project does not exist for client token"
+ */
 const clickEventRoute = APIWrapper({
     POST: {
         config: {
@@ -33,6 +108,99 @@ const clickEventRoute = APIWrapper({
             return createdEvent;
         },
     },
+    /**
+     * @swagger
+     * /api/events/click-event:
+     *   get:
+     *     tags: 
+     *       - Events API
+     *     summary: Retrieve click events.
+     *     description: Retrieves click events based on specified parameters.
+     *     parameters:
+     *       - in: query
+     *         name: afterId
+     *         schema:
+     *           type: string
+     *         description: The ID of the event after which to start retrieving events.
+     *       - in: query
+     *         name: projectName
+     *         schema:
+     *           type: string
+     *         required: true
+     *         description: The name of the project for which to retrieve events.
+     *       - in: query
+     *         name: environment
+     *         schema:
+     *           type: string
+     *           enum: [development, staging, production]
+     *         description: The environment for which to retrieve events.
+     *       - in: query
+     *         name: limit
+     *         schema:
+     *           type: integer
+     *         description: The maximum number of events to retrieve. Defaults to 10.
+     *       - in: query
+     *         name: afterTime
+     *         schema:
+     *           type: string
+     *           format: date-time
+     *         description: The timestamp after which to start retrieving events.
+     *       - in: header
+     *         name: clienttoken
+     *         schema:
+     *           type: string
+     *         required: false
+     *         description: Client token for authentication.
+     *     responses:
+     *       '200':
+     *         description: Successful response.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 success:
+     *                   type: boolean
+     *                   example: true
+     *                 payload:
+     *                   type: object
+     *                   properties:
+     *                     events:
+     *                       type: array
+     *                       items:
+     *                         $ref: '#/components/schemas/ClickEvent'
+     *                       example: []
+     *                     afterId:
+     *                       type: string
+     *                       nullable: true
+     *                       example: "609cdd81c167df001c9548d6"
+     *       '400':
+     *         description: Bad request.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 success:
+     *                   type: boolean
+     *                   example: false
+     *                 message:
+     *                   type: string
+     *                   example: "You must specify a project name!"
+     *       '403':
+     *         description: Forbidden.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 success:
+     *                   type: boolean
+     *                   example: false
+     *                 message:
+     *                   type: string
+     *                   example: "You do not have permissions to access this API route"
+     */
     GET: {
         config: {
             requireClientToken: false,
@@ -53,6 +221,5 @@ const clickEventRoute = APIWrapper({
         },
     },
 });
-
 
 export const clickEvent = relogRequestHandler(clickEventRoute);

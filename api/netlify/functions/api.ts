@@ -5,7 +5,6 @@ import { router } from '@/src/routes';
 import { ApplicationError } from '@/src/errors/application-error';
 import swaggerUi from 'swagger-ui-express';
 import cors from "cors"
-
 import serverless from "serverless-http";
 import swaggerJsdoc from 'swagger-jsdoc';
 export let api = express();
@@ -59,14 +58,17 @@ const options = {
             },
         ],
     },
-    apis: ["./model-docs.js", "./route-docs.js"],
+    apis: ["./src/utils/*.ts", "./src/controllers/events/*.ts", "./src/controllers/gdpr/*.ts", "./src/controllers/graphs/*.ts",],
 };
 
 const specs = swaggerJsdoc(options);
+
+// writeFile('swagger.json', JSON.stringify(specs, null, 2), 'utf-8');
 const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
 api.use(
     "/api/docs",
     swaggerUi.serve,
     swaggerUi.setup(specs, { explorer: true, customCssUrl: CSS_URL })
 );
+
 export const handler = serverless(api);
