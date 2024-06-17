@@ -31,7 +31,7 @@ Using npm:
 npm i bog-analytics
 ```
 
-Create an account at our [analytics portal](https://portal.analytics.bitsofgood) and then create a project to get your API keys. Head over to our [package docs](https://github.com/GTBitsOfGood/bog-analytics/tree/main/docs) to start interfacing with bog analytics.
+Create an account at our [analytics portal](https://portal.analytics.bitsofgood.org) and then create a project to get your API keys. Head over to our [package docs](https://github.com/GTBitsOfGood/bog-analytics/tree/main/docs) to start interfacing with bog analytics.
 
 **Note:** You'll need to get your account verified by a Bits of Good admin.
 
