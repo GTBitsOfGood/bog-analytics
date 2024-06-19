@@ -33,7 +33,7 @@ api.use((err: ApplicationError, req: Request, res: Response, next: NextFunction)
 
 const options = {
     definition: {
-        openapi: "3.1.0",
+        openapi: "3.0.0",
         info: {
             title: "Bits of Good Analytics API",
             version: "1.0.0",

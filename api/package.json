@@ -8,13 +8,12 @@
     "build": "npx tsc",
     "dev": "nodemon --exec npx tsx src/server.ts",
     "start": "node dist/api.js",
-    "generate-docs": "node generate-swagger-json.js && redocly build-docs swagger.json --output=output/docs.html"
+    "generate-docs": "node generate-swagger-json.js && node generate-docs-html.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@netlify/functions": "^2.5.1",
-    "@redocly/cli": "^1.11.0",
     "@types/node": "^20.11.16",
     "@types/node-fetch": "2",
     "body-parser": "^1.20.2",
