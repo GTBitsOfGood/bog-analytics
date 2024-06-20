@@ -200,7 +200,7 @@ Retrieves the custom graph types for a given project and event type ID.
 const customGraphTypes = await analyticsViewer.getCustomGraphTypesbyId('my-project', 'event123');
 ```
 
-#### `getClickEventsPaginated(queryParams: GetEventsQueryParams): Promise<PaginatedResult<ClickEvent> | null>`
+#### `getClickEventsPaginated(queryParams: GetEventsQueryParams): Promise<{ events: ClickEvent[], afterId: string } | null>`
 
 Retrieves a paginated list of click events based on the provided query parameters.
 
@@ -230,7 +230,7 @@ Retrieves all click events for a given project, optionally filtered by a start t
 const clickEvents = await analyticsViewer.getAllClickEvents('my-project', new Date('2023-04-01'));
 ```
 
-#### `getVisitEventsPaginated(queryParams: GetEventsQueryParams): Promise<PaginatedResult<VisitEvent> | null>`
+#### `getVisitEventsPaginated(queryParams: GetEventsQueryParams): Promise<{ events: VisitEvent[], afterId: string } | null>`
 
 Retrieves a paginated list of visit events based on the provided query parameters.
 
@@ -260,7 +260,7 @@ Retrieves all visit events for a given project, optionally filtered by a start t
 const visitEvents = await analyticsViewer.getAllVisitEvents('my-project', new Date('2023-04-01'));
 ```
 
-#### `getInputEventsPaginated(queryParams: GetEventsQueryParams): Promise<PaginatedResult<InputEvent> | null>`
+#### `getInputEventsPaginated(queryParams: GetEventsQueryParams): Promise<{ events: InputEvent[], afterId: string } | null>`
 
 Retrieves a paginated list of input events based on the provided query parameters.
 
@@ -290,7 +290,7 @@ Retrieves all input events for a given project, optionally filtered by a start t
 const inputEvents = await analyticsViewer.getAllInputEvents('my-project', new Date('2023-04-01'));
 ```
 
-#### `getCustomEventsPaginated(queryParams: GetCustomEventsQueryParams): Promise<PaginatedResult<CustomEvent> | null>`
+#### `getCustomEventsPaginated(queryParams: GetCustomEventsQueryParams): Promise<{ events: CustomEvent[], afterId: string } | null>`
 
 Retrieves a paginated list of custom events based on the provided query parameters.
 
@@ -403,7 +403,7 @@ Deletes all custom events for a given user.
 const deletedCustomEvents = await gdprManager.deleteCustomEventsForUser('user123', 'userAttr', 'user', 'signup');
 ```
 
-#### `getUserClickEventsPaginated(queryParams: GetUserEventsQueryParams): Promise<null | PaginatedResult<ClickEvent>>`
+#### `getUserClickEventsPaginated(queryParams: GetUserEventsQueryParams): Promise<{ events: ClickEvent[], afterId: string } | null>`
 
 Retrieves a paginated list of click events for a given user.
 
@@ -432,7 +432,7 @@ Retrieves all click events for a given user.
 const allClickEvents = await gdprManager.getAllUserClickEvents('user123');
 ```
 
-#### `getUserVisitEventsPaginated(queryParams: GetUserEventsQueryParams): Promise<null | PaginatedResult<VisitEvent>>`
+#### `getUserVisitEventsPaginated(queryParams: GetUserEventsQueryParams): Promise<null | Promise<{ events: VisitEvent[], afterId: string } | null>`
 
 Retrieves a paginated list of visit events for a given user.
 
@@ -461,7 +461,7 @@ Retrieves all visit events for a given user.
 const allVisitEvents = await gdprManager.getAllUserVisitEvents('user123');
 ```
 
-#### `getUserInputEventsPaginated(queryParams: GetUserEventsQueryParams): Promise<null | PaginatedResult<InputEvent>>`
+#### `getUserInputEventsPaginated(queryParams: GetUserEventsQueryParams): Promise<null | Promise<{ events: InputEvent[], afterId: string } | null>`
 
 Retrieves a paginated list of input events for a given user.
 
@@ -490,7 +490,7 @@ Retrieves all input events for a given user.
 const allInputEvents = await gdprManager.getAllUserInputEvents('user123');
 ```
 
-#### `getUserCustomEventsPaginated(afterId: string, userId: string, userAttribute: string, eventCategory: string, eventSubcategory: string): Promise<null | PaginatedResult<CustomEvent>>`
+#### `getUserCustomEventsPaginated(afterId: string, userId: string, userAttribute: string, eventCategory: string, eventSubcategory: string): Promise<{ events: CustomEvent[], afterId: string } | null>`
 
 Retrieves a paginated list of custom events for a given user.
 
