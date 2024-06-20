@@ -2,7 +2,7 @@
 <div align="center"> 
 <h1>Bits of Good Analytics NPM Package</h1></div>
 
-<div align="center"> 
+</div> 
 
 ## Analytics Logger Module
 

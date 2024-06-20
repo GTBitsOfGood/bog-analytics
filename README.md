@@ -4,7 +4,7 @@
 
 <div align="center"> 
 
-[Dashboard](https://analytics.bitsofgood.org) | [Portal](https://portal.analytics.bitsofgood.org) | [API Docs](https://analytics.bitsofgood.org/docs) | [Package](https://www.npmjs.com/package/bog-analytics) | [Package Docs](https://github.com/GTBitsOfGood/bog-analytics/tree/main/docs)
+[Dashboard](https://analytics.bitsofgood.org) | [Portal](https://portal.analytics.bitsofgood.org) | [API Docs](https://analytics.bitsofgood.org/docs) | [Package](https://www.npmjs.com/package/bog-analytics) | [Package Docs](https://github.com/GTBitsOfGood/bog-analytics/tree/main/package#bits-of-good-analytics-npm-package)
 
 </div>
 
