@@ -388,19 +388,19 @@ Deletes all input events for a given user.
 const deletedInputEvents = await gdprManager.deleteInputEventsForUser('user123');
 ```
 
-#### `deleteCustomEventsForUser(userId: string, userAttribute: string, eventCategory: string, eventSubcategory: string): Promise<null | CustomEvent[]>`
+#### `deleteCustomEventsForUser({ userId, userAttribute, category, subcategory }: { userId: string, userAttribute: string, category: string, subcategory: string }): Promise<null | CustomEvent[]>`
 
 Deletes all custom events for a given user.
 
 - `userId`: The ID of the user.
 - `userAttribute`: The user attribute associated with the custom events.
-- `eventCategory`: The category of the custom events.
-- `eventSubcategory`: The subcategory of the custom events.
+- `category`: The category of the custom events.
+- `subcategory`: The subcategory of the custom events.
 
 ##### Example
 
 ```javascript
-const deletedCustomEvents = await gdprManager.deleteCustomEventsForUser('user123', 'userAttr', 'user', 'signup');
+const deletedCustomEvents = await gdprManager.deleteCustomEventsForUser({ userId: 'user123', userAttribute: 'userAttr', category: 'user', subcategory: 'signup' });
 ```
 
 #### `getUserClickEventsPaginated(queryParams: GetUserEventsQueryParams): Promise<{ events: ClickEvent[], afterId: string } | null>`
@@ -432,7 +432,7 @@ Retrieves all click events for a given user.
 const allClickEvents = await gdprManager.getAllUserClickEvents('user123');
 ```
 
-#### `getUserVisitEventsPaginated(queryParams: GetUserEventsQueryParams): Promise<null | Promise<{ events: VisitEvent[], afterId: string } | null>`
+#### `getUserVisitEventsPaginated(queryParams: GetUserEventsQueryParams): Promise<{ events: VisitEvent[], afterId: string } | null>`
 
 Retrieves a paginated list of visit events for a given user.
 
@@ -461,7 +461,7 @@ Retrieves all visit events for a given user.
 const allVisitEvents = await gdprManager.getAllUserVisitEvents('user123');
 ```
 
-#### `getUserInputEventsPaginated(queryParams: GetUserEventsQueryParams): Promise<null | Promise<{ events: InputEvent[], afterId: string } | null>`
+#### `getUserInputEventsPaginated(queryParams: GetUserEventsQueryParams): Promise<{ events: InputEvent[], afterId: string } | null>`
 
 Retrieves a paginated list of input events for a given user.
 
@@ -490,38 +490,42 @@ Retrieves all input events for a given user.
 const allInputEvents = await gdprManager.getAllUserInputEvents('user123');
 ```
 
-#### `getUserCustomEventsPaginated(afterId: string, userId: string, userAttribute: string, eventCategory: string, eventSubcategory: string): Promise<{ events: CustomEvent[], afterId: string } | null>`
+#### `getUserCustomEventsPaginated(queryParams: GetUserCustomEventsQueryParams): Promise<{ events: CustomEvent[], afterId: string } | null>`
 
 Retrieves a paginated list of custom events for a given user.
 
-- `afterId`: The ID of the event to start after.
-- `userId`: The ID of the user.
-- `userAttribute`: The user attribute associated with the custom events.
-- `eventCategory`: The category of the custom events.
-- `eventSubcategory`: The subcategory of the custom events.
+- `queryParams`: An object containing query parameters for filtering and paginating the events.
 
 ##### Example
 
 ```javascript
-const customEvents = await gdprManager.getUserCustomEventsPaginated('event456', 'user123', 'userAttr', 'user', 'signup');
+const queryParams = {
+  userId: 'user123',
+  userAttribute: 'userAttr',
+  category: 'user',
+  subcategory: 'signup',
+  afterId: 'event456',
+  limit: 100,
+};
+const customEvents = await gdprManager.getUserCustomEventsPaginated(queryParams);
 ```
 
-#### `getAllUserCustomEvents(userId: string, userAttribute: string, eventCategory: string, eventSubcategory: string): Promise<null | CustomEvent[]>`
+#### `getAllUserCustomEvents({ userId, userAttribute, category, subcategory }: { userId: string, userAttribute: string, category: string, subcategory: string }): Promise<null | CustomEvent[]>`
 
 Retrieves all custom events for a given user.
 
 - `userId`: The ID of the user.
 - `userAttribute`: The user attribute associated with the custom events.
-- `eventCategory`: The category of the custom events.
-- `eventSubcategory`: The subcategory of the custom events.
+- `category`: The category of the custom events.
+- `subcategory`: The subcategory of the custom events.
 
 ##### Example
 
 ```javascript
-const allCustomEvents = await gdprManager.getAllUserCustomEvents('user123', 'userAttr', 'user', 'signup');
+const allCustomEvents = await gdprManager.getAllUserCustomEvents({ userId: 'user123', userAttribute: 'userAttr', category: 'user', subcategory: 'signup' });
 ```
 
-#### `updateUserClickEvent(eventId: string, userId: string, objectId: string): Promise<null | ClickEvent>`
+#### `updateUserClickEvent({ eventId, userId, objectId }: { eventId: string, userId: string, objectId: string }): Promise<null | ClickEvent>`
 
 Updates a click event for a given user.
 
@@ -532,10 +536,10 @@ Updates a click event for a given user.
 ##### Example
 
 ```javascript
-const updatedClickEvent = await gdprManager.updateUserClickEvent('event123', 'user123', 'object456');
+const updatedClickEvent = await gdprManager.updateUserClickEvent({ eventId: 'event123', userId: 'user123', objectId: 'object456' });
 ```
 
-#### `updateUserVisitEvent(eventId: string, userId: string, pageUrl: string): Promise<null | VisitEvent>`
+#### `updateUserVisitEvent({ eventId, userId, pageUrl }: { eventId: string, userId: string, pageUrl: string }): Promise<null | VisitEvent>`
 
 Updates a visit event for a given user.
 
@@ -546,10 +550,10 @@ Updates a visit event for a given user.
 ##### Example
 
 ```javascript
-const updatedVisitEvent = await gdprManager.updateUserVisitEvent('event123', 'user123', 'https://example.com/page');
+const updatedVisitEvent = await gdprManager.updateUserVisitEvent({ eventId: 'event123', userId: 'user123', pageUrl: 'https://example.com/page' });
 ```
 
-#### `updateUserInputEvent(eventId: string, userId: string, objectId?: string, textValue?: string): Promise<null | InputEvent>`
+#### `updateUserInputEvent({ eventId, userId, objectId, textValue }: { eventId: string, userId: string, objectId?: string, textValue?: string }): Promise<null | InputEvent>`
 
 Updates an input event for a given user.
 
@@ -561,20 +565,20 @@ Updates an input event for a given user.
 ##### Example
 
 ```javascript
-const updatedInputEvent = await gdprManager.updateUserInputEvent('event123', 'user123', 'object456', 'new text');
+const updatedInputEvent = await gdprManager.updateUserInputEvent({ eventId: 'event123', userId: 'user123', objectId: 'object456', textValue: 'new text' });
 ```
 
-#### `updateUserCustomEvent(eventId: string, userId: string, userAttribute: string, updatedAttributes: object): Promise<null | CustomEvent>`
+#### `updateUserCustomEvent({ eventId, userId, userAttribute, updatedAttributes }: { eventId: string, userId: string, userAttribute: string, updatedAttributes: object }): Promise<null | CustomEvent>`
 
 Updates a custom event for a given user.
 
 - `eventId`: The ID of the event.
 - `userId`: The ID of the user.
-- `userAttribute`: The user attribute associated with the custom event.
-- `updatedAttributes`: An object containing the updated attributes for the event.
+- `userAttribute`: The user attribute associated with the event.
+- `updatedAttributes`: The updated attributes for the custom event.
 
 ##### Example
 
 ```javascript
-const updatedCustomEvent = await gdprManager.updateUserCustomEvent('event123', 'user123', 'userAttr', { key: 'new value' });
+const updatedCustomEvent = await gdprManager.updateUserCustomEvent({ eventId: 'event123', userId: 'user123', userAttribute: 'userAttr', updatedAttributes: { key: 'value' } });
 ```

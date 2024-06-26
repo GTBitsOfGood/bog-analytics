@@ -308,8 +308,8 @@ describe("/api/gdpr", () => {
                 .send({
                     userId: USER_ID,
                     userAttribute: USER_ATTRIBUTE,
-                    eventCategory: customEventType.category,
-                    eventSubcategory: customEventType.subcategory
+                    category: customEventType.category,
+                    subcategory: customEventType.subcategory
                 })
             expect(response.status).toBe(200)
 
@@ -324,7 +324,7 @@ describe("/api/gdpr", () => {
             while (true) {
                 const response = await agent.get("/api/gdpr/custom-event")
                     .set("servertoken", testProject?.serverApiKey as string)
-                    .query({ afterId, userId: USER_ID, userAttribute: USER_ATTRIBUTE, eventCategory: customEventType.category, eventSubcategory: customEventType.subcategory, limit: 50 })
+                    .query({ afterId, userId: USER_ID, userAttribute: USER_ATTRIBUTE, category: customEventType.category, subcategory: customEventType.subcategory, limit: 50 })
 
                 expect(response.status).toBe(200);
                 userEvents = [...(userEvents as CustomEvent[]), ...(response.body.payload.events as CustomEvent[])]

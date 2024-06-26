@@ -1,5 +1,5 @@
 import { externalRequest } from "@/utils/requests"
-import { ClickEvent, GetUserEventsQueryParams, HttpMethod, VisitEvent } from "@/utils/types";
+import { ClickEvent, GetUserCustomEventsQueryParams, GetUserEventsQueryParams, HttpMethod, VisitEvent } from "@/utils/types";
 import { urls } from "@/utils/urls"
 
 
@@ -36,7 +36,7 @@ export const gdprDeleteInputEvents = async (apiBaseUrl: string, apiKey: string, 
     })
 }
 
-export const gdprDeleteCustomEvents = async (apiBaseUrl: string, apiKey: string, userId: string, userAttribute: string, eventCategory: string, eventSubcategory: string): Promise<CustomEvent[]> => {
+export const gdprDeleteCustomEvents = async (apiBaseUrl: string, apiKey: string, userId: string, userAttribute: string, category: string, subcategory: string): Promise<CustomEvent[]> => {
     return externalRequest<CustomEvent[]>({
         url: apiBaseUrl + urls.gdpr.customEvent,
         method: HttpMethod.DELETE,
@@ -44,8 +44,8 @@ export const gdprDeleteCustomEvents = async (apiBaseUrl: string, apiKey: string,
         body: {
             userId,
             userAttribute,
-            eventCategory,
-            eventSubcategory
+            category,
+            subcategory
         }
     })
 }
@@ -83,14 +83,12 @@ export const gdprPaginatedUserInputEvents = async (apiBaseUrl: string, apiKey: s
     })
 }
 
-export const gdprPaginatedUserCustomEvents = async (apiBaseUrl: string, apiKey: string, afterId: string | undefined, userId: string, userAttribute: string, eventCategory: string, eventSubcategory: string) => {
+export const gdprPaginatedUserCustomEvents = async (apiBaseUrl: string, apiKey: string, getEventParams: GetUserCustomEventsQueryParams) => {
     return externalRequest<{ events: CustomEvent[], afterId: string }>({
         url: apiBaseUrl + urls.gdpr.customEvent,
         serverApiKey: apiKey,
         method: HttpMethod.GET,
-        queryParams: {
-            afterId, userId, userAttribute, eventCategory, eventSubcategory
-        }
+        queryParams: { ...getEventParams }
     })
 }
 

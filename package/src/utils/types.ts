@@ -123,3 +123,8 @@ export interface GetCustomEventsQueryParams extends GetEventsQueryParams {
     subcategory: string;
 }
 
+export interface GetUserCustomEventsQueryParams extends GetUserEventsQueryParams {
+    category: string;
+    subcategory: string;
+    userAttribute: string;
+}

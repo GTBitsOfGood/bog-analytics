@@ -30,17 +30,17 @@ import { Request } from "express";
  *               userAttribute:
  *                 type: string
  *                 description: The attribute of the user in the event type.
- *               eventCategory:
+ *               category:
  *                 type: string
  *                 description: The category of the event.
- *               eventSubcategory:
+ *               subcategory:
  *                 type: string
  *                 description: The subcategory of the event.
  *             required:
  *               - userId
  *               - userAttribute
- *               - eventCategory
- *               - eventSubcategory
+ *               - category
+ *               - subcategory
  *     parameters:
  *       - in: header
  *         name: servertoken
@@ -95,15 +95,15 @@ const gdprCustomEventRoute = APIWrapper({
             requireServerToken: true,
         },
         handler: async (req: Request) => {
-            const { userId, userAttribute, eventCategory, eventSubcategory } = req.body;
-            if (!userId || !userAttribute || !eventCategory || !eventSubcategory) {
+            const { userId, userAttribute, category, subcategory } = req.body;
+            if (!userId || !userAttribute || !category || !subcategory) {
                 throw new Error("You must specify an event category, event subcategory, user id, and user attribute to delete data for.");
             }
             const project = await getProjectByServerKey(req.headers.servertoken as string);
             if (!project) {
                 throw new Error("Project with specified server token not found");
             }
-            const eventType = await findEventTypeForProject(project._id.toString(), eventCategory, eventSubcategory);
+            const eventType = await findEventTypeForProject(project._id.toString(), category, subcategory);
             if (!eventType) {
                 throw new Error("Event type for specified category and subcategory does not exist");
             }
@@ -137,13 +137,13 @@ const gdprCustomEventRoute = APIWrapper({
      *         required: true
      *         description: The attribute of the user in the event type.
      *       - in: query
-     *         name: eventCategory
+     *         name: category
      *         schema:
      *           type: string
      *         required: true
      *         description: The category of the event.
      *       - in: query
-     *         name: eventSubcategory
+     *         name: subcategory
      *         schema:
      *           type: string
      *         required: true
@@ -219,8 +219,8 @@ const gdprCustomEventRoute = APIWrapper({
             requireServerToken: true,
         },
         handler: async (req: Request) => {
-            const { afterId, userId, userAttribute, eventCategory, eventSubcategory } = req.query;
-            if (!userId || !userAttribute || !eventCategory || !eventSubcategory) {
+            const { afterId, userId, userAttribute, category, subcategory } = req.query;
+            if (!userId || !userAttribute || !category || !subcategory) {
                 throw new Error("You must specify a user id, user attribute, event category, and event subcategory to get data for.");
             }
 
@@ -229,7 +229,7 @@ const gdprCustomEventRoute = APIWrapper({
             if (!project) {
                 throw new Error("Project with specified server token not found");
             }
-            const eventType = await findEventTypeForProject(project._id.toString(), eventCategory as string, eventSubcategory as string);
+            const eventType = await findEventTypeForProject(project._id.toString(), category as string, subcategory as string);
             if (!eventType) {
                 throw new Error("Event type for specified category and subcategory does not exist");
             }

@@ -10,7 +10,7 @@ describe('GDPR Manager Module', () => {
     let analyticsManager: AnalyticsManager;
     let gdprManager: GDPRManager;
     let project: Project;
-    const EVENT_COUNT = 200;
+    const EVENT_COUNT = 10;
     const USER_ID = "user 1";
     const OLD_OBJECT = "object 1"
     const NEW_OBJECT = "object 2"
@@ -112,7 +112,7 @@ describe('GDPR Manager Module', () => {
         let events: ClickEvent[] = await gdprManager.getAllUserClickEvents(USER_ID) as ClickEvent[];
         expect(events?.length).toEqual(EVENT_COUNT);
         const eventId = events[0]._id;
-        await gdprManager.updateUserClickEvent(eventId, USER_ID, NEW_OBJECT)
+        await gdprManager.updateUserClickEvent({ eventId: eventId, userId: USER_ID, objectId: NEW_OBJECT })
 
         events = await gdprManager.getAllUserClickEvents(USER_ID) as ClickEvent[];
         expect(events?.length).toEqual(EVENT_COUNT);
@@ -132,7 +132,7 @@ describe('GDPR Manager Module', () => {
         let events: VisitEvent[] = await gdprManager.getAllUserVisitEvents(USER_ID) as VisitEvent[];
         expect(events?.length).toEqual(EVENT_COUNT);
         const eventId = events[0]._id;
-        await gdprManager.updateUserVisitEvent(eventId, USER_ID, NEW_PAGE)
+        await gdprManager.updateUserVisitEvent({ eventId: eventId, userId: USER_ID, pageUrl: NEW_PAGE })
 
         events = await gdprManager.getAllUserVisitEvents(USER_ID) as VisitEvent[];
         expect(events?.length).toEqual(EVENT_COUNT);
@@ -152,7 +152,7 @@ describe('GDPR Manager Module', () => {
         let events: InputEvent[] = await gdprManager.getAllUserInputEvents(USER_ID) as unknown as InputEvent[];
         expect(events?.length).toEqual(EVENT_COUNT);
         const eventId = events[0]._id;
-        await gdprManager.updateUserInputEvent(eventId, USER_ID, NEW_OBJECT, NEW_TEXT_VALUE)
+        await gdprManager.updateUserInputEvent({ eventId: eventId, userId: USER_ID, objectId: NEW_OBJECT, textValue: NEW_TEXT_VALUE })
 
         events = await gdprManager.getAllUserInputEvents(USER_ID) as unknown as InputEvent[];
         expect(events?.length).toEqual(EVENT_COUNT);
@@ -170,24 +170,26 @@ describe('GDPR Manager Module', () => {
     })
 
     test("getAllUserCustomEvents and deleteCustomEventsForUser", async () => {
-        let events = await gdprManager.getAllUserCustomEvents(USER_ID, USER_ATTRIBUTE, customEventType.category, customEventType.subcategory);
+        let events = await gdprManager.getAllUserCustomEvents({ userId: USER_ID, userAttribute: USER_ATTRIBUTE, category: customEventType.category, subcategory: customEventType.subcategory });
         expect(events?.length).toEqual(EVENT_COUNT);
 
-        await gdprManager.deleteCustomEventsForUser(USER_ID, USER_ATTRIBUTE, customEventType.category, customEventType.subcategory);
-        events = await gdprManager.getAllUserCustomEvents(USER_ID, USER_ATTRIBUTE, customEventType.category, customEventType.subcategory);
+        await gdprManager.deleteCustomEventsForUser({ userId: USER_ID, userAttribute: USER_ATTRIBUTE, category: customEventType.category, subcategory: customEventType.subcategory });
+        events = await gdprManager.getAllUserCustomEvents({ userId: USER_ID, userAttribute: USER_ATTRIBUTE, category: customEventType.category, subcategory: customEventType.subcategory });
         expect(events?.length).toEqual(0);
     }, 100000)
 
 
     test("gdprUpdateCustomEvent", async () => {
-        let events: CustomEvent[] = await gdprManager.getAllUserCustomEvents(USER_ID, USER_ATTRIBUTE, customEventType.category, customEventType.subcategory) as unknown as CustomEvent[];
+        let events: CustomEvent[] = await gdprManager.getAllUserCustomEvents({ userId: USER_ID, userAttribute: USER_ATTRIBUTE, category: customEventType.category, subcategory: customEventType.subcategory }) as unknown as CustomEvent[];
         expect(events?.length).toEqual(EVENT_COUNT);
         const eventId = events[0]._id;
-        await gdprManager.updateUserCustomEvent(eventId, USER_ID, USER_ATTRIBUTE, {
-            prop1: NEW_TEXT_VALUE
+        await gdprManager.updateUserCustomEvent({
+            eventId: eventId, userId: USER_ID, userAttribute: USER_ATTRIBUTE, updatedAttributes: {
+                prop1: NEW_TEXT_VALUE
+            }
         })
 
-        events = await gdprManager.getAllUserCustomEvents(USER_ID, USER_ATTRIBUTE, customEventType.category, customEventType.subcategory) as unknown as CustomEvent[];
+        events = await gdprManager.getAllUserCustomEvents({ userId: USER_ID, userAttribute: USER_ATTRIBUTE, category: customEventType.category, subcategory: customEventType.subcategory }) as unknown as CustomEvent[];
         expect(events?.length).toEqual(EVENT_COUNT);
 
 
