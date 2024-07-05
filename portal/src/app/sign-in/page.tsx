@@ -9,6 +9,7 @@ import { useContext, useEffect, useState } from "react";
 import Logo from "assets/img/logo.png";
 import AnalyticsLogin from "assets/img/analytics-login.svg";
 import AnalyticsLogin2 from "assets/img/analytics-login-2.svg";
+import Netlify from "assets/img/netlify.svg";
 import Link from "next/link";
 import { getRoles, getSession, getVerificationStatus, loginToAccount } from "@/actions/Auth";
 import { validateEmail } from "@/utils/string";
@@ -83,6 +84,9 @@ export default function SignIn() {
                         </div>}
                     </div>
                 </div>
+                <a href="https://www.netlify.com" className="mt-auto">
+                    <img src={Netlify.src} className="h-12" />
+                </a>
             </div>
             {!isMobile && <div className="bg-[#ffaa63] grow p-12 flex flex-col justify-between items-start">
                 <div>

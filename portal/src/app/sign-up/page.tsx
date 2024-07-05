@@ -11,6 +11,7 @@ import AnalyticsLogin from "assets/img/analytics-login.svg";
 import AnalyticsLogin2 from "assets/img/analytics-login-2.svg";
 import Link from "next/link";
 import { validateEmail } from "@/utils/string";
+import Netlify from "assets/img/netlify.svg";
 import { createAccount, getRoles, getSession, getVerificationStatus } from "@/actions/Auth";
 
 export default function SignUp() {
@@ -97,6 +98,9 @@ export default function SignUp() {
                         </div>}
                     </div>
                 </div>
+                <a href="https://www.netlify.com" className="mt-auto">
+                    <img src={Netlify.src} className="h-12" />
+                </a>
             </div>
             {!isMobile && <div className="bg-[#ffaa63] grow p-12 flex flex-col justify-between items-start">
                 <div>

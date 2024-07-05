@@ -32,7 +32,6 @@ import pathlib
 col1, col2 = st.columns([1, 5])
 
 with col1:
-    print()
     st.image(
         f"{pathlib.Path(__file__).parent.resolve()}/images/bog_mainlogo.jpeg", width=100
     )
@@ -110,6 +109,11 @@ if selected_environment:
     selected_environment = selected_environment.lower()
 if selected_event_type:
     days_ago = init_days_slider(st, selected_event_type)
+
+st.sidebar.image(
+    f"{pathlib.Path(__file__).parent.resolve()}/images/netlify.svg",
+    width=100,
+)
 
 if days_ago:
     time_iso_string = get_iso_string_n_days_ago(int(days_ago))
