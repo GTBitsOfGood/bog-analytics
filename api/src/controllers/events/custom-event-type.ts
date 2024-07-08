@@ -81,7 +81,7 @@ import { Request } from "express";
  *                   example: false
  *                 message:
  *                   type: string
- *                   example: "Project does not exist for client token"
+ *                   example: "Project does not exist for server token"
  */
 const customEventTypeRoute = APIWrapper({
     POST: {
@@ -130,12 +130,6 @@ const customEventTypeRoute = APIWrapper({
      *           type: string
      *         required: true
      *         description: The name of the project for which to retrieve custom event types.
-     *       - in: header
-     *         name: servertoken
-     *         schema:
-     *           type: string
-     *         required: false
-     *         description: Server token for authentication.
      *     responses:
      *       '200':
      *         description: Successful response.

@@ -153,12 +153,6 @@ const inputEventRoute = APIWrapper({
      *           type: string
      *           format: date-time
      *         description: The timestamp after which to start retrieving events.
-     *       - in: header
-     *         name: clienttoken
-     *         schema:
-     *           type: string
-     *         required: false
-     *         description: Client token for authentication.
      *     responses:
      *       '200':
      *         description: Successful response.
