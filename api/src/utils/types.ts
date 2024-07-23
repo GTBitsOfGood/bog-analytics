@@ -16,11 +16,7 @@ import {
  *           type: string
  *           description: The subcategory of the event
  *         projectId:
- *           oneOf:
- *             - type: string
- *             - type: object
- *               properties:
- *                 $ref: '#/components/schemas/ObjectId'
+ *           type: string
  *           description: The ID of the project related to the event
  *         environment:
  *           $ref: '#/components/schemas/EventEnvironment'
@@ -50,11 +46,7 @@ export interface BaseEvent extends Document {
  *       type: object
  *       properties:
  *         projectId:
- *           oneOf:
- *             - type: string
- *             - type: object
- *               properties:
- *                 $ref: '#/components/schemas/ObjectId'
+ *           type: string
  *           description: The ID of the project related to the event
  *         environment:
  *           $ref: '#/components/schemas/EventEnvironment'
@@ -191,11 +183,7 @@ export interface ClickEventProperties {
  *       type: object
  *       properties:
  *         _id:
- *           oneOf:
- *             - type: string
- *             - type: object
- *               properties:
- *                 $ref: '#/components/schemas/ObjectId'
+ *           type: string
  *         clientApiKey:
  *           type: string
  *           description: The client API key for the project
@@ -231,11 +219,7 @@ export interface Project {
  *       type: object
  *       properties:
  *         _id:
- *           oneOf:
- *             - type: string
- *             - type: object
- *               properties:
- *                 $ref: '#/components/schemas/ObjectId'
+ *           type: string
  *         category:
  *           type: string
  *           description: The category of the custom event type
@@ -248,11 +232,7 @@ export interface Project {
  *             type: string
  *           description: A list of properties for the custom event type
  *         projectId:
- *           oneOf:
- *             - type: string
- *             - type: object
- *               properties:
- *                 $ref: '#/components/schemas/ObjectId'
+ *           type: string
  *           description: The ID of the project related to the custom event type
  */
 export interface CustomEventType {
@@ -273,11 +253,7 @@ export interface CustomEventType {
  *         - type: object
  *           properties:
  *             eventTypeId:
- *               oneOf:
- *                 - type: string
- *                 - type: object
- *                   properties:
- *                     $ref: '#/components/schemas/ObjectId'
+ *               type: string
  *               description: The ID of the custom event type
  *             properties:
  *               type: object
@@ -296,23 +272,11 @@ export interface CustomEvent extends BaseEventWithoutCategory {
  *       type: object
  *       properties:
  *         _id:
- *           oneOf:
- *             - type: string
- *             - type: object
- *               properties:
- *                 $ref: '#/components/schemas/ObjectId'
+ *           type: string
  *         eventTypeId:
- *           oneOf:
- *             - type: string
- *             - type: object
- *               properties:
- *                 $ref: '#/components/schemas/ObjectId'
+ *           type: string
  *         projectId:
- *           oneOf:
- *             - type: string
- *             - type: object
- *               properties:
- *                 $ref: '#/components/schemas/ObjectId'
+ *           type: string
  *         graphTitle:
  *           type: string
  *           description: The title of the graph
@@ -450,12 +414,3 @@ export enum EventEnvironment {
     STAGING = "staging",
     PRODUCTION = "production"
 }
-
-/**
- * @swagger
- * components:
- *   schemas:
- *     ObjectId:
- *       type: string
- *       description: A unique identifier for objects
- */
