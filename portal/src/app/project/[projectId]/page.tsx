@@ -5,6 +5,8 @@ import { ScreenURLs } from "@/utils/types";
 import Navigator from "@/components/Navigator";
 import CustomEventTypesTable from "@/components/CustomEventTypesTable";
 import CreateCustomEventTypeWidget from "@/components/CreateCustomEventTypeWidget";
+import UpdatePrivateDataWidget from "@/components/UpdatePrivateDataWidget";
+import UpdateDeletionPolicyWidget from "@/components/UpdateDeletionPolicyWidget";
 
 
 function ProjectPage({ params }: { params: { projectId: string } }) {
@@ -19,6 +21,8 @@ function ProjectPage({ params }: { params: { projectId: string } }) {
         <div className={`p-12 grow min-w-0 min-h-0 ${isMobile ? "min-h-0 overflow-y-scroll max-h-full" : ""} flex flex-col gap-y-2`}>
             <CreateCustomEventTypeWidget projectId={params.projectId} />
             <CustomEventTypesTable projectId={params.projectId} />
+            <UpdatePrivateDataWidget projectId={params.projectId} />
+            <UpdateDeletionPolicyWidget projectId={params.projectId} />
         </div>
     </main>
     )

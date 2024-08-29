@@ -1,5 +1,5 @@
 import { createInputEvent, paginatedGetInputEvents } from "@/src/actions/input-event";
-import { getProjectByClientKey } from "@/src/actions/project";
+import { getProjectByClientKey, validatePrivateData } from "@/src/actions/project";
 import { relogRequestHandler } from "@/src/middleware/request-middleware";
 import APIWrapper from "@/src/utils/api-wrapper";
 import { EventEnvironment, InputEvent } from "@/src/utils/types";
@@ -123,7 +123,7 @@ const inputEventRoute = APIWrapper({
      *     tags: 
      *       - Events API
      *     summary: Retrieve input events.
-     *     description: Retrieves input events based on specified parameters.
+     *     description: Retrieves input events based on specified parameters. If the project's data is private, a server token is required to access the data.
      *     parameters:
      *       - in: query
      *         name: projectName
@@ -153,6 +153,12 @@ const inputEventRoute = APIWrapper({
      *           type: string
      *           format: date-time
      *         description: The timestamp after which to start retrieving events.
+     *       - in: header
+     *         name: servertoken
+     *         schema:
+     *           type: string
+     *         required: false
+     *         description: Server token for accessing private project data.
      *     responses:
      *       '200':
      *         description: Successful response.
@@ -201,7 +207,7 @@ const inputEventRoute = APIWrapper({
      *                   example: false
      *                 message:
      *                   type: string
-     *                   example: "You do not have permissions to access this API route"
+     *                   example: "This project's data is private. You need a server token to view it"
      */
     GET: {
         config: {
@@ -215,6 +221,11 @@ const inputEventRoute = APIWrapper({
             if (!projectName) {
                 throw new Error("You must specify a project name!")
             }
+
+            if (!(await validatePrivateData(projectName as string, (req.headers.servertoken as string | undefined)))) {
+                throw new Error("This project's data is private. You need a server token to view it")
+            }
+
             const events: InputEvent[] = await paginatedGetInputEvents(afterTime, afterId as string, parseInt(limit as string), projectName as string, environment as EventEnvironment);
             return {
                 events,

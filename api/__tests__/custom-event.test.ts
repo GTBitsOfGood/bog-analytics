@@ -13,6 +13,7 @@ import { CustomEventType } from '@/src/utils/types';
 let manyTypesProject: Project | null = null;
 let colorProject: Project | null = null;
 let unchangedProject: Project | null = null;
+let privateTestProject: Project | null = null;
 let manyColorType: CustomEventType | null = null;
 let manyDimType: CustomEventType | null = null;
 let oneColorType: CustomEventType | null = null;
@@ -84,6 +85,22 @@ describe("/api/events/custom-event", () => {
         expect(eventTypes3.length).toEqual(1);
         oneColorType = colorResponse.body.payload;
 
+        const responsePrivate = await agent.post("/api/project").send({ projectName: "private jest project", privateData: true })
+        expect(responsePrivate.status).toBe(200)
+
+        privateTestProject = responsePrivate.body.payload;
+        const colorEventTypeResponsePrivate = await agent
+            .post("/api/events/custom-event-type")
+            .set("servertoken", privateTestProject?.serverApiKey as string)
+            .send(eventTypeColorProperties);
+        expect(colorEventTypeResponsePrivate.status).toBe(200);
+        const dimEventTypeResponsePrivate = await agent
+            .post("/api/events/custom-event-type")
+            .set("servertoken", privateTestProject?.serverApiKey as string)
+            .send(eventTypeDimProperties);
+        expect(dimEventTypeResponsePrivate.status).toBe(200);
+        const eventTypesPrivate = await getCustomEventTypesForProject(privateTestProject?._id as string);
+        expect(eventTypesPrivate.length).toEqual(2);
     })
     afterAll(async () => {
         await deleteProjectById(manyTypesProject?._id as string);
@@ -460,5 +477,47 @@ describe("/api/events/custom-event", () => {
             expect(events.length).toEqual(0);
             expect(afterId).toBeNull();
         });
+
+        test("Get events of private project without server key", async () => {
+            const response = await agent
+                .post("/api/events/custom-event")
+                .set("clienttoken", privateTestProject?.clientApiKey as string)
+                .send({
+                    category: manyColorType?.category,
+                    subcategory: manyColorType?.subcategory,
+                    properties: eventColorProperties.properties
+                });
+            expect(response.status).toBe(200);
+
+            const getResponse = await agent
+                .get("/api/events/custom-event")
+                .query({ projectName: privateTestProject?.projectName })
+
+            expect(getResponse.status).toBe(400);
+        })
+
+        test("Get events of private project with server key", async () => {
+            const response = await agent
+                .post("/api/events/custom-event")
+                .set("clienttoken", privateTestProject?.clientApiKey as string)
+                .send({
+                    category: manyColorType?.category,
+                    subcategory: manyColorType?.subcategory,
+                    properties: eventColorProperties.properties
+                });
+            expect(response.status).toBe(200);
+
+            const getResponse = await agent
+                .get("/api/events/custom-event")
+                .query({
+                    projectName: privateTestProject?.projectName,
+                    category: manyColorType?.category,
+                    subcategory: manyColorType?.subcategory,
+                })
+                .set("servertoken", privateTestProject?.serverApiKey as string)
+
+            expect(getResponse.status).toBe(200);
+        })
+
     });
 });

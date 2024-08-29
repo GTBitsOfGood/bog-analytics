@@ -100,6 +100,8 @@ export interface Project {
     clientApiKey: string;
     serverApiKey: string;
     projectName: string;
+    privateData: boolean;
+    deletionPolicy: number;
     createdAt?: Date;
     updatedAt?: Date;
 }

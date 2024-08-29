@@ -1,5 +1,5 @@
 import { createClickEvent, paginatedGetClickEvents } from "@/src/actions/click-event";
-import { getProjectByClientKey } from "@/src/actions/project";
+import { getProjectByClientKey, getProjectByName, getProjectByServerKey, validatePrivateData } from "@/src/actions/project";
 import { relogRequestHandler } from "@/src/middleware/request-middleware";
 import APIWrapper from "@/src/utils/api-wrapper";
 import { ClickEvent, EventEnvironment } from "@/src/utils/types";
@@ -115,7 +115,7 @@ const clickEventRoute = APIWrapper({
      *     tags: 
      *       - Events API
      *     summary: Retrieve click events.
-     *     description: Retrieves click events based on specified parameters.
+     *     description: Retrieves click events based on specified parameters. If the project data is private, a valid server token is required to access the data.
      *     parameters:
      *       - in: query
      *         name: afterId
@@ -145,6 +145,12 @@ const clickEventRoute = APIWrapper({
      *           type: string
      *           format: date-time
      *         description: The timestamp after which to start retrieving events.
+     *       - in: header
+     *         name: servertoken
+     *         schema:
+     *           type: string
+     *         required: false
+     *         description: Server token required for accessing private project data.
      *     responses:
      *       '200':
      *         description: Successful response.
@@ -193,7 +199,7 @@ const clickEventRoute = APIWrapper({
      *                   example: false
      *                 message:
      *                   type: string
-     *                   example: "You do not have permissions to access this API route"
+     *                   example: "This project's data is private. You need a server token to view it."
      */
     GET: {
         config: {
@@ -206,6 +212,11 @@ const clickEventRoute = APIWrapper({
             if (!projectName) {
                 throw new Error("You must specify a project name!")
             }
+
+            if (!(await validatePrivateData(projectName as string, (req.headers.servertoken as string | undefined)))) {
+                throw new Error("This project's data is private. You need a server token to view it")
+            }
+
             const events: ClickEvent[] = await paginatedGetClickEvents(afterTime, afterId as string, parseInt(limit as string), projectName as string, environment as EventEnvironment);
             return {
                 events,

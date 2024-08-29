@@ -329,7 +329,6 @@ export default class GDPRManager {
             return events;
 
         } catch (e) {
-            console.log(e)
             await logMessage(formatErrorMessage("an error occurred when updating click events for a user (GDPR)", { userId, eventId, objectId }))
             return null
         }

@@ -130,6 +130,7 @@ dist
 .pnp.*
 
 .env
+.env.prod
 
 output/docs.html
 swagger.json

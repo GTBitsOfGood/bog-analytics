@@ -253,4 +253,10 @@ def get_projects():
     response = requests.get(project_url)
     response.raise_for_status()  # error
     response = response.json()
-    return [project["projectName"] for project in response["payload"]]
+    projects = []
+
+    for project in response["payload"]:
+        if not project.get("privateData", False):
+            projects.append(project["projectName"])
+
+    return projects

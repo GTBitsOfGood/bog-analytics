@@ -15,9 +15,10 @@ export const createClickEvent = async (apiBaseUrl: string, apiKey: string, objec
     })
 }
 
-export const getPaginatedClickEvents = async (apiBaseUrl: string, getEventParams: GetEventsQueryParams) => {
+export const getPaginatedClickEvents = async (apiBaseUrl: string, getEventParams: GetEventsQueryParams, serverApiKey?: string) => {
     return externalRequest<{ events: ClickEvent[], afterId: string }>({
         url: apiBaseUrl + urls.events.clickEvent,
+        serverApiKey: serverApiKey,
         method: HttpMethod.GET,
         queryParams: {
             ...getEventParams

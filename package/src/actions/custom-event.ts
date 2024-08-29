@@ -16,10 +16,11 @@ export const createCustomEvent = async (apiBaseUrl: string, apiKey: string, cate
     })
 }
 
-export const getPaginatedCustomEvents = async (apiBaseUrl: string, getEventParams: GetCustomEventsQueryParams) => {
+export const getPaginatedCustomEvents = async (apiBaseUrl: string, getEventParams: GetCustomEventsQueryParams, serverApiKey?: string) => {
     return externalRequest<{ events: CustomEvent[], afterId: string }>({
         url: apiBaseUrl + urls.events.customEvent,
         method: HttpMethod.GET,
+        serverApiKey: serverApiKey,
         queryParams: {
             ...getEventParams
         }

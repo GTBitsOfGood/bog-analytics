@@ -1,6 +1,6 @@
 import { createCustomEvent, paginatedGetCustomEvents } from "@/src/actions/custom-event";
 import { getCustomEventTypeID, findEventTypeForProjectByID, getCustomEventType } from "@/src/actions/custom-event-type";
-import { getProjectIDByName } from "@/src/actions/project";
+import { getProjectIDByName, validatePrivateData } from "@/src/actions/project";
 import { getProjectByClientKey } from "@/src/actions/project";
 import { relogRequestHandler } from "@/src/middleware/request-middleware";
 import APIWrapper from "@/src/utils/api-wrapper";
@@ -145,7 +145,7 @@ const customEventRoute = APIWrapper({
      *     tags: 
      *       - Events API
      *     summary: Retrieve custom events.
-     *     description: Retrieves custom events based on specified parameters.
+     *     description: Retrieves custom events based on specified parameters. If the project data is private, a valid server token is required to access the data.
      *     parameters:
      *       - in: query
      *         name: projectName
@@ -185,6 +185,12 @@ const customEventRoute = APIWrapper({
      *           type: string
      *           format: date-time
      *         description: The timestamp after which to start retrieving events.
+     *       - in: header
+     *         name: servertoken
+     *         schema:
+     *           type: string
+     *         required: false
+     *         description: Server token required for accessing private project data.
      *     responses:
      *       '200':
      *         description: Successful response.
@@ -233,7 +239,20 @@ const customEventRoute = APIWrapper({
      *                   example: false
      *                 message:
      *                   type: string
-     *                   example: "You do not have permissions to access this API route"
+     *                   example: "This project's data is private. You need a server token to view it."
+     *       '404':
+     *         description: Not Found.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 success:
+     *                   type: boolean
+     *                   example: false
+     *                 message:
+     *                   type: string
+     *                   example: "Project or event type does not exist."
      */
     GET: {
         config: {
@@ -253,6 +272,10 @@ const customEventRoute = APIWrapper({
             const eventType = await getCustomEventTypeID(id.toString(), category as string, subcategory as string);
             if (!eventType) {
                 throw new Error("Event type does not exist");
+            }
+
+            if (!(await validatePrivateData(projectName as string, (req.headers.servertoken as string | undefined)))) {
+                throw new Error("This project's data is private. You need a server token to view it")
             }
 
             const { afterId } = req.query;

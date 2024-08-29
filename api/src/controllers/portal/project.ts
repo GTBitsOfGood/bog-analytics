@@ -3,7 +3,7 @@ import { deleteCustomEventsByProject } from "@/src/actions/custom-event";
 import { deleteCustomEventTypesByProject } from "@/src/actions/custom-event-type";
 import { deleteCustomGraphTypesByProject } from "@/src/actions/custom-graph-type";
 import { deleteInputEventsByProject } from "@/src/actions/input-event";
-import { createProject, deleteProjectByName, getProjectIDByName, getProjectsWithSensitiveInfo, getProjectByIdWithSensitiveInfo } from "@/src/actions/project";
+import { createProject, deleteProjectByName, getProjectIDByName, getProjectsWithSensitiveInfo, getProjectByIdWithSensitiveInfo, updateProjectByName } from "@/src/actions/project";
 import { deleteVisitEventsByProject } from "@/src/actions/visit-event";
 import { relogRequestHandler } from "@/src/middleware/request-middleware";
 import APIWrapper from "@/src/utils/api-wrapper";
@@ -68,7 +68,25 @@ const projectRoute = APIWrapper({
             return await deleteProjectByName(projectName);
         }
     },
+    PATCH: {
+        config: {
+            requirePortalToken: true
+        },
+        handler: async (req: Request) => {
+            const projectName: string = req.body.projectName;
+            const privateData: boolean = req.body.privateData ?? false;
+            const deletionPolicy: number = req.body.deletionPolicy ?? -1;
 
+            const updates = {
+                privateData,
+                deletionPolicy:
+                    Math.floor(Math.max(deletionPolicy, -1))
+            }
+
+            return await updateProjectByName(projectName, updates);
+
+        }
+    }
 });
 
 export const portalProject = relogRequestHandler(projectRoute);

@@ -29,3 +29,25 @@ export const deleteProject = (projectName: string) => {
         }
     })
 }
+
+export const updateProjectSettings = (projectName: string, privateData?: boolean, deletionPolicy?: number) => {
+    return internalRequest<Project>({
+        url: urls.baseUrl + urls.api.projectSettings,
+        method: HttpMethod.PATCH,
+        body: {
+            projectName,
+            deletionPolicy,
+            privateData
+        }
+    })
+}
+
+export const getProjectSettings = (projectName: string) => {
+    return internalRequest<Project>({
+        url: urls.baseUrl + urls.api.projectSettings,
+        method: HttpMethod.GET,
+        queryParams: {
+            projectName,
+        }
+    })
+}
