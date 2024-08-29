@@ -1,6 +1,6 @@
 import { updateProjectPrivateDataAndDeletionPolicy } from "@/src/migrations/private-data-and-deletion-policy";
 
-const PRODUCTION_MODE = true;
+const PRODUCTION_MODE = false;
 
 // Make sure you add the migrations in order
 const MIGRATIONS: Array<(productionMode: boolean) => Promise<void>> = [
