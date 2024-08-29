@@ -295,7 +295,7 @@ describe("/api/events/click-event", () => {
                 .get("/api/events/click-event")
                 .query({ projectName: privateTestProject?.projectName })
 
-            expect(getResponse.status).toBe(400);
+            expect(getResponse.status).toBe(403);
         })
 
         test("Get events of private project with server key", async () => {

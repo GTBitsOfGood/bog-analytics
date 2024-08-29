@@ -4,6 +4,7 @@ import { getProjectIDByName, validatePrivateData } from "@/src/actions/project";
 import { getProjectByClientKey } from "@/src/actions/project";
 import { relogRequestHandler } from "@/src/middleware/request-middleware";
 import APIWrapper from "@/src/utils/api-wrapper";
+import { HttpError } from "@/src/utils/http-error";
 import { CustomEvent, EventEnvironment } from "@/src/utils/types";
 import { Request } from "express";
 
@@ -275,7 +276,7 @@ const customEventRoute = APIWrapper({
             }
 
             if (!(await validatePrivateData(projectName as string, (req.headers.servertoken as string | undefined)))) {
-                throw new Error("This project's data is private. You need a server token to view it")
+                throw new HttpError("This project's data is private. You need a server token to view it", 403)
             }
 
             const { afterId } = req.query;

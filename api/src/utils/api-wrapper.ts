@@ -4,6 +4,7 @@ import {
 } from "@/src/utils/types";
 import { Request, RequestHandler, Response } from "express"; import { getProjectByClientKey, getProjectByServerKey } from "@/src/actions/project";
 import { validatePortalToken } from "@/src/actions/portal";
+import { HttpError } from "./http-error";
 
 interface RouteConfig {
     requireClientToken?: boolean; // Client side event logging endpoints
@@ -93,8 +94,9 @@ function APIWrapper(
                 });
             }
 
-            const error = e as Error;
-            return res.status(400).json({ success: false, message: error.message });
+            const error = e as (Error | HttpError);
+            const code = (e as HttpError)?.errorCode ?? 400;
+            return res.status(code).json({ success: false, message: error.message });
         }
     };
 }

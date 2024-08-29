@@ -33,20 +33,20 @@ afterAll(async () => {
     await mongoMemoryInstance.stop()
     server.close()
 })
+const eventTypeDimProperties = {
+    category: "Interaction",
+    subcategory: "Resize",
+    properties: ["length", "width", "height"]
+}
+const eventTypeColorProperties = {
+
+    category: "Image",
+    subcategory: "Visuals",
+    properties: ["color", "pixels", "opacity"]
+}
 
 describe("/api/events/custom-event", () => {
     beforeAll(async () => {
-        const eventTypeDimProperties = {
-            category: "Interaction",
-            subcategory: "Resize",
-            properties: ["length", "width", "height"]
-        }
-        const eventTypeColorProperties = {
-
-            category: "Image",
-            subcategory: "Visuals",
-            properties: ["color", "pixels", "opacity"]
-        }
         //project with color and dimension custom event types
         const response = await agent.post("/api/project").send({ projectName: "many types project" })
         expect(response.status).toBe(200)
@@ -483,17 +483,20 @@ describe("/api/events/custom-event", () => {
                 .post("/api/events/custom-event")
                 .set("clienttoken", privateTestProject?.clientApiKey as string)
                 .send({
-                    category: manyColorType?.category,
-                    subcategory: manyColorType?.subcategory,
+                    category: eventTypeColorProperties?.category,
+                    subcategory: eventTypeColorProperties?.subcategory,
                     properties: eventColorProperties.properties
                 });
             expect(response.status).toBe(200);
 
             const getResponse = await agent
                 .get("/api/events/custom-event")
-                .query({ projectName: privateTestProject?.projectName })
+                .query({
+                    projectName: privateTestProject?.projectName, category: eventTypeColorProperties?.category,
+                    subcategory: eventTypeColorProperties?.subcategory,
+                })
 
-            expect(getResponse.status).toBe(400);
+            expect(getResponse.status).toBe(403);
         })
 
         test("Get events of private project with server key", async () => {
@@ -501,8 +504,8 @@ describe("/api/events/custom-event", () => {
                 .post("/api/events/custom-event")
                 .set("clienttoken", privateTestProject?.clientApiKey as string)
                 .send({
-                    category: manyColorType?.category,
-                    subcategory: manyColorType?.subcategory,
+                    category: eventTypeColorProperties?.category,
+                    subcategory: eventTypeColorProperties?.subcategory,
                     properties: eventColorProperties.properties
                 });
             expect(response.status).toBe(200);
@@ -511,8 +514,8 @@ describe("/api/events/custom-event", () => {
                 .get("/api/events/custom-event")
                 .query({
                     projectName: privateTestProject?.projectName,
-                    category: manyColorType?.category,
-                    subcategory: manyColorType?.subcategory,
+                    category: eventTypeColorProperties?.category,
+                    subcategory: eventTypeColorProperties?.subcategory,
                 })
                 .set("servertoken", privateTestProject?.serverApiKey as string)
 

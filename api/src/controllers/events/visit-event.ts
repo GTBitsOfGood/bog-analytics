@@ -4,6 +4,7 @@ import APIWrapper from "@/src/utils/api-wrapper";
 import { EventEnvironment, VisitEvent } from "@/src/utils/types";
 import { Request } from "express";
 import { getProjectByClientKey, validatePrivateData } from "@/src/actions/project";
+import { HttpError } from "@/src/utils/http-error";
 
 /**
  * @swagger
@@ -217,7 +218,7 @@ const visitEventRoute = APIWrapper({
             }
 
             if (!(await validatePrivateData(projectName as string, (req.headers.servertoken as string | undefined)))) {
-                throw new Error("This project's data is private. You need a server token to view it")
+                throw new HttpError("This project's data is private. You need a server token to view it", 403)
             }
 
             const events: VisitEvent[] = await paginatedGetVisitEvents(afterTime, afterId, parseInt(limit as string), projectName as string, environment as EventEnvironment);
