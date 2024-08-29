@@ -175,6 +175,12 @@ constructor({ apiBaseUrl, environment }: { apiBaseUrl?: string, environment?: Ev
 
 ### Methods
 
+#### `authenticate(serverApiKey: string): Promise<void>`
+
+Authenticates the viewer with the server API key. Used to access events from projects with private data.
+
+- `serverApiKey`: The server API key.
+
 #### `getCustomEventTypes(projectName: string): Promise<CustomEventType[] | null>`
 
 Retrieves the custom event types for a given project.

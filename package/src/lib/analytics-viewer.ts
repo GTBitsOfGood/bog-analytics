@@ -18,7 +18,7 @@ export default class AnalyticsViewer {
         this.environment = environment ?? EventEnvironment.DEVELOPMENT;
     }
 
-    public authenticate(serverApiKey: string) {
+    public async authenticate(serverApiKey: string) {
         this.serverApiKey = serverApiKey;
     }
 
