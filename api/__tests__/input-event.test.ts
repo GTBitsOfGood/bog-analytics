@@ -327,7 +327,7 @@ describe("/api/events/input-event", () => {
                 .get("/api/events/input-event")
                 .query({ projectName: privateTestProject?.projectName })
 
-            expect(getResponse.status).toBe(400);
+            expect(getResponse.status).toBe(403);
         })
 
         test("Get events of private project with server key", async () => {
