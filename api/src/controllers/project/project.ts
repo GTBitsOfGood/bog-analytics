@@ -20,8 +20,11 @@ const projectRoute = APIWrapper({
             const clientApiKey: string = randomUUID();
             const serverApiKey: string = randomUUID();
 
+            const deletionPolicy: number = req.body.deletionPolicy ?? -1;
+            const privateData: boolean = req.body.privateData ?? false;
+
             const project: Partial<Project> = {
-                projectName, clientApiKey, serverApiKey
+                projectName, clientApiKey, serverApiKey, deletionPolicy, privateData
             }
 
             const preexistingProject = await getProjectIDByName(projectName);

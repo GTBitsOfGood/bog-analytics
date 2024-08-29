@@ -44,3 +44,16 @@ export const deleteProject = async (projectName: string) => {
         }
     })
 }
+
+export const updateProject = async (projectName: string, privateData?: boolean, deletionPolicy?: number) => {
+    return externalRequest<Project>({
+        url: urls.analyticsUrl + urls.analyticsApi.project,
+        method: HttpMethod.PATCH,
+        portalToken: generatePortalToken(),
+        body: {
+            projectName,
+            privateData,
+            deletionPolicy
+        }
+    })
+}

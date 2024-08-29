@@ -11,6 +11,7 @@ import { getInputEvents } from '@/src/actions/input-event';
 import { getClickEvents } from '@/src/actions/click-event';
 
 let testProject: Project | null = null;
+let privateTestProject: Project | null = null;
 let server: Server<typeof IncomingMessage, typeof ServerResponse>;
 let agent: TestAgent<Test>;
 let mongoMemoryInstance: MongoMemoryServer;
@@ -31,6 +32,12 @@ describe("/api/events/visit-event", () => {
         expect(response.status).toBe(200)
 
         testProject = response.body.payload;
+
+        const responsePrivate = await agent.post("/api/project").send({ projectName: "private jest project", privateData: true })
+        expect(responsePrivate.status).toBe(200)
+
+        privateTestProject = responsePrivate.body.payload;
+
     })
     afterAll(async () => {
         await deleteProjectById(testProject?._id as string);
@@ -116,7 +123,6 @@ describe("/api/events/visit-event", () => {
             expect(response2.status).toBe(200);
 
             const events2 = await getVisitEvents();
-            console.log(events2)
             expect(events2.length).toEqual(2);
 
 
@@ -140,7 +146,6 @@ describe("/api/events/visit-event", () => {
             expect(response2.status).toBe(200);
 
             const events2 = await getVisitEvents();
-            console.log(events2)
             expect(events2.length).toEqual(2);
 
 
@@ -164,7 +169,6 @@ describe("/api/events/visit-event", () => {
 
 
             const events2 = await getVisitEvents();
-            console.log(events2)
             expect(events2.length).toEqual(1);
         });
     });
@@ -305,5 +309,45 @@ describe("/api/events/visit-event", () => {
             expect(events.length).toEqual(0);
             expect(afterId).toBeNull();
         });
+
+        test("Get events of private project without server key", async () => {
+            let visitEventProperties = {
+                pageUrl: "url",
+                userId: "userId",
+                environment: "development"
+            }
+            const response = await agent
+                .post("/api/events/visit-event")
+                .set("clienttoken", privateTestProject?.clientApiKey as string)
+                .send(visitEventProperties);
+            expect(response.status).toBe(200);
+
+            const getResponse = await agent
+                .get("/api/events/visit-event")
+                .query({ projectName: privateTestProject?.projectName })
+
+            expect(getResponse.status).toBe(400);
+        })
+
+        test("Get events of private project with server key", async () => {
+            let visitEventProperties = {
+                pageUrl: "url",
+                userId: "userId",
+                environment: "development"
+            }
+            const response = await agent
+                .post("/api/events/visit-event")
+                .set("clienttoken", privateTestProject?.clientApiKey as string)
+                .send(visitEventProperties);
+            expect(response.status).toBe(200);
+
+            const getResponse = await agent
+                .get("/api/events/visit-event")
+                .query({ projectName: privateTestProject?.projectName })
+                .set("servertoken", privateTestProject?.serverApiKey as string)
+
+            expect(getResponse.status).toBe(200);
+        })
+
     });
 });

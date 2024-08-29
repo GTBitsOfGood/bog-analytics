@@ -15,9 +15,10 @@ export const createVisitEvent = async (apiBaseUrl: string, apiKey: string, pageU
     })
 }
 
-export const getPaginatedVisitEvents = async (apiBaseUrl: string, getEventParams: GetEventsQueryParams) => {
+export const getPaginatedVisitEvents = async (apiBaseUrl: string, getEventParams: GetEventsQueryParams, serverApiKey?: string) => {
     return externalRequest<{ events: VisitEvent[], afterId: string }>({
         url: apiBaseUrl + urls.events.visitEvent,
+        serverApiKey: serverApiKey,
         method: HttpMethod.GET,
         queryParams: {
             ...getEventParams

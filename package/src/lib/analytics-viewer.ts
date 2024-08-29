@@ -10,11 +10,16 @@ import { getPaginatedCustomEvents } from "@/actions/custom-event";
 
 export default class AnalyticsViewer {
     private apiBaseUrl?: string;
+    private serverApiKey?: string;
     private environment: EventEnvironment;
 
     constructor({ apiBaseUrl, environment }: { apiBaseUrl?: string, environment?: EventEnvironment }) {
         this.apiBaseUrl = apiBaseUrl ?? "https://analytics.bitsofgood.org"
         this.environment = environment ?? EventEnvironment.DEVELOPMENT;
+    }
+
+    public authenticate(serverApiKey: string) {
+        this.serverApiKey = serverApiKey;
     }
 
     public async getCustomEventTypes(projectName: string): Promise<CustomEventType[] | null> {
@@ -54,7 +59,7 @@ export default class AnalyticsViewer {
 
     public async getClickEventsPaginated(queryParams: GetEventsQueryParams) {
         try {
-            return await getPaginatedClickEvents(this.apiBaseUrl as string, queryParams);
+            return await getPaginatedClickEvents(this.apiBaseUrl as string, queryParams, this.serverApiKey);
         } catch {
             await logMessage(formatErrorMessage(
                 "an error occurred when retrieving click events (paginated)",
@@ -84,12 +89,12 @@ export default class AnalyticsViewer {
         const clickEvents = []
 
         try {
-            let page = await getPaginatedClickEvents(this.apiBaseUrl as string, queryParams);
+            let page = await getPaginatedClickEvents(this.apiBaseUrl as string, queryParams, this.serverApiKey);
             while (true) {
                 clickEvents.push(...page['events']);
                 queryParams['afterId'] = page['afterId']
                 if (page['afterId']) {
-                    page = await getPaginatedClickEvents(this.apiBaseUrl as string, queryParams);
+                    page = await getPaginatedClickEvents(this.apiBaseUrl as string, queryParams, this.serverApiKey);
                     continue;
                 }
                 break;
@@ -115,7 +120,7 @@ export default class AnalyticsViewer {
 
     public async getVisitEventsPaginated(queryParams: GetEventsQueryParams) {
         try {
-            return await getPaginatedVisitEvents(this.apiBaseUrl as string, queryParams);
+            return await getPaginatedVisitEvents(this.apiBaseUrl as string, queryParams, this.serverApiKey);
         } catch {
             await logMessage(formatErrorMessage(
                 "an error occurred when retrieving visit events (paginated)",
@@ -145,12 +150,12 @@ export default class AnalyticsViewer {
         const visitEvents = []
 
         try {
-            let page = await getPaginatedVisitEvents(this.apiBaseUrl as string, queryParams);
+            let page = await getPaginatedVisitEvents(this.apiBaseUrl as string, queryParams, this.serverApiKey);
             while (true) {
                 visitEvents.push(...page['events']);
                 queryParams['afterId'] = page['afterId']
                 if (page['afterId']) {
-                    page = await getPaginatedVisitEvents(this.apiBaseUrl as string, queryParams);
+                    page = await getPaginatedVisitEvents(this.apiBaseUrl as string, queryParams, this.serverApiKey);
                     continue;
                 }
                 break;
@@ -176,7 +181,7 @@ export default class AnalyticsViewer {
 
     public async getInputEventsPaginated(queryParams: GetEventsQueryParams) {
         try {
-            return await getPaginatedInputEvents(this.apiBaseUrl as string, queryParams);
+            return await getPaginatedInputEvents(this.apiBaseUrl as string, queryParams, this.serverApiKey);
         } catch {
             await logMessage(formatErrorMessage(
                 "an error occurred when retrieving input events (paginated)",
@@ -206,12 +211,12 @@ export default class AnalyticsViewer {
         const inputEvents = []
 
         try {
-            let page = await getPaginatedInputEvents(this.apiBaseUrl as string, queryParams);
+            let page = await getPaginatedInputEvents(this.apiBaseUrl as string, queryParams, this.serverApiKey);
             while (true) {
                 inputEvents.push(...page['events']);
                 queryParams['afterId'] = page['afterId']
                 if (page['afterId']) {
-                    page = await getPaginatedInputEvents(this.apiBaseUrl as string, queryParams);
+                    page = await getPaginatedInputEvents(this.apiBaseUrl as string, queryParams, this.serverApiKey);
                     continue;
                 }
                 break;
@@ -237,7 +242,7 @@ export default class AnalyticsViewer {
 
     public async getCustomEventsPaginated(queryParams: GetCustomEventsQueryParams) {
         try {
-            return await getPaginatedCustomEvents(this.apiBaseUrl as string, queryParams);
+            return await getPaginatedCustomEvents(this.apiBaseUrl as string, queryParams, this.serverApiKey);
         } catch {
             await logMessage(formatErrorMessage(
                 "an error occurred when retrieving custom events (paginated)",
@@ -270,12 +275,12 @@ export default class AnalyticsViewer {
         const customEvents = []
 
         try {
-            let page = await getPaginatedCustomEvents(this.apiBaseUrl as string, queryParams);
+            let page = await getPaginatedCustomEvents(this.apiBaseUrl as string, queryParams, this.serverApiKey);
             while (true) {
                 customEvents.push(...page['events']);
                 queryParams['afterId'] = page['afterId']
                 if (page['afterId']) {
-                    page = await getPaginatedCustomEvents(this.apiBaseUrl as string, queryParams);
+                    page = await getPaginatedCustomEvents(this.apiBaseUrl as string, queryParams, this.serverApiKey);
                     continue;
                 }
                 break;

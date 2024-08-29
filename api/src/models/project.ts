@@ -15,6 +15,16 @@ export const ProjectSchema = new mongoose.Schema<Project>({
         required: true,
         unique: true
     },
+    privateData: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    deletionPolicy: {
+        type: Number,
+        required: true,
+        default: -1
+    }
 },
     {
         timestamps: {

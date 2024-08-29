@@ -33,6 +33,7 @@ export const urls = {
             }
         },
         project: "/api/projects",
+        projectSettings: "/api/projects/settings",
         customEventTypes: "/api/events/custom-event-type",
         users: "/api/users"
     },

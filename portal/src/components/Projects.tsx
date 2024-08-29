@@ -60,6 +60,12 @@ export default function Projects() {
                                 Server API Key
                             </th>
                             <th scope="col" className="px-6 py-3">
+                                Private Data
+                            </th>
+                            <th scope="col" className="px-6 py-3">
+                                Deletion Policy
+                            </th>
+                            <th scope="col" className="px-6 py-3">
                                 Project Actions
                             </th>
                         </tr>
@@ -84,6 +90,16 @@ export default function Projects() {
                                                 <IconCopy className="h-5 w-5 cursor-pointer hover:bg-blue-100 rounded-lg p-1" onClick={() => copyToClipboard(project.serverApiKey)} />
                                             </div>
                                         </td>
+                                        <th scope="row" className="px-6 py-4 font-medium whitespace-nowrap">
+                                            {!project.privateData && <div className="py-1 px-2 rounded-lg text-white font-normal bg-red-500 w-fit">
+                                                {project.privateData.toString()}
+                                            </div>}
+                                            {project.privateData && <div className="py-1 px-2 rounded-lg text-white font-normal bg-green-500 w-fit">
+                                                {project.privateData.toString()}
+                                            </div>}
+                                        </th>
+                                        <th scope="row" className="px-6 py-4 font-medium whitespace-nowrap">
+                                            {project.deletionPolicy <= 0 ? "Never Delete" : project.deletionPolicy + " Days"}                                        </th>
                                         <td className="px-6 py-4 flex flex-row gap-x-2">
                                             <button className="font-medium text-blue-600 hover:underline" onClick={() => router.push(`${urls.client.project}/${project._id}`)}>Manage</button>
                                             {isAdmin && <button className={`font-medium text-red-600 hover:underline`} onClick={() => deletionModalHandler(project.projectName)}

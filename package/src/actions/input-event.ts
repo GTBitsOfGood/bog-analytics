@@ -16,10 +16,11 @@ export const createInputEvent = async (apiBaseUrl: string, apiKey: string, objec
     })
 }
 
-export const getPaginatedInputEvents = async (apiBaseUrl: string, getEventParams: GetEventsQueryParams) => {
+export const getPaginatedInputEvents = async (apiBaseUrl: string, getEventParams: GetEventsQueryParams, serverApiKey?: string) => {
     return externalRequest<{ events: InputEvent[], afterId: string }>({
         url: apiBaseUrl + urls.events.inputEvent,
         method: HttpMethod.GET,
+        serverApiKey: serverApiKey,
         queryParams: {
             ...getEventParams
         }

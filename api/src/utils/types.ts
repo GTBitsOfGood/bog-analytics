@@ -193,6 +193,12 @@ export interface ClickEventProperties {
  *         projectName:
  *           type: string
  *           description: The name of the project
+ *         privateData:
+ *           type: boolean
+ *           description: Boolean to toggle the data between private and public modes
+ *         deletionPolicy:
+ *           type: number
+ *           description: Data deletion policy - periodically deletes data based on this policy (days)
  *         createdAt:
  *           type: string
  *           format: date-time
@@ -207,6 +213,8 @@ export interface Project {
     clientApiKey: string;
     serverApiKey: string;
     projectName: string;
+    privateData: boolean;
+    deletionPolicy: number;
     createdAt?: Date;
     updatedAt?: Date;
 }
