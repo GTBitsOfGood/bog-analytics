@@ -36,7 +36,7 @@ export const deleteProjectById = async (projectId: string) => {
 
 export const getAllProjects = async () => {
     await dbConnect();
-    return await ProjectModel.find({}).select("projectName _id");
+    return await ProjectModel.find({}).select("projectName _id privateData deletionPolicy");
 
 }
 
