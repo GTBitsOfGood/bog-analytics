@@ -7,6 +7,8 @@ WORKDIR /app
 # Copy package.json and yarn.lock to the working directory
 COPY portal/package.json portal/yarn.lock ./
 
+RUN yarn config set network-timeout 600000
+
 # Install dependencies
 RUN yarn install
 
