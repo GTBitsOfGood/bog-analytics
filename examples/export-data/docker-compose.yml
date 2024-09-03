@@ -1,0 +1,11 @@
+services:
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    networks:
+      - export-data-net
+
+networks:
+  export-data-net:
+    driver: bridge
