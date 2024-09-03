@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "export-data": "npx tsx main.ts"
+  },
+  "dependencies": {
+    "typescript": "^5.5.4"
+  }
+}
