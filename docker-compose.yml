@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 services:
   api:
     build:
@@ -7,8 +7,7 @@ services:
     ports:
       - "3001:3001"
     volumes:
-      - ./api:/app
-      - ./api/node_modules:/app/node_modules
+      - ./api/src:/app/src
     networks:
       - bog-analytics-net
     environment:
@@ -25,8 +24,8 @@ services:
       - ./dashboard:/app
       - ./dashboard/venv:/app/venv
     networks:
-      - bog-analytics-net      
-  
+      - bog-analytics-net
+
   portal:
     build:
       context: .
