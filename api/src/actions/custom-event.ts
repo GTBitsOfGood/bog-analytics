@@ -86,3 +86,8 @@ export const updateCustomEventById = async (eventId: string, updatedAttributes: 
     );
 
 }
+
+export const getCustomEventCount = async (eventTypeId: string, afterDate: Date, environment: EventEnvironment) => {
+    await dbConnect();
+    return await CustomEventModel.countDocuments({ eventTypeId, createdAt: { $gt: afterDate }, environment })
+}
