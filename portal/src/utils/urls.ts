@@ -35,7 +35,11 @@ export const urls = {
         project: "/api/projects",
         projectSettings: "/api/projects/settings",
         customEventTypes: "/api/events/custom-event-type",
-        users: "/api/users"
+        users: "/api/users",
+        customEvents: {
+            count: "/api/events/custom-event/count"
+        }
+
     },
     client: {
         home: "/",
@@ -45,6 +49,9 @@ export const urls = {
         project: "/project"
     },
     analyticsApi: {
-        project: "/api/portal/project"
+        project: "/api/portal/project",
+        customEvents: {
+            count: "/api/portal/custom-event/count"
+        }
     }
 }
