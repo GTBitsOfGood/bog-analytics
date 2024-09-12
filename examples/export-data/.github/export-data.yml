@@ -1,0 +1,28 @@
+name: Export Analytics Data on a CRON Schedule
+
+on:
+    schedule:
+        - cron: "0 0 * * *"
+    workflow_dispatch:
+
+jobs:
+    export_analytics_data:
+        runs-on: ubuntu-latest
+        name: A job to export analytics data
+        steps:
+            - name: Checkout the repository
+              uses: actions/checkout@v3
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: "16"
+
+            - name: Install dependencies
+              run: yarn install
+
+            - name: Run export data script
+              run: yarn export-data
+              env:
+                  SERVER_API_SECRET: ${{ secrets.SERVER_API_SECRET }}
+                  MONGO_URI: ${{ secrets.MONGO_URI }}
