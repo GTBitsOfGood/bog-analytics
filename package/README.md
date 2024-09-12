@@ -76,22 +76,20 @@ const inputEvent = await analyticsLogger.logInputEvent({
 });
 ```
 
-#### `logCustomEvent(category: string, subcategory: string, customEvent: Partial<CustomEvent>): Promise<CustomEvent | null>`
+#### `logCustomEvent(category: string, subcategory: string, properties: object): Promise<CustomEvent | null>`
 
 Logs a custom event to the analytics service.
 
 - `category`: The category of the custom event.
 - `subcategory`: The subcategory of the custom event.
-- `customEvent`: An object containing the properties of the custom event.
+- `properties`: An object containing the properties of the custom event.
 
 ##### Example
 
 ```javascript
 const customEvent = await analyticsLogger.logCustomEvent('feature', 'signup', {
-  properties: {
     email: 'user@example.com',
     plan: 'premium',
-  },
 });
 ```
 
