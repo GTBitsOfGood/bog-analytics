@@ -1,0 +1,1 @@
+export { customEventCount } from '@/src/controllers/portal/custom-events/count';
