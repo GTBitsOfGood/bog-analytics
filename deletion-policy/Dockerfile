@@ -10,6 +10,6 @@ COPY ./package*.json ./
 # Install dependencies
 RUN npm install
 
-COPY ./ ./
+COPY . ./
 
-CMD ["npm", "start"]
+CMD ["npx", "tsx", "/app/delete-events.ts"]
