@@ -2,42 +2,20 @@
 // README: Ensure this is in sync with the models defined in the api package
 //
 
-import { EventEnvironment } from "bog-analytics";
+import { EventEnvironment, BaseEvent, Project, CustomEvent } from "bog-analytics";
 import mongoose, { Schema, Types } from "mongoose";
 
-export interface BaseEvent extends Document {
-  category: string;
-  subcategory: string;
-  projectId: string | Types.ObjectId;
-  environment: EventEnvironment;
-  createdAt?: Date | string;
-  updatedAt?: Date | string;
+export interface BaseEventInterface extends Omit<BaseEvent, 'projectId'>, Document {
+  projectId: Types.ObjectId;
+}
+export interface ProjectInterface extends Project, Document { }
+export interface CustomEventInterface extends Omit<Omit<CustomEvent, 'projectId'>, "eventTypeId">, Document {
+  projectId: Types.ObjectId;
+  eventTypeId: Types.ObjectId;
 }
 
-export interface Project extends Document {
-  _id: string | Types.ObjectId;
-  clientApiKey: string;
-  serverApiKey: string;
-  projectName: string;
-  privateData: boolean;
-  deletionPolicy: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
 
-export interface BaseEventWithoutCategory extends Document {
-  projectId: string | Types.ObjectId;
-  environment: EventEnvironment;
-  createdAt?: Date | string;
-  updatedAt?: Date | string;
-}
-
-export interface CustomEvent extends BaseEventWithoutCategory {
-  eventTypeId: string | Types.ObjectId;
-  properties: object;
-}
-
-const ProjectSchema = new mongoose.Schema<Project>(
+const ProjectSchema = new mongoose.Schema<ProjectInterface>(
   {
     projectName: { type: String, required: true, unique: true },
     clientApiKey: { type: String, required: true, unique: true },
@@ -48,7 +26,7 @@ const ProjectSchema = new mongoose.Schema<Project>(
   { timestamps: true }
 );
 
-const BaseEventSchema = new mongoose.Schema<BaseEvent>(
+const BaseEventSchema = new mongoose.Schema<BaseEventInterface>(
   {
     category: { type: String, required: true },
     subcategory: { type: String, required: true },
@@ -63,7 +41,7 @@ const BaseEventSchema = new mongoose.Schema<BaseEvent>(
   { timestamps: true }
 );
 
-const CustomEventSchema = new mongoose.Schema<CustomEvent>(
+const CustomEventSchema = new mongoose.Schema<CustomEventInterface>(
   {
     properties: { type: Schema.Types.Mixed, required: true },
     eventTypeId: {
@@ -82,12 +60,12 @@ const CustomEventSchema = new mongoose.Schema<CustomEvent>(
   { timestamps: true }
 );
 
-export const ProjectModel = mongoose.model<Project>("Project", ProjectSchema);
-export const BaseEventModel = mongoose.model<BaseEvent>(
+export const ProjectModel = mongoose.model<ProjectInterface>("Project", ProjectSchema);
+export const BaseEventModel = mongoose.model<BaseEventInterface>(
   "BaseEvent",
   BaseEventSchema
 );
-export const CustomEventModel = mongoose.model<CustomEvent>(
+export const CustomEventModel = mongoose.model<CustomEventInterface>(
   "CustomEvent",
   CustomEventSchema
 );

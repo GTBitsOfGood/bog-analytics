@@ -6,7 +6,7 @@
     "start": "npx tsx delete-events.ts"
   },
   "dependencies": {
-    "bog-analytics": "1.0.6",
+    "bog-analytics": "^1.0.8",
     "mongoose": "^8.6.2",
     "typescript": "^5.6.2"
   },
