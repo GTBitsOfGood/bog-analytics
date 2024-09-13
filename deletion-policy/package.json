@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "tsx delete-events.ts"
+    "start": "npx tsx delete-events.ts"
   },
   "dependencies": {
     "bog-analytics": "1.0.6",
