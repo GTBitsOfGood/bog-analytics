@@ -25,6 +25,8 @@ export interface BaseEvent {
     _id: string;
     category: string;
     subcategory: string;
+    projectId: string;
+    environment: EventEnvironment;
     createdAt?: Date | string;
     updatedAt?: Date | string;
 }
@@ -35,6 +37,7 @@ export interface CustomEventType {
     subcategory: string;
     properties: string[]
     projectId: string;
+    environment: EventEnvironment;
 }
 
 export interface BaseEventWithoutCategory {
