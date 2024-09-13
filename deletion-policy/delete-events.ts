@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { Project, BaseEvent, CustomEvent } from "bog-analytics";
 import { ProjectModel, BaseEventModel, CustomEventModel } from "./models";
 
 const MONGODB_URI = process.env.DATABASE_URL || "mongodb://localhost:27017";
