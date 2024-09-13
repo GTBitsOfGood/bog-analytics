@@ -1,4 +1,6 @@
-// NOTE: Ensure this is in sync with the models defined in the api package
+//
+// README: Ensure this is in sync with the models defined in the api package
+//
 
 import { EventEnvironment } from "bog-analytics";
 import mongoose, { Schema, Types } from "mongoose";
@@ -35,7 +37,6 @@ export interface CustomEvent extends BaseEventWithoutCategory {
   properties: object;
 }
 
-// Project Model
 const ProjectSchema = new mongoose.Schema<Project>(
   {
     projectName: { type: String, required: true, unique: true },
@@ -47,7 +48,6 @@ const ProjectSchema = new mongoose.Schema<Project>(
   { timestamps: true }
 );
 
-// Base Event Model
 const BaseEventSchema = new mongoose.Schema<BaseEvent>(
   {
     category: { type: String, required: true },
@@ -63,7 +63,6 @@ const BaseEventSchema = new mongoose.Schema<BaseEvent>(
   { timestamps: true }
 );
 
-// Custom Event Model
 const CustomEventSchema = new mongoose.Schema<CustomEvent>(
   {
     properties: { type: Schema.Types.Mixed, required: true },
