@@ -78,21 +78,22 @@ def create_visit_event(client_token, page_url, user_id, environment):
         return None
 
 
-def create_custom_event(client_token, event_type_id, properties, environment):
+def create_custom_event(client_token, properties, environment, category, subcategory):
     url = base_url + "/api/events/custom-event"
     headers = {"clienttoken": client_token}
     body = {
-        "eventTypeId": event_type_id,
         "properties": properties,
         "environment": environment,
+        "category": category,
+        "subcategory": subcategory,
     }
 
     try:
         response = requests.post(url, headers=headers, json=body)
-        response.raise_for_status()  # Raises an exception for HTTP errors
+        response.raise_for_status()
         return response.json()["payload"]
     except requests.exceptions.RequestException as e:
-        print(f"Error creating custom event: {e}")
+        print(f"Error creating custom event: {e} {response.text}")
         return None
 
 
@@ -226,9 +227,10 @@ def seed():
 
         create_custom_event(
             project["clientApiKey"],
-            event_type["_id"],
             props,
             random.choice(environments),
+            event_type["category"],
+            event_type["subcategory"],
         )
 
     print("Creating Graph Types")

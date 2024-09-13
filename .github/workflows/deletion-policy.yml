@@ -1,0 +1,17 @@
+name: Run Deletion Policy on a CRON Schedule
+on:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  run_deletion_policy:
+    runs-on: ubuntu-latest
+    name: A job to run the deletion policy
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Run Deletion Policy Action Step
+        uses: ./deletion-policy # Uses an action in the deletion-policy directory
+        id: deletion-policy
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
