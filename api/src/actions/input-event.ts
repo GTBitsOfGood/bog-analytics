@@ -22,7 +22,7 @@ export const paginatedGetInputEvents = async (afterDate: Date, afterID: string, 
     if (project && project._id) {
         const events = await InputEventModel.find(
             {
-                createdAt: { $gte: afterDate },
+                createdAt: { $gt: afterDate },
                 ...(afterID && { _id: { $gt: afterID } }),
                 projectId: project._id,
                 ...(environment && { environment })

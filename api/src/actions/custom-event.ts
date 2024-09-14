@@ -28,7 +28,7 @@ export const paginatedGetCustomEvents = async (eventTypeId: string, afterDate: D
     await dbConnect();
     const events = await CustomEventModel.find(
         {
-            createdAt: { $gte: afterDate },
+            createdAt: { $gt: afterDate },
             ...(afterID && { _id: { $gt: afterID } }),
             eventTypeId,
             ...(environment && { environment })

@@ -23,7 +23,7 @@ export const paginatedGetVisitEvents = async (afterDate: Date, afterID: string, 
 
         const events = await VisitEventModel.find(
             {
-                createdAt: { $gte: afterDate },
+                createdAt: { $gt: afterDate },
                 ...(afterID && { _id: { $gt: afterID } }),
                 projectId: project._id,
                 ...(environment && { environment })
