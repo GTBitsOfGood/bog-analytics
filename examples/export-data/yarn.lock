@@ -28,10 +28,10 @@
   dependencies:
     "@types/webidl-conversions" "*"
 
-bog-analytics@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/bog-analytics/-/bog-analytics-1.0.5.tgz#5642d79ddf70fbcf34902628773900a8131c4cab"
-  integrity sha512-qTkok1QE1B9121vPlmKHLkxQUuBBrMGRN+IOlgThBDq29F1IPVM30iHAHzMru1J9NH3wTlVEdZ74G+JYaYcyFA==
+bog-analytics@^1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/bog-analytics/-/bog-analytics-1.0.9.tgz#17bdf26f2a4f03651c301ea23c49e6bfbfe65cce"
+  integrity sha512-Mk9dMdWf6enxuk5v/37rh7HH6eDqQdWmc444pyYQWE1Qm8uzjJvtDlx8SuO7ocMJL+LBwhW+ZmTCkzi4ABnbyQ==
 
 bson@^6.7.0:
   version "6.8.0"

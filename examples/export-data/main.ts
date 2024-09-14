@@ -18,8 +18,8 @@ const main = async () => {
         await dbConnect();
         console.log('Connected to MongoDB');
 
-        const viewer = new AnalyticsViewer({ environment: EventEnvironment.PRODUCTION});
-        await viewer.authenticate(SERVER_KEY);
+        const viewer = new AnalyticsViewer({ environment: EventEnvironment.PRODUCTION });
+        await viewer.authenticate(SERVER_KEY); // Only necessary for private data
 
         const customEventTypes = await viewer.getCustomEventTypes(projectName);
         if (customEventTypes) {
@@ -132,20 +132,20 @@ async function getLatestEventDates() {
 }
 async function mockEvents() {
     try {
-        const logger = new AnalyticsLogger({environment: EventEnvironment.PRODUCTION});
+        const logger = new AnalyticsLogger({ environment: EventEnvironment.PRODUCTION });
         await logger.authenticate(CLIENT_KEY)
 
         const manager = new AnalyticsManager({});
         await manager.authenticate(SERVER_KEY);
 
-        const viewer = new AnalyticsViewer({ environment: EventEnvironment.PRODUCTION});
+        const viewer = new AnalyticsViewer({ environment: EventEnvironment.PRODUCTION });
         await viewer.authenticate(SERVER_KEY);
 
         // Define a custom event if it doesn't already exist
         const existingCustomEventTypes = await viewer.getCustomEventTypes(projectName);
 
-        const customEventExists = existingCustomEventTypes?.some(eventType => 
-            eventType.category === "custom event category" && 
+        const customEventExists = existingCustomEventTypes?.some(eventType =>
+            eventType.category === "custom event category" &&
             eventType.subcategory === "custom event subcategory"
         );
         if (!customEventExists) {
@@ -164,21 +164,21 @@ async function mockEvents() {
 
         // Generate mock click, input, visit, and custom events
         for (let i = 0; i < 5; i++) {
-            await logger.logClickEvent({ 
-                objectId: `object-${i}`,                     
+            await logger.logClickEvent({
+                objectId: `object-${i}`,
                 userId: `user-${i}`,
             })
         }
 
         for (let i = 0; i < 5; i++) {
-            await logger.logVisitEvent({                    
+            await logger.logVisitEvent({
                 pageUrl: `https://portal.analytics.bitsofgood.org/dashboard/page-${i}`,
                 userId: `user-${i}`,
             })
         }
 
         for (let i = 0; i < 5; i++) {
-            await logger.logInputEvent({                    
+            await logger.logInputEvent({
                 objectId: `input-object-${i}`,
                 userId: `user-${i}`,
                 textValue: `Sample input value ${i}`,
