@@ -133,3 +133,15 @@ export interface GetUserCustomEventsQueryParams extends GetUserEventsQueryParams
     subcategory: string;
     userAttribute: string;
 }
+
+export enum EventCategories {
+    INTERACTION = "Interaction",
+    ACTIVITY = "Activity",
+}
+
+export enum EventSubcategories {
+    CLICK = "Click",
+    VISIT = "Visit",
+    INPUT = "Input",
+}
+

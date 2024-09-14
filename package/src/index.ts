@@ -14,7 +14,9 @@ import {
     CustomEvent,
     CustomEventType,
     CustomGraphType,
-    Project
+    Project,
+    EventCategories,
+    EventSubcategories
 } from "@/utils/types";
 
 export {
@@ -33,5 +35,7 @@ export {
     CustomEventType,
     CustomGraphType,
     Project,
-    BaseEvent
+    BaseEvent,
+    EventCategories,
+    EventSubcategories
 };
