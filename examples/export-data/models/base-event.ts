@@ -1,6 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { BaseEvent, EventEnvironment } from "../utils/types";
-import ProjectModel from "./project";
+import { BaseEvent, EventEnvironment } from "../node_modules/bog-analytics";
 
 export const BaseEventSchema = new mongoose.Schema<BaseEvent>({
     category: {
@@ -10,11 +9,6 @@ export const BaseEventSchema = new mongoose.Schema<BaseEvent>({
     subcategory: {
         type: String,
         required: true,
-    },
-    projectId: {
-        type: Schema.Types.ObjectId,
-        required: true,
-        ref: ProjectModel.modelName
     },
     environment: {
         type: String,

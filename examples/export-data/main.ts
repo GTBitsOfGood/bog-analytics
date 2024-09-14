@@ -1,18 +1,16 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import { dbConnect } from './utils/db-connect';
-import { AnalyticsViewer, AnalyticsLogger, AnalyticsManager } from "bog-analytics";
+import { AnalyticsViewer, AnalyticsLogger, AnalyticsManager, EventEnvironment } from "bog-analytics";
 import { ClickEventModel } from './models/click-event';
 import { VisitEventModel } from './models/visit-event';
 import { InputEventModel } from './models/input-event';
 import { CustomEventModel } from './models/custom-event';
-import { Project } from './utils/types';
-import { EventEnvironment } from './utils/types';
-import { getProjectIDByName, createProject } from './actions/project'
+import CustomEventTypeModel from './models/custom-event-type';
 
 dotenv.config();
-const CLIENT_KEY = process.env.CLIENT_API_SECRET || '';
-const SERVER_KEY = process.env.SERVER_API_SECRET || '';
+const CLIENT_KEY = process.env.CLIENT_API_KEY || '';
+const SERVER_KEY = process.env.SERVER_API_KEY || '';
 const projectName = "Bits of Good Example Project";
 
 const main = async () => {
@@ -20,51 +18,70 @@ const main = async () => {
         await dbConnect();
         console.log('Connected to MongoDB');
 
-        // Create the project if it doesn't exist
-        let projectId = await getProjectIDByName(projectName);
-        if (!projectId) {
-            console.log(`Project '${projectName}' does not exist. Creating new project`);
-            
-            const newProject: Partial<Project> = {
-                projectName: projectName,
-                clientApiKey: CLIENT_KEY,
-                serverApiKey: SERVER_KEY,
-                privateData: false,
-                deletionPolicy: -1,
-            };
-            
-            const createdProject = await createProject(newProject);
-            projectId = createdProject._id;
-            console.log(`Created new project with ID: ${projectId}`);
-        } else {
-            console.log(`Project ID found: ${projectId}`);
+        const viewer = new AnalyticsViewer({ environment: EventEnvironment.PRODUCTION});
+        await viewer.authenticate(SERVER_KEY);
+
+        const customEventTypes = await viewer.getCustomEventTypes(projectName);
+        if (customEventTypes) {
+            for (const eventType of customEventTypes) {
+                const existingType = await CustomEventTypeModel.findById(eventType._id);
+                if (!existingType) {
+                    await CustomEventTypeModel.create({
+                        _id: eventType._id,
+                        category: eventType.category,
+                        subcategory: eventType.subcategory,
+                        properties: eventType.properties,
+                    });
+                }
+            }
+            console.log(`Exported ${customEventTypes.length} custom event types`);
         }
 
-        const { clickEvents, visitEvents, inputEvents, customEvents } = await fetchEvents();
-        
+        // Gets the most recent createdAt date for each event type
+        const afterDate = await getLatestEventDates();
+
+        let clickEvents = await viewer.getAllClickEvents(projectName, afterDate.click);
+        let visitEvents = await viewer.getAllVisitEvents(projectName, afterDate.visit);
+        let inputEvents = await viewer.getAllInputEvents(projectName, afterDate.input);
+        let customEvents = await viewer.getAllCustomEvents(
+            projectName,
+            "custom event category",
+            "custom event subcategory",
+            afterDate.custom
+        );
+
+        // If no existing events, mock the data
+        if (isEmptyEvents(clickEvents, visitEvents, inputEvents, customEvents)) {
+            const mockData = await mockEvents();
+            clickEvents = mockData.clickEvents;
+            visitEvents = mockData.visitEvents;
+            inputEvents = mockData.inputEvents;
+            customEvents = mockData.customEvents;
+        }
+
         console.log(`Fetched ${clickEvents?.length} click events`)
         console.log(`Fetched ${visitEvents?.length} visit events`)
         console.log(`Fetched ${inputEvents?.length} input events`)
         console.log(`Fetched ${customEvents?.length} custom events`)
 
+        // Export analytics data to database
         for (const event of clickEvents || []) {
             await ClickEventModel.create({
                 eventProperties: event.eventProperties,
                 category: event.category,
                 subcategory: event.subcategory,
-                projectId: projectId,
-                timestamp: event.createdAt ? new Date(event.createdAt) : new Date(),
+                createdAt: event.createdAt ? new Date(event.createdAt) : new Date(),
+                updatedAt: event.updatedAt ? new Date(event.updatedAt) : new Date(),
             });
         }
 
         for (const event of visitEvents || []) {
-            console.log(`event ${event}`)
             await VisitEventModel.create({
                 eventProperties: event.eventProperties,
                 category: event.category,
                 subcategory: event.subcategory,
-                projectId: projectId,
-                timestamp: event.createdAt ? new Date(event.createdAt) : new Date(),
+                createdAt: event.createdAt ? new Date(event.createdAt) : new Date(),
+                updatedAt: event.updatedAt ? new Date(event.updatedAt) : new Date(),
             });
         }
 
@@ -73,8 +90,8 @@ const main = async () => {
                 eventProperties: event.eventProperties,
                 category: event.category,
                 subcategory: event.subcategory,
-                projectId: projectId,
-                timestamp: event.createdAt ? new Date(event.createdAt) : new Date(),
+                createdAt: event.createdAt ? new Date(event.createdAt) : new Date(),
+                updatedAt: event.updatedAt ? new Date(event.updatedAt) : new Date(),
             });
         }
 
@@ -83,8 +100,8 @@ const main = async () => {
                 eventTypeId: event.eventTypeId,
                 environment: event.environment,
                 properties: event.properties,
-                projectId: projectId,
-                timestamp: event.createdAt ? new Date(event.createdAt) : new Date(),
+                createdAt: event.createdAt ? new Date(event.createdAt) : new Date(),
+                updatedAt: event.updatedAt ? new Date(event.updatedAt) : new Date(),
             });
         }
         console.log('Data exported');
@@ -96,7 +113,24 @@ const main = async () => {
     }
 }
 
-async function fetchEvents() {
+function isEmptyEvents(...events: Array<any[] | null>): boolean {
+    return events.every(eventList => !eventList || eventList.length === 0);
+}
+
+async function getLatestEventDates() {
+    const latestClickEvent = await ClickEventModel.findOne().sort({ createdAt: -1 });
+    const latestVisitEvent = await VisitEventModel.findOne().sort({ createdAt: -1 });
+    const latestInputEvent = await InputEventModel.findOne().sort({ createdAt: -1 });
+    const latestCustomEvent = await CustomEventModel.findOne().sort({ createdAt: -1 });
+
+    return {
+        click: latestClickEvent?.createdAt ? new Date(latestClickEvent.createdAt) : undefined,
+        visit: latestVisitEvent?.createdAt ? new Date(latestVisitEvent.createdAt) : undefined,
+        input: latestInputEvent?.createdAt ? new Date(latestInputEvent.createdAt) : undefined,
+        custom: latestCustomEvent?.createdAt ? new Date(latestCustomEvent.createdAt) : undefined,
+    };
+}
+async function mockEvents() {
     try {
         const logger = new AnalyticsLogger({environment: EventEnvironment.PRODUCTION});
         await logger.authenticate(CLIENT_KEY)

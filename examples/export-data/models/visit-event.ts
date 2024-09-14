@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document, CallbackError } from "mongoose";
-import { BaseEvent, VisitEvent, VisitEventProperties, EventCategories, EventSubcategories } from "../utils/types";
+import { BaseEvent, VisitEvent, VisitEventProperties, EventCategories, EventSubcategories } from "../node_modules/bog-analytics";
 import BaseEventModel from "./base-event";
 
 const VisitEventSchema = new Schema<BaseEvent & {
@@ -39,6 +39,8 @@ VisitEventSchema.pre("save", async function (this: Document & BaseEvent, next: (
 
 export const VisitEventModel = (mongoose.models.VisitEvent as mongoose.Model<VisitEvent>) || mongoose.model("VisitEvent", VisitEventSchema, "visitevents");
 
-export default EventDiscriminator as mongoose.Model<Document & BaseEvent & {
-    eventProperties: VisitEventProperties
-}>;
+// export default EventDiscriminator as mongoose.Model<Document & BaseEvent & {
+//     eventProperties: VisitEventProperties
+// }>;
+
+export default VisitEventModel 

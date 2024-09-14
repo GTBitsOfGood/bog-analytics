@@ -1,7 +1,6 @@
 import mongoose, { Schema } from "mongoose";
-import { CustomEvent, EventEnvironment } from "../utils/types";
+import { CustomEvent, EventEnvironment } from "../node_modules/bog-analytics";
 import CustomEventTypeModel from "./custom-event-type";
-import ProjectModel from "./project";
 
 
 const CustomEventSchema = new Schema<CustomEvent>({
@@ -10,20 +9,16 @@ const CustomEventSchema = new Schema<CustomEvent>({
         required: true
     },
     eventTypeId: {
-        type: Schema.Types.ObjectId,
+        // type: Schema.Types.ObjectId,
+        type: String,
         required: true,
         ref: CustomEventTypeModel.modelName
-    },
-    projectId: {
-        type: Schema.Types.ObjectId,
-        required: true,
-        ref: ProjectModel.modelName
     },
     environment: {
         type: String,
         required: true,
         enum: Object.values(EventEnvironment),
-        default: EventEnvironment.DEVELOPMENT
+        default: EventEnvironment.PRODUCTION
     }
 }, { timestamps: true });
 

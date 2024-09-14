@@ -1,4 +1,4 @@
-name: Export Analytics Data on a CRON Schedule
+name: Export Analytics Data
 
 on:
     schedule:
@@ -23,6 +23,3 @@ jobs:
 
             - name: Run export data script
               run: yarn export-data
-              env:
-                  SERVER_API_SECRET: ${{ secrets.SERVER_API_SECRET }}
-                  MONGO_URI: ${{ secrets.MONGO_URI }}

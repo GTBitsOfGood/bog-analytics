@@ -1,8 +1,11 @@
 import mongoose, { Schema } from "mongoose";
-import { CustomEventType } from "../utils/types";
-import ProjectModel from "./project";
+import { CustomEventType } from "../node_modules/bog-analytics"
 
 export const CustomEventTypeSchema = new mongoose.Schema<CustomEventType>({
+    _id: {
+        type: Schema.Types.ObjectId,
+        required: true,
+    },
     category: {
         type: String,
         required: true,
@@ -15,11 +18,6 @@ export const CustomEventTypeSchema = new mongoose.Schema<CustomEventType>({
         type: [String],
         required: true
     },
-    projectId: {
-        type: Schema.Types.ObjectId,
-        required: true,
-        ref: ProjectModel.modelName
-    }
 });
 
 const CustomEventTypeModel =

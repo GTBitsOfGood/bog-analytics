@@ -98,6 +98,12 @@ We define a couple of different event types that are unified across Bits of Good
 }
 ```
 
+## Example Project: Exporting Bog Analytics Data to a Local Database
+
+We have provided an example project located in [examples/export-data](https://github.com/GTBitsOfGood/bog-analytics/tree/main/examples/export-data) that demonstrates how to use the Bog Analytics NPM package to export analytics data (click, visit, input, and custom events) into a local MongoDB instance. This example walks through the process of fetching data and inserting it into a database using Mongoose.
+
+We've included instructions for running the script manually or scheduling it with a GitHub Actions cron job. It serves as a guide for developers looking to integrate Bog Analytics data into their own databases for more advanced or custom querying.
+
 ## Setup Repository with Docker (Reccommended)
 
 Because this repository acts as a monorepository for all things analytics, we provide a `docker-compose` for easy setup. To run the application via docker compose:
@@ -217,9 +223,3 @@ git push --set-upstream origin samrat/repository-setup
 # If you are pushing normally
 git push
 ```
-
-## Example Project: Exporting Bog Analytics Data to a Local Database
-
-We have provided an example project located in [examples/export-data](https://github.com/GTBitsOfGood/bog-analytics/tree/main/examples/export-data) that demonstrates how to use the Bog Analytics NPM package to export analytics data (click, visit, input, and custom events) into a local MongoDB instance. This example walks through the process of fetching data and inserting it into a database using Mongoose.
-
-We've included instructions for running the script manually or scheduling it with a GitHub Actions cron job. It serves as a guide for developers looking to integrate Bog Analytics data into their own databases for more advanced or custom querying.
