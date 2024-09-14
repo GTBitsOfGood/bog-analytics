@@ -3,6 +3,7 @@ import AnalyticsManager from "@/lib/analytics-manager";
 import AnalyticsViewer from "@/lib/analytics-viewer";
 import GDPRManager from "@/lib/gdpr-manager";
 import {
+    BaseEvent,
     EventEnvironment,
     ClickEvent,
     ClickEventProperties,
@@ -13,7 +14,9 @@ import {
     CustomEvent,
     CustomEventType,
     CustomGraphType,
-    Project
+    Project,
+    EventCategories,
+    EventSubcategories
 } from "@/utils/types";
 
 export {
@@ -31,5 +34,8 @@ export {
     CustomEvent,
     CustomEventType,
     CustomGraphType,
-    Project
+    Project,
+    BaseEvent,
+    EventCategories,
+    EventSubcategories
 };

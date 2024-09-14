@@ -5,11 +5,11 @@ FROM node:18.17.0
 WORKDIR /app
 
 # Copy package.json and yarn.lock to the working directory
-# COPY api/package.json api/yarn.lock ./
+COPY api/package.json api/yarn.lock ./
 
 # Install dependencies
 RUN yarn install
 
-RUN chmod -R 777 node_modules/
+COPY api/ ./
 
-ENTRYPOINT ["sh", "-c", "rm -rf /tmp/tsx-0 && yarn dev"]
+ENTRYPOINT ["yarn", "dev"]
