@@ -39,7 +39,6 @@ const main = async () => {
 
         // Gets the most recent createdAt date for each event type
         const afterDate = await getLatestEventDates();
-
         let clickEvents = await viewer.getAllClickEvents(projectName, afterDate.click);
         let visitEvents = await viewer.getAllVisitEvents(projectName, afterDate.visit);
         let inputEvents = await viewer.getAllInputEvents(projectName, afterDate.input);
@@ -66,7 +65,12 @@ const main = async () => {
 
         // Export analytics data to database
         for (const event of clickEvents || []) {
+            const preexistingEvent = await ClickEventModel.findOne({ _id: event._id })
+            if (preexistingEvent)
+                continue
+
             await ClickEventModel.create({
+                _id: event._id,
                 eventProperties: event.eventProperties,
                 category: event.category,
                 subcategory: event.subcategory,
@@ -76,7 +80,12 @@ const main = async () => {
         }
 
         for (const event of visitEvents || []) {
+            const preexistingEvent = await VisitEventModel.findOne({ _id: event._id })
+            if (preexistingEvent)
+                continue
+
             await VisitEventModel.create({
+                _id: event._id,
                 eventProperties: event.eventProperties,
                 category: event.category,
                 subcategory: event.subcategory,
@@ -86,7 +95,12 @@ const main = async () => {
         }
 
         for (const event of inputEvents || []) {
+            const preexistingEvent = await InputEventModel.findOne({ _id: event._id })
+            if (preexistingEvent)
+                continue
+
             await InputEventModel.create({
+                _id: event._id,
                 eventProperties: event.eventProperties,
                 category: event.category,
                 subcategory: event.subcategory,
@@ -96,7 +110,12 @@ const main = async () => {
         }
 
         for (const event of customEvents || []) {
+            const preexistingEvent = await CustomEventModel.findOne({ _id: event._id })
+            if (preexistingEvent)
+                continue
+
             await CustomEventModel.create({
+                _id: event._id,
                 eventTypeId: event.eventTypeId,
                 environment: event.environment,
                 properties: event.properties,
