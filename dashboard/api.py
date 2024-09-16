@@ -234,14 +234,17 @@ def get_custom_graphs_by_event(project_name, event_type_id):
 
 def get_event_types(project_name):
     custom_event_types = get_custom_event_types_by_project(project_name)
-
+    project_event_types = {}
     for custom_type in custom_event_types:
         event_type_labels_to_event_mapping[
             f"{custom_type['category']} - {custom_type['subcategory']}"
         ] = custom_type
+        project_event_types[
+            f"{custom_type['category']} - {custom_type['subcategory']}"
+        ] = custom_type
     # When we have custom events, we will want to change this to include both default and custom events
     default_types = [member.value for member in EventTypes]
-    default_types.extend(event_type_labels_to_event_mapping.keys())
+    default_types.extend(project_event_types.keys())
     return default_types
 
 
