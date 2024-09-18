@@ -1,10 +1,10 @@
 import mongoose, { Schema, Document, CallbackError } from "mongoose";
-import { BaseEvent, VisitEvent, VisitEventProperties, EventCategories, EventSubcategories } from "../node_modules/bog-analytics";
+import { VisitEvent, EventCategories, EventSubcategories } from "bog-analytics";
 import BaseEventModel from "./base-event";
 
-const VisitEventSchema = new Schema<BaseEvent & {
-    eventProperties: VisitEventProperties;
-}>({
+export interface MongooseVisitEvent extends Omit<VisitEvent, "projectId"> { };
+
+const VisitEventSchema = new Schema<MongooseVisitEvent>({
     eventProperties: {
         pageUrl: {
             type: String,
@@ -22,7 +22,7 @@ const EventDiscriminator = BaseEventModel.discriminator(
     VisitEventSchema
 );
 
-VisitEventSchema.pre("save", async function (this: Document & BaseEvent, next: (err?: CallbackError) => void) {
+VisitEventSchema.pre("save", async function (this: Document & MongooseVisitEvent, next: (err?: CallbackError) => void) {
     // Set default values for category and subcategory if they are not provided
     if (!this.category) {
         this.category = EventCategories.ACTIVITY;
@@ -37,10 +37,6 @@ VisitEventSchema.pre("save", async function (this: Document & BaseEvent, next: (
 });
 
 
-export const VisitEventModel = (mongoose.models.VisitEvent as mongoose.Model<VisitEvent>) || mongoose.model("VisitEvent", VisitEventSchema, "visitevents");
+export const VisitEventModel = (mongoose.models.VisitEvent as mongoose.Model<MongooseVisitEvent>) || mongoose.model("VisitEvent", VisitEventSchema, "visitevents");
 
-// export default EventDiscriminator as mongoose.Model<Document & BaseEvent & {
-//     eventProperties: VisitEventProperties
-// }>;
-
-export default VisitEventModel 
+export default EventDiscriminator as mongoose.Model<MongooseVisitEvent>;

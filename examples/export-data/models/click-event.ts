@@ -1,10 +1,11 @@
 import mongoose, { Schema, Document, CallbackError } from "mongoose";
-import { BaseEvent, ClickEvent, ClickEventProperties, EventCategories, EventSubcategories } from "../node_modules/bog-analytics"
+import { ClickEvent, EventCategories, EventSubcategories } from "bog-analytics";
 import BaseEventModel from "./base-event";
 
-const ClickEventSchema = new Schema<BaseEvent & {
-    eventProperties: ClickEventProperties;
-}>({
+
+export interface MongooseClickEvent extends Omit<ClickEvent, "projectId"> { };
+
+const ClickEventSchema = new Schema<MongooseClickEvent>({
     eventProperties: {
         objectId: {
             type: String,
@@ -22,7 +23,7 @@ const EventDiscriminator = BaseEventModel.discriminator(
     ClickEventSchema
 );
 
-ClickEventSchema.pre("save", async function (this: Document & BaseEvent, next: (err?: CallbackError) => void) {
+ClickEventSchema.pre("save", async function (this: Document & MongooseClickEvent, next: (err?: CallbackError) => void) {
     // Set default values for category and subcategory if they are not provided
     if (!this.category) {
         this.category = EventCategories.INTERACTION;
@@ -37,9 +38,6 @@ ClickEventSchema.pre("save", async function (this: Document & BaseEvent, next: (
 });
 
 
-export const ClickEventModel = (mongoose.models.ClickEvent as mongoose.Model<ClickEvent>) || mongoose.model("ClickEvent", ClickEventSchema, "clickevents");
+export const ClickEventModel = (mongoose.models.ClickEvent as mongoose.Model<MongooseClickEvent>) || mongoose.model("ClickEvent", ClickEventSchema, "clickevents");
 
-// export default EventDiscriminator as mongoose.Model<Document & BaseEvent & {
-//     eventProperties: ClickEventProperties
-// }>;
-export default ClickEventModel;
+export default EventDiscriminator as mongoose.Model<MongooseClickEvent>;

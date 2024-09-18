@@ -1,10 +1,10 @@
 import mongoose, { Schema, Document, CallbackError } from "mongoose";
-import { BaseEvent, InputEvent, InputEventProperties, EventCategories, EventSubcategories } from "../node_modules/bog-analytics";
+import { InputEvent, EventCategories, EventSubcategories } from "bog-analytics";
 import BaseEventModel from "./base-event";
 
-const InputEventSchema = new Schema<BaseEvent & {
-    eventProperties: InputEventProperties;
-}>({
+export interface MongooseInputEvent extends Omit<InputEvent, "projectId"> { };
+
+const InputEventSchema = new Schema<MongooseInputEvent>({
     eventProperties: {
         objectId: {
             type: String,
@@ -26,7 +26,7 @@ const EventDiscriminator = BaseEventModel.discriminator(
     InputEventSchema
 );
 
-InputEventSchema.pre("save", async function (this: Document & BaseEvent, next: (err?: CallbackError) => void) {
+InputEventSchema.pre("save", async function (this: Document & MongooseInputEvent, next: (err?: CallbackError) => void) {
     // Set default values for category and subcategory if they are not provided
     if (!this.category) {
         this.category = EventCategories.INTERACTION;
@@ -41,10 +41,6 @@ InputEventSchema.pre("save", async function (this: Document & BaseEvent, next: (
 });
 
 
-export const InputEventModel = (mongoose.models.InputEvent as mongoose.Model<InputEvent>) || mongoose.model("InputEvent", InputEventSchema, "inputevents");
+export const InputEventModel = (mongoose.models.InputEvent as mongoose.Model<MongooseInputEvent>) || mongoose.model("InputEvent", InputEventSchema, "inputevents");
 
-// export default EventDiscriminator as mongoose.Model<Document & BaseEvent & {
-//     eventProperties: InputEventProperties
-// }>;
-
-export default InputEventModel;
+export default EventDiscriminator as mongoose.Model<MongooseInputEvent>;

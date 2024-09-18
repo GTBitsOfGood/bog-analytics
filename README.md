@@ -98,8 +98,9 @@ We define a couple of different event types that are unified across Bits of Good
 }
 ```
 
-## Example Project: Exporting Bog Analytics Data to a Local Database
+## Bog Analytics Examples
 
+**Data Export Project**
 We have provided an example project located in [examples/export-data](https://github.com/GTBitsOfGood/bog-analytics/tree/main/examples/export-data) that demonstrates how to use the Bog Analytics NPM package to export analytics data (click, visit, input, and custom events) into a local MongoDB instance. This example walks through the process of fetching data and inserting it into a database using Mongoose.
 
 We've included instructions for running the script manually or scheduling it with a GitHub Actions cron job. It serves as a guide for developers looking to integrate Bog Analytics data into their own databases for more advanced or custom querying.
