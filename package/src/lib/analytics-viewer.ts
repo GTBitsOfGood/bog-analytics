@@ -78,11 +78,12 @@ export default class AnalyticsViewer {
     }
 
 
-    public async getAllClickEvents(projectName: string, afterTime?: Date) {
+    public async getAllClickEvents(projectName: string, afterTime?: Date, limit?: number) {
         const queryParams: GetEventsQueryParams = {
             projectName,
             afterTime: afterTime?.toString(),
             afterId: undefined,
+            limit,
             environment: this.environment
         }
 
@@ -139,11 +140,12 @@ export default class AnalyticsViewer {
     }
 
 
-    public async getAllVisitEvents(projectName: string, afterTime?: Date) {
+    public async getAllVisitEvents(projectName: string, afterTime?: Date, limit?: number) {
         const queryParams: GetEventsQueryParams = {
             projectName,
             afterTime: afterTime?.toString(),
             afterId: undefined,
+            limit,
             environment: this.environment
         }
 
@@ -200,11 +202,12 @@ export default class AnalyticsViewer {
     }
 
 
-    public async getAllInputEvents(projectName: string, afterTime?: Date) {
+    public async getAllInputEvents(projectName: string, afterTime?: Date, limit?: number) {
         const queryParams: GetEventsQueryParams = {
             projectName,
             afterTime: afterTime?.toString(),
             afterId: undefined,
+            limit,
             environment: this.environment
         }
 
@@ -261,14 +264,16 @@ export default class AnalyticsViewer {
         }
 
     }
-
-    public async getAllCustomEvents(projectName: string, category: string, subcategory: string, afterTime?: Date) {
+    // We expose limit here because some projects would like to retrieve the number of events in fewer api calls 
+    // reduces latency for this method to complete
+    public async getAllCustomEvents(projectName: string, category: string, subcategory: string, afterTime?: Date, limit?: number) {
         const queryParams: GetCustomEventsQueryParams = {
             projectName,
             afterTime: afterTime?.toString(),
             afterId: undefined,
             environment: this.environment,
             subcategory,
+            limit,
             category
         }
 
