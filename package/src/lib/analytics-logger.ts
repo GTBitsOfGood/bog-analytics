@@ -11,16 +11,30 @@ export default class AnalyticsLogger {
     private clientApiKey?: string;
     private environment?: EventEnvironment;
     private apiBaseUrl?: string; // used for unittesting puposes
+    private disabled?: boolean;
 
-    constructor({ apiBaseUrl, environment }: { apiBaseUrl?: string, environment?: EventEnvironment }) {
+    constructor({ apiBaseUrl, environment, disabled }: { apiBaseUrl?: string, environment?: EventEnvironment, disabled?: boolean }) {
         this.apiBaseUrl = apiBaseUrl ?? "https://analytics.bitsofgood.org"
         this.environment = environment ?? EventEnvironment.DEVELOPMENT;
+        this.disabled = disabled ?? false;
     }
     public async authenticate(clientApiKey: string): Promise<void> {
         this.clientApiKey = clientApiKey;
     }
 
+    public disable() {
+        this.disabled = true;
+    }
+
+    public enable() {
+        this.disabled = false;
+    }
+
+
     public async logClickEvent(clickEvent: ClickEventProperties): Promise<ClickEvent | null> {
+        if (this.disabled) {
+            return null;
+        }
         const { objectId, userId } = clickEvent;
 
         try {
@@ -50,6 +64,9 @@ export default class AnalyticsLogger {
     }
 
     public async logVisitEvent(visitEvent: VisitEventProperties): Promise<VisitEvent | null> {
+        if (this.disabled) {
+            return null;
+        }
         const { pageUrl, userId } = visitEvent;
         try {
             if (!this.clientApiKey) {
@@ -79,6 +96,9 @@ export default class AnalyticsLogger {
     }
 
     public async logInputEvent(inputEvent: InputEventProperties): Promise<InputEvent | null> {
+        if (this.disabled) {
+            return null;
+        }
         const { objectId, userId, textValue } = inputEvent;
 
         try {
@@ -109,6 +129,9 @@ export default class AnalyticsLogger {
     }
 
     public async logCustomEvent(category: string, subcategory: string, properties: object): Promise<CustomEvent | null> {
+        if (this.disabled) {
+            return null;
+        }
         try {
             if (!this.clientApiKey) {
                 throw new Error('Please authenticate first with your client api key using the authenticate method');
