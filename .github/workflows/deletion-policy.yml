@@ -15,3 +15,11 @@ jobs:
         id: deletion-policy
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  keepalive-job:
+    name: Keepalive Workflow
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: gautamkrishnar/keepalive-workflow@2.0.7
