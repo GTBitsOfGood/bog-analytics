@@ -750,6 +750,11 @@ balanced-match@^1.0.0:
   resolved "https://registry.npmjs.org/balanced-match/-/balanced-match-1.0.2.tgz"
   integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
 
+bog-analytics@^1.0.11:
+  version "1.0.11"
+  resolved "https://registry.npmjs.org/bog-analytics/-/bog-analytics-1.0.11.tgz"
+  integrity sha512-WW9wVcNXDA5k7laYSNtFnWkj53ACcQPCNllPJMJpQvpzCz4Z13lob5QQur1k/AqoZahvAmdonldXtWopETEM7w==
+
 brace-expansion@^1.1.7:
   version "1.1.11"
   resolved "https://registry.npmjs.org/brace-expansion/-/brace-expansion-1.1.11.tgz"
