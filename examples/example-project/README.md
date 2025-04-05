@@ -1,13 +1,15 @@
-# Example Project — BoG Analytics Usage Examples
+<div align="center"> 
+<h1>Example Project — BoG Analytics Usage Examples</h1></div>
 
-This example project demonstrates how to use the BoG Analytics API + npm package in a variety of common scenarios for logging events. It serves as a reference for developers at BoG looking to quickly understand and leverage BoG Analytics in their own projects.
 
-## Features
+This example project demonstrates how to use the BoG Analytics API + npm package in a variety of common scenarios for logging events. It serves as a reference for developers at BoG looking to quickly understand and leverage BoG Analytics in their own projects. All the contents can be found in `src/app/page.tsx`
+
+## Contents
 ### Setting Up the Analytics Logger
 
 To start using `AnalyticsLogger` in your project:
 
-1. Create a new logger instance
+#### 1. Create a new logger instance
 Choose the environment you want to log to:
 
 * EventEnvironment.DEVELOPMENT
@@ -18,14 +20,15 @@ Choose the environment you want to log to:
 const analyticsLogger = new AnalyticsLogger({ environment: EventEnvironment.DEVELOPMENT }); // or STAGING / PRODUCTION
 ```
 
-2. Authenticate with your API key
+#### 2. Authenticate with your API key
 After creating your project in the Bog Analytics Portal, you'll receive an API key. Use this key to authenticate your logger:
 
 ```
 logger.authenticate("your-api-key-here");
 ```
 
-3. Start logging events
+#### 3. Start logging events
+
 Once authenticated, you're ready to use any of the `AnalyticsLogger` methods, as showcased in this project.
 
 ### Log Click Events
