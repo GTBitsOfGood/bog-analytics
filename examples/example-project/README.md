@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Example Project — BoG Analytics Usage Examples
 
-## Getting Started
+This example project demonstrates how to use the BoG Analytics API + npm package in a variety of common scenarios for logging events. It serves as a reference for developers at BoG looking to quickly understand and leverage BoG Analytics in their own projects.
 
-First, run the development server:
+## Features
+### Setting Up the Analytics Logger
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+To start using `AnalyticsLogger` in your project:
+
+1. Create a new logger instance
+Choose the environment you want to log to:
+
+* EventEnvironment.DEVELOPMENT
+* EventEnvironment.STAGING
+* EventEnvironment.PRODUCTION
+
+```
+const analyticsLogger = new AnalyticsLogger({ environment: EventEnvironment.DEVELOPMENT }); // or STAGING / PRODUCTION
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Authenticate with your API key
+After creating your project in the Bog Analytics Portal, you'll receive an API key. Use this key to authenticate your logger:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+logger.authenticate("your-api-key-here");
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Start logging events
+Once authenticated, you're ready to use any of the `AnalyticsLogger` methods, as showcased in this project.
 
-## Learn More
+### Log Click Events
 
-To learn more about Next.js, take a look at the following resources:
+There are three buttons on the app, each logging its own click events. At each button handler, there is a `logClickEvent()` call, which logs the event for us. An `objectID` is used to associate a click event with its source.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+const handleButton1 = () => {
+    logger.logClickEvent({
+        objectId: 'button-1',
+        userId: (Math.random() + 1).toString(36).substring(7), // random uuid
+    })
+    console.log('Button 1 pressed')
+}
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Log Input Events
 
-## Deploy on Vercel
+An input field is provided that logs an input event every time the user types something. On submit, there is a `logInputEvent()` call to log the input event. An `objectID` is used to associate an input event with its source.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+const handleInputSubmit = () => {
+    logger.logInputEvent({
+        objectId: 'input-text-field',
+        userId: (Math.random() + 1).toString(36).substring(7), // random uuid
+        textValue: inputValue,
+    })
+    setInputValue("")
+    console.log('Input Submitted')
+}
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Log Visit Events
+
+A visit event is automatically logged when the app loads to track page visits. `React.useEffect()` can be used to track visit events using `logVisitEvent()` on first load.
+
+```
+React.useEffect(() => {
+    logger.logVisitEvent({
+        userId: getBrowserName(navigator.userAgent),
+        pageUrl: '/'
+    });
+}, [])
+```
+
+### Log Custom Events
+
+A button is provided to represent a custom process. The package allows you to log completely custom events with arbitrary data. To do this, call `logCustomEvent()` and pass:
+* `category`: The category of the custom event.
+* `subcategory`: The subcategory of the custom event.
+* `properties`: An object containing the properties of the custom event.
+
+```
+const handleCustomEventButton = async() => {
+    await logger.logCustomEvent("custom event category", "custom event subcategory", {prop1: "properties of custom event"})
+    console.log('Custom Event Button Pressed')
+}
+```
+
+### Change Logging Environment
+
+A dropdown is available to change the environment in which events are being logged to (e.g., development, production). Each environment needs it's unique `AnalyticsLogger` instance.
+
+### Analytics Viewer
+
+To view some recently logged events, click on the Print Logged Events button and check the logged events in the console. This function was created by using `Analytics Viewer`

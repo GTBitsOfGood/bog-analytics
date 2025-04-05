@@ -78,7 +78,7 @@ export default function Home() {
   let [inputValue, setInputValue] = React.useState("")
   const handleInputSubmit = () => {
     logger.logInputEvent({
-      objectId: 'button-3',
+      objectId: 'input-text-field',
       userId: (Math.random() + 1).toString(36).substring(7), // random uuid
       textValue: inputValue,
     })
