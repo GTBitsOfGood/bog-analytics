@@ -30,10 +30,6 @@ export default function Home() {
   const stagingViewer = new AnalyticsViewer({ environment: EventEnvironment.STAGING });
   const productionViewer = new AnalyticsViewer({ environment: EventEnvironment.PRODUCTION });
 
-  developmentViewer.authenticate(process.env.NEXT_PUBLIC_BOG_ANALYTICS_SERVER_API_KEY as string);
-  stagingViewer.authenticate(process.env.NEXT_PUBLIC_BOG_ANALYTICS_SERVER_API_KEY as string);
-  productionViewer.authenticate(process.env.NEXT_PUBLIC_BOG_ANALYTICS_SERVER_API_KEY as string);
-
   let viewer = developmentViewer
 
   // switch logger and viewer based on environment
