@@ -1,7 +1,10 @@
 name: Run Deletion Policy on a CRON Schedule
 on:
   schedule:
-    - cron: "0 0 * * *"
+    - cron: "0 0 * * *"   # every day at midnight UTC
+
+permissions:
+  contents: write       # needed for pushing/deleting branches
 
 jobs:
   run_deletion_policy:
@@ -11,15 +14,40 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Run Deletion Policy Action Step
-        uses: ./deletion-policy # Uses an action in the deletion-policy directory
+        uses: ./deletion-policy
         id: deletion-policy
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-  keepalive-job:
+
+  keepalive-workflow:
     name: Keepalive Workflow
     runs-on: ubuntu-latest
     permissions:
-      actions: write
+      contents: write   # allow branch creation & deletion
     steps:
-      - uses: actions/checkout@v4
-      - uses: gautamkrishnar/keepalive-workflow@2.0.7
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Create, Push & Delete Dummy Branch
+        run: |
+          # Use run ID for a unique branch name each run
+          BRANCH="keepalive-${{ github.run_id }}"
+          
+          # 1) Create new branch
+          git checkout -b $BRANCH
+          
+          # 2) Make a dummy commit
+          echo "keepalive run ${{ github.run_id }} at $(date -u)" >> keepalive.txt
+          git add keepalive.txt
+          git commit -m "chore: keepalive commit ${{ github.run_id }}"
+          
+          # Push the branch
+          git push origin $BRANCH
+          
+          # 3) Delete it immediately
+          git push origin --delete $BRANCH
